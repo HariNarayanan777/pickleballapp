@@ -1,0 +1,7 @@
+{
+  "name": "pickleconnect",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
