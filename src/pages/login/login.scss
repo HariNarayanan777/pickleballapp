@@ -1,0 +1,18 @@
+page-login {
+    ion-content{
+        background-position: center !important;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        .scroll-content{
+            display: flex;
+            align-items: flex-end;
+            button{
+                border-radius: 5px;
+                text-transform: capitalize;
+                font-weight: bold;
+                box-shadow: none;
+                height: 4rem;
+            }
+        }
+    }
+}

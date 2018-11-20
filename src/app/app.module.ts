@@ -14,6 +14,7 @@ import { CategoriesPageModule } from '../pages/categories/categories.module';
 import { MapPageModule } from '../pages/map/map.module';
 import { SearchPageModule } from '../pages/search/search.module';
 import { AccountPageModule } from '../pages/account/account.module';
+import { LoginPageModule } from '../pages/login/login.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AccountPageModule } from '../pages/account/account.module';
     CategoriesPageModule,
     MapPageModule,
     SearchPageModule,
-    AccountPageModule
+    AccountPageModule,
+    LoginPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
