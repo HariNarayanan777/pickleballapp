@@ -15,6 +15,8 @@ import { MapPageModule } from '../pages/map/map.module';
 import { SearchPageModule } from '../pages/search/search.module';
 import { AccountPageModule } from '../pages/account/account.module';
 import { LoginPageModule } from '../pages/login/login.module';
+import { Facebook } from '@ionic-native/facebook';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { LoginPageModule } from '../pages/login/login.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     CategoriesPageModule,
     MapPageModule,
     SearchPageModule,
@@ -44,6 +47,7 @@ import { LoginPageModule } from '../pages/login/login.module';
   providers: [
     StatusBar,
     SplashScreen,
+    Facebook,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

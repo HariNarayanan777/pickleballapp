@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { Facebook } from '@ionic-native/facebook';
+import { Storage } from '@ionic/storage';
+import { LoginPage } from '../login/login';
 
-/**
- * Generated class for the AccountPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,11 +12,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AccountPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private fb: Facebook,
+    private storage: Storage,
+    private app: App) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AccountPage');
+  }
+
+  logout(){
+    this.fb.logout().then(res =>{ 
+      console.log(res);
+      this.storage.set('LOGGED_IN', false);
+      this.app.getRootNav().setRoot(LoginPage);
+
+    })
   }
 
 }
