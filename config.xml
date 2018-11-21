@@ -88,7 +88,7 @@
         <variable name="APP_NAME" value="Pickleball" />
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.37.0" />
     </plugin>
+    <plugin name="cordova-sqlite-storage" spec="^2.5.1" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.0.0" />
-    <plugin name="cordova-sqlite-storage" spec="^2.5.1" />
 </widget>
