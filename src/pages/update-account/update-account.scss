@@ -1,0 +1,23 @@
+page-update-account {
+        ion-header{
+            ion-toolbar{
+                min-height: 40px !important;
+                box-shadow: none !important;
+                .toolbar-content{
+                    text-align: center;
+                    order: 2;
+                }
+        
+                .start-btn{
+                    order: 1;
+                }
+                .end-btn{
+                    order: 2;
+                }
+            }
+        }
+
+        ion-header:after{
+            background: none !important;
+        }
+}

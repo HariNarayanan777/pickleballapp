@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { TabsPage } from '../tabs/tabs';
 import { Storage } from '@ionic/storage';
+import { RestProvider } from '../../providers/rest/rest';
 
 
 
@@ -12,11 +13,13 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  fbLoginEndpoint:any = '/login-facebook';
 
   constructor(public navCtrl: NavController,
      public navParams: NavParams,
      private fb: Facebook,
-     private storage: Storage) {
+     private storage: Storage,
+     private rest: RestProvider) {
   }
 
   ionViewDidLoad() {
@@ -29,11 +32,33 @@ export class LoginPage {
   .catch(e => console.log('Error logging into Facebook', e));
   }
   handleLogin(res){
-    console.log(res);
     if(res.hasOwnProperty('status') && res.status == 'connected'){
+      this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
+        let user = {
+          "facebook": {
+              "userID": res['authResponse']['userID']
+          },
+          "user": {
+              "firstName": profile['first_name'],
+              "lastName":  profile['last_name'],
+              "zipCode": "",
+              "rank": 0,
+              "email": profile['email']
+          }
+      }
+      this.saveInAPI(user);
+      });      
+     
+    }
+  }
+
+
+  saveInAPI(res){
+    this.rest.putData(this.fbLoginEndpoint, res).subscribe(result => {
+      this.storage.set('USER_ID', result['id']);
       this.storage.set('LOGGED_IN', true);
       this.navCtrl.setRoot(TabsPage);
-    }
+    })
   }
 
   logout(){

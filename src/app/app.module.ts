@@ -17,6 +17,11 @@ import { AccountPageModule } from '../pages/account/account.module';
 import { LoginPageModule } from '../pages/login/login.module';
 import { Facebook } from '@ionic-native/facebook';
 import { IonicStorageModule } from '@ionic/storage';
+import { InterceptorProvider } from '../providers/interceptor/interceptor';
+import { RestProvider } from '../providers/rest/rest';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ComponentsModule } from '../components/components.module';
+import { UpdateAccountPageModule } from '../pages/update-account/update-account.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,9 @@ import { IonicStorageModule } from '@ionic/storage';
     MapPageModule,
     SearchPageModule,
     AccountPageModule,
-    LoginPageModule
+    LoginPageModule,
+    HttpClientModule,
+    UpdateAccountPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -48,7 +55,9 @@ import { IonicStorageModule } from '@ionic/storage';
     StatusBar,
     SplashScreen,
     Facebook,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
+    RestProvider
   ]
 })
 export class AppModule {}

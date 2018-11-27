@@ -1,3 +1,41 @@
 page-account {
+ion-header{
+    ion-toolbar{
+        min-height: 40px !important;
+        box-shadow: none !important;
+        .toolbar-content{
+            text-align: center;
+            order: 2;
+        }
 
+        .start-btn{
+            order: 1;
+        }
+        .end-btn{
+            order: 2;
+        }
+    }
+}
+
+ion-header:after{
+    background: none !important;
+}
+
+.image-holder{
+    text-align: center;
+    img{
+        height: 120px;
+        width: 120px;
+        border-radius: 50%;
+        text-align: center;
+    }
+}
+
+.star-rank{
+    text-align: center;
+    ion-icon{
+        font-size: 20px;
+        color: gold;
+    }
+}
 }

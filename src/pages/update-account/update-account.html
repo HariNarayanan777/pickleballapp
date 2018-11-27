@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>
+        Update Account
+      </ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text>Cancel</span>
+        </button>
+      </ion-buttons>
+      <ion-buttons end>
+          <button ion-button (click)="updateAccount()"> 
+            <span ion-text>Save</span>
+          </button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+      <ion-list>
+
+          <ion-item>
+            <ion-input type="text" placeholder="First Name" [(ngModel)]="fName"></ion-input>
+          </ion-item>
+        
+          <ion-item>
+            <ion-input type="text" placeholder="Last Name" [(ngModel)]="lName"></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-input type="text" placeholder="Email" [(ngModel)]="email"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="text" placeholder="Zipcode" [(ngModel)]="zipcode"></ion-input>
+              </ion-item>
+        
+        </ion-list>
+  </ion-content>
