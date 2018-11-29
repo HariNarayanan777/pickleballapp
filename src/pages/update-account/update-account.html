@@ -32,6 +32,11 @@
             <ion-item>
                 <ion-input type="text" placeholder="Zipcode" [(ngModel)]="zipcode"></ion-input>
               </ion-item>
+              <ion-item>
+                <ion-label>Make my profile available in the player
+                  search section</ion-label>
+                <ion-toggle [(ngModel)]="searchable"></ion-toggle>
+              </ion-item>
         
         </ion-list>
   </ion-content>

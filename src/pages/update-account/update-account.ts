@@ -16,6 +16,7 @@ export class UpdateAccountPage {
   email:any;
   zipcode:any;
   profile:any;
+  searchable:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController,
     private storage: Storage,
@@ -32,10 +33,12 @@ export class UpdateAccountPage {
   getProfile(){
     this.rest.getData('/user/' + this.userID).subscribe(data => {
       this.profile = data;
+      console.log(data);
       this.fName = data['firstName'];
       this.lName = data['lastName'];
       this.email = data['email'];
       this.zipcode = data['zipCode'];
+      this.searchable = data['searchable'];
     });
 
   }
@@ -45,6 +48,7 @@ export class UpdateAccountPage {
    this.profile['lastName'] = this.lName;
    this.profile['email'] = this.email;
    this.profile['zipCode'] = this.zipcode;
+   this.profile['searchable'] = this.searchable;
    this.rest.putData('/user/' + this.userID, this.profile).subscribe(result =>{
       console.log("Update", result);
       let data = {'updated': true}

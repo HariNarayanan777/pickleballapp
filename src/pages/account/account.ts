@@ -20,6 +20,7 @@ export class AccountPage {
   lName:any;
   email:any;
   zipcode:any;
+  rank:any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -60,10 +61,12 @@ export class AccountPage {
 
   getProfile(){
     this.rest.getData('/user/' + this.userID).subscribe(data => {
+      console.log(data);
       this.fName = data['firstName'];
       this.lName = data['lastName'];
       this.email = data['email'];
       this.zipcode = data['zipCode'];
+      this.rank = data['rank'];
     });
 
   }
