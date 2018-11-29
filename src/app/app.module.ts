@@ -22,6 +22,7 @@ import { RestProvider } from '../providers/rest/rest';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ComponentsModule } from '../components/components.module';
 import { UpdateAccountPageModule } from '../pages/update-account/update-account.module';
+import { Push } from '@ionic-native/push';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { UpdateAccountPageModule } from '../pages/update-account/update-account.
     Facebook,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
-    RestProvider
+    RestProvider,
+    Push
   ]
 })
 export class AppModule {}
