@@ -4,6 +4,7 @@ import { CategoriesPage } from '../categories/categories';
 import { MapPage } from '../map/map';
 import { SearchPage } from '../search/search';
 import { AccountPage } from '../account/account';
+import { MyApp } from '../../app/app.component';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -17,6 +18,6 @@ export class TabsPage {
   tab5Root = AccountPage;
 
   constructor() {
-
+    MyApp.initNotifications();
   }
 }

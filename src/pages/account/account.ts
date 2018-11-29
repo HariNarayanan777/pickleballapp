@@ -5,6 +5,8 @@ import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
 import { RestProvider } from '../../providers/rest/rest';
 import { UpdateAccountPage } from '../update-account/update-account';
+import { MyApp } from '../../app/app.component';
+import { HttpClient } from '@angular/common/http';
 
 
 @IonicPage()
@@ -28,38 +30,54 @@ export class AccountPage {
     private storage: Storage,
     private app: App,
     private rest: RestProvider,
-    public modalCtrl: ModalController) {
-      this.init();
+    public modalCtrl: ModalController,
+    public http: HttpClient) {
+    this.init();
   }
 
   ionViewDidLoad() {
   }
 
-  init(){
+  init() {
     this.getProfileImage();
-      this.storage.get('USER_ID').then(res => {
-        this.userID = res;
-        this.getProfile();
+    this.storage.get('USER_ID').then(res => {
+      this.userID = res;
+      this.getProfile();
 
-      });
+    });
   }
 
-  getProfileImage(){
+  getProfileImage() {
     this.fb.api('me?fields=picture.width(720).height(720).as(picture_large)', []).then(picture => {
       this.profileImg = picture['picture_large']['data']['url'];
     })
   }
 
-  logout(){
-    this.fb.logout().then(res =>{ 
+  logout() {
+    this.fb.logout().then(res => {
       console.log(res);
       this.storage.set('LOGGED_IN', false);
+      MyApp.setNotifications = false;
+      this.removeToken();
       this.app.getRootNav().setRoot(LoginPage);
-
     })
   }
 
-  getProfile(){
+  private async removeToken() {
+    try {
+      let token = await this.storage.get("tokenNotification");
+      let userID: any = await this.storage.get("USER_ID");
+      await this.http.put("/logout", { token, id: userID }, { responseType: "text" }).toPromise();
+      await this.storage.remove("tokenNotification");
+      await this.storage.remove("USER_ID");
+      localStorage.removeItem("updateTokens");
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  getProfile() {
     this.rest.getData('/user/' + this.userID).subscribe(data => {
       console.log(data);
       this.fName = data['firstName'];
@@ -74,7 +92,7 @@ export class AccountPage {
   presentModal() {
     const modal = this.modalCtrl.create(UpdateAccountPage);
     modal.onDidDismiss(data => {
-      if(data['updated'] == true){
+      if (data['updated'] == true) {
         this.init();
       }
     });
