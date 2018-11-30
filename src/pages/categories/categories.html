@@ -18,6 +18,14 @@
                       </button>
               
               </ion-item>
+              <ion-item *ngIf="n.type == 'acceptFriend'">
+                    <ion-avatar item-start>
+                            <img [src]="n.data.to.loginFacebook.image">
+                          </ion-avatar>
+                    <h2 text-wrap>{{n.title}}</h2>
+
+
+              </ion-item>
         </div>
         
     

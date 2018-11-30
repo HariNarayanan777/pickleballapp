@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ActionSheetController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { RestProvider } from '../../providers/rest/rest';
-import 'rxjs/add/operator/debounceTime';
 import { Storage } from '@ionic/storage';
 
 
