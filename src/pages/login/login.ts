@@ -36,11 +36,11 @@ export class LoginPage {
       this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
         let user = {
           "facebook": {
-              "userID": res['authResponse']['userID']
+              "userID": res['authResponse']['userID'],
+              "image": profile['picture_large']['data']['url']
           },
           "user": {
-              "firstName": profile['first_name'],
-              "lastName":  profile['last_name'],
+              "fullName": profile['first_name'] + ' ' + profile['last_name'],
               "zipCode": "",
               "rank": 0,
               "email": profile['email']
@@ -55,6 +55,8 @@ export class LoginPage {
 
   saveInAPI(res){
     this.rest.putData(this.fbLoginEndpoint, res).subscribe(result => {
+      console.log("Profile", result);
+
       this.storage.set('USER_ID', result['id']);
       this.storage.set('LOGGED_IN', true);
       this.navCtrl.setRoot(TabsPage);

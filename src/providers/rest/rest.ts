@@ -14,4 +14,11 @@ export class RestProvider {
     getData(endpoint){
       return this.http.get(endpoint)
     }
+    postData(endpoint, data){
+      return this.http.post(endpoint, data)
+    }
+
+    removeData(endpoint){
+      return this.http.delete(endpoint)
+    }
 }

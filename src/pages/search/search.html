@@ -1,18 +1,32 @@
-<!--
-  Generated template for the SearchPage page.
+<ion-content>
+      <form action="." (ngSubmit)="onSearchInput()">
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
+          <ion-searchbar (ionInput)="onSearchInput()"   [(ngModel)]="searchTerm" [formControl]="searchControl"   [showCancelButton]="true" (ionCancel)="cancel()"
+          ></ion-searchbar>
+      </form>
+ 
 
-  <ion-navbar>
-    <ion-title>search</ion-title>
-  </ion-navbar>
+<ion-row *ngIf="searching" padding>
+  <ion-list>
+    <div class="flex-center" *ngIf="players.length < 1">
+        <p>Sorry, no results matched your criteria</p>
+      </div>
+      <div *ngIf="players.length > 0">
+        	<ion-item >
+              <p class="list-title">Results for {{searchTerm}} in Players</p>
+            </ion-item>
+          
+            <ion-item *ngFor="let p of players">
+              <ion-avatar item-start  >
+                <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
+              </ion-avatar>
+              <button style="background: none;"><h2 text-wrap>{{p.fullName}}</h2></button>
+              <button [disabled]="disable" *ngIf="p._id != userID" ion-button item-end [innerHtml]="p.requests != '' ? 'Cancel Request' : 'Add Friend' " (click)="checkFriendRequest(p, $event)"></button>
+            
+            </ion-item>
+      </div>
 
-</ion-header>
-
-
-<ion-content padding>
-
+ 
+</ion-list>
+</ion-row>
 </ion-content>
