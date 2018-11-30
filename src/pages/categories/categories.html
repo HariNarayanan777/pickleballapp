@@ -3,9 +3,24 @@
       <ion-list-header>
           Notifications
         </ion-list-header>
-        <ion-item>Terminator II</ion-item>
-        <ion-item>The Empire Strikes Back</ion-item>
-        <ion-item>Blade Runner</ion-item>
+        <div *ngFor="let n of notifications">
+          
+            <ion-item *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
+                <ion-avatar item-start>
+                    <img [src]="n.data.from.loginFacebook.image">
+                  </ion-avatar>
+                  <h2>{{n.title}} {{n.data.from.fullName}}</h2>
+                  <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="secondary" (click)="responseRequest(n, true)">
+                      <ion-icon name="ios-checkmark"></ion-icon>
+                    </button>
+                    <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="danger" (click)="responseRequest(n, false)">
+                        <ion-icon name="ios-close"></ion-icon>
+                      </button>
+              
+              </ion-item>
+        </div>
+        
+    
 
   </ion-list>
 

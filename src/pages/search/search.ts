@@ -30,13 +30,12 @@ export class SearchPage {
   }
 
   ionViewDidLoad() {
-    this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false; 
       this.shouldShowCancel = false;
-    });
   }
 
   onSearchInput(){
+    console.log(this.searchTerm);
     if (this.searchTerm === "") {
       this.searching = false;
       this.shouldShowCancel = false;
@@ -51,15 +50,12 @@ export class SearchPage {
     getdata(){
       this.rest.getData(`/users/finds/${this.userID}?name=${this.searchTerm}`).subscribe(
   result => {
-    console.log(result);
+    console.log("Result", result);
     this.players = result;
   
   },
   err =>{
     console.error("Error : "+err);
-  } ,
-  () => {
-    console.log('getData completed');
   });
 }
 

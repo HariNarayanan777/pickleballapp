@@ -27,7 +27,7 @@ export class LoginPage {
   }
 
   login(){
-    this.fb.login(['public_profile', 'user_friends', 'email'])
+    this.fb.login(['public_profile', 'email'])
   .then((res: FacebookLoginResponse) => this.handleLogin(res))
   .catch(e => console.log('Error logging into Facebook', e));
   }

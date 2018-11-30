@@ -21,4 +21,7 @@ export class RestProvider {
     removeData(endpoint){
       return this.http.delete(endpoint)
     }
+    patchData(endpoint, data){
+      return this.http.patch(endpoint, data)
+    }
 }

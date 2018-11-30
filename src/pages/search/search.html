@@ -1,7 +1,7 @@
 <ion-content>
       <form action="." (ngSubmit)="onSearchInput()">
 
-          <ion-searchbar (ionInput)="onSearchInput()"   [(ngModel)]="searchTerm" [formControl]="searchControl"   [showCancelButton]="true" (ionCancel)="cancel()"
+          <ion-searchbar  (input)="onSearchInput()"   [(ngModel)]="searchTerm" [formControl]="searchControl"   [showCancelButton]="true" (ionCancel)="cancel()"
           ></ion-searchbar>
       </form>
  
