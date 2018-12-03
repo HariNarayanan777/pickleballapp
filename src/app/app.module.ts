@@ -23,6 +23,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ComponentsModule } from '../components/components.module';
 import { UpdateAccountPageModule } from '../pages/update-account/update-account.module';
 import { Push } from '@ionic-native/push';
+import { ChatPageModule } from '../pages/chat/chat.module';
+import { ChatPage } from '../pages/chat/chat';
+import { EmojiProvider } from '../providers/emoji/emoji';
+import { ListChatPageModule } from '../pages/list-chat/list-chat.module';
+import { ListChatPage } from '../pages/list-chat/list-chat';
+import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
 
 @NgModule({
   declarations: [
@@ -42,7 +48,9 @@ import { Push } from '@ionic-native/push';
     AccountPageModule,
     LoginPageModule,
     HttpClientModule,
-    UpdateAccountPageModule
+    UpdateAccountPageModule,
+    ChatPageModule,
+    ListChatPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -50,7 +58,9 @@ import { Push } from '@ionic-native/push';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ChatPage,
+    ListChatPage
   ],
   providers: [
     StatusBar,
@@ -59,7 +69,9 @@ import { Push } from '@ionic-native/push';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     RestProvider,
-    Push
+    Push,
+    EmojiProvider,
+    LiveComunicationProvider
   ]
 })
 export class AppModule {}

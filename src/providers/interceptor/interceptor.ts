@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable'
 export class InterceptorProvider implements HttpInterceptor {
  
     constructor() { }
-    public static url = 'http://138.68.19.227:8781';
+    public static url = 'http://138.68.19.227:8781'; // "http://localhost:8781";
  
     // Intercepts all HTTP requests!
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
