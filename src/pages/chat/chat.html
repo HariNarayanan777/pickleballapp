@@ -2,8 +2,7 @@
 
   <ion-navbar>
     <ion-row>
-      <img class="user-img" [hidden]="!_photoReady" (load)="photoReady()" [src]="photo">
-      <img class="user-img" [hidden]="_photoReady" src="./assets/imgs/logo-login.png">
+      <img class="user-img" [src]="photo">
       <ion-title>{{to.fullName}}</ion-title>
     </ion-row>
   </ion-navbar>
@@ -18,14 +17,14 @@
       <ion-spinner></ion-spinner>
     </div>
     <div *ngFor="let msg of msgList; let i = index; trackBy: customTrackBy" class="message" (click)="showIfImage(msg)"
-      [class.left]=" msg.from.id !== from.id " [class.right]=" msg.from.id === from.id " [class.success]="msg.view>=3">
+      [class.left]=" msg.from.id !== user.id " [class.right]=" msg.from.id === user.id " [class.success]="msg.view>=3">
       <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
       <div class="msg-detail">
         <div class="msg-info">
           <p>&nbsp;&nbsp;&nbsp;{{msg.dateTime | relativeTime}}</p>
         </div>
         <div class="msg-content">
-          <p class="line-breaker">{{msg.text}}</p>
+          <p class="line-breaker">{{msg.message}}</p>
         </div>
 
       </div>

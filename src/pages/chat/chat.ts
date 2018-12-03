@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
 import { Storage } from '@ionic/storage';
+import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 
 @IonicPage()
 @Component({
@@ -20,26 +21,25 @@ export class ChatPage {
   private skip = 20;
 
   @ViewChild('chat_input') messageInput: TextInput;
-  msgList: any;
+  msgList = [];
   msgListObserver: Observable<Array<any>>;
   editorMsg = '';
   showEmojiPicker = false;
 
   public user: any;
   public to: any;
-
+  public photo = "";
   //Para scrolling infinite to up
   // @ViewChild(Content) content: Content;
 
   constructor(private navParams: NavParams, private events: Events,
     private http: HttpClient, private ngZone: NgZone,
     public changeDectRef: ChangeDetectorRef, public modal: ModalController,
-    private storage: Storage
+    private storage: Storage, private lc: LiveComunicationProvider
   ) {
     this.to = this.navParams.get("user");
+    this.photo = this.to.loginFacebook.image || "";
   }
-
-
 
   ngAfterViewInit() {
     //
@@ -62,10 +62,9 @@ export class ChatPage {
     await this.getMsg();
 
     // Subscribe to received  new message events
-    // this.subscription.subscribeWithPush("message", function (msg) {
-    //   // console.log(msg);
-    //   this.pushNewMsg(msg);
-    // }.bind(this));
+    this.lc.subscribeEvent("new-chat", function (msg) {
+      this.pushNewMsg(msg);
+    }.bind(this));
 
     this.showEmojiPicker = false;
     this.content.resize();
@@ -73,17 +72,12 @@ export class ChatPage {
 
   }
 
-  ionViewWillLeave() {
-    // unsubscribe
-    this.events.unsubscribe('message');
-  }
-
   private async getMsg() {
     try {
       let query = { "or": [{ from: this.user.id, to: this.to.id }, { from: this.to.id, to: this.user.id }] };
-      let mgs = await this.http.get(`/chat?where=${JSON.stringify(query)}&sort=dateTime DESC&limit=20&skip=${this.skip}`).toPromise() as any[];
+      let mgs = await this.http.get(`/chat?where=${JSON.stringify(query)}&sort=dateTime DESC&limit=20`).toPromise() as any[];
       mgs = mgs.filter(it => {
-        return it.hasOwnProperty("user") && it.hasOwnProperty("team");
+        return it.hasOwnProperty("to") && it.hasOwnProperty("from");
       });
       this.msgList = mgs.reverse();
     }
@@ -115,7 +109,9 @@ export class ChatPage {
     }
   }
 
-
+  ionViewDidLeave() {
+    this.lc.unsubscribeEvent("new-chat");
+  }
 
   public loadImage(msg) {
     msg.loadImage = true;
@@ -150,7 +146,7 @@ export class ChatPage {
   * @name getMsg
   * @returns {Promise<ChatMessage[]>}
   */
-  
+
 
   /**
   * @name sendMsg
@@ -158,20 +154,23 @@ export class ChatPage {
   sendMsg() {
     if (!this.editorMsg.trim()) return;
 
+    let dateTime = moment().toISOString();
     // Mock message
     let newMsgPost = {
       from: this.user.id,
       to: this.to.id,
       message: this.editorMsg,
-      dateTime: moment().toISOString(),
+      dateTime,
+      type: "text",
       status: 'pending'
     };
 
     let newMsg = {
-      from: this.user.id,
-      to: this.to.id,
+      from: this.user,
+      to: this.to,
       message: this.editorMsg,
-      dateTime: moment().toISOString(),
+      dateTime,
+      type: "text",
       status: 'pending'
     };
 
@@ -182,7 +181,7 @@ export class ChatPage {
       this.messageInput.setFocus();
     }
 
-    this.http.post("/messages", newMsgPost).toPromise()
+    this.http.post("/chat", newMsgPost).toPromise()
       .then((msg: any) => {
         let index = this.getMsgIndexById(msg.dateTime);
         if (index !== -1) {
@@ -237,9 +236,11 @@ export class ChatPage {
   * @param msg
   */
   async pushNewMsg(msg) {
+
     let index = this.getMsgIndexById(msg.dateTime);
     if (index === -1) {
       this.scrollToBottom();
+      this.ngZone.run(function () { this.msgList.push(msg); }.bind(this))
     }
 
   }

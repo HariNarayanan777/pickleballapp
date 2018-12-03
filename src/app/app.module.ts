@@ -28,6 +28,7 @@ import { ChatPage } from '../pages/chat/chat';
 import { EmojiProvider } from '../providers/emoji/emoji';
 import { ListChatPageModule } from '../pages/list-chat/list-chat.module';
 import { ListChatPage } from '../pages/list-chat/list-chat';
+import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { ListChatPage } from '../pages/list-chat/list-chat';
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     RestProvider,
     Push,
-    EmojiProvider
+    EmojiProvider,
+    LiveComunicationProvider
   ]
 })
 export class AppModule {}

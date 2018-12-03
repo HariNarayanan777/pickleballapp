@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ModalController, Platform } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
@@ -16,13 +16,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AccountPage {
 
-  profileImg:any;
-  userID:any;
-  fName:any;
-  lName:any;
-  email:any;
-  zipcode:any;
-  rank:any;
+  profileImg: any;
+  userID: any;
+  fName: any;
+  lName: any;
+  email: any;
+  zipcode: any;
+  rank: any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -31,7 +31,9 @@ export class AccountPage {
     private app: App,
     private rest: RestProvider,
     public modalCtrl: ModalController,
-    public http: HttpClient) {
+    public http: HttpClient,
+    private platform: Platform
+  ) {
     this.init();
   }
 
@@ -54,13 +56,19 @@ export class AccountPage {
   }
 
   logout() {
-    this.fb.logout().then(res => {
-      console.log(res);
+    if (this.platform.is("cordova")) {
+      this.fb.logout().then(res => {
+        console.log(res);
+        this.storage.set('LOGGED_IN', false);
+        MyApp.setNotifications = false;
+        this.removeToken();
+        this.app.getRootNav().setRoot(LoginPage);
+      });
+    } else {
       this.storage.set('LOGGED_IN', false);
       MyApp.setNotifications = false;
-      this.removeToken();
       this.app.getRootNav().setRoot(LoginPage);
-    })
+    }
   }
 
   private async removeToken() {
