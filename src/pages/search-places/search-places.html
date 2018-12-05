@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Search Places</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-searchbar type="text" [(ngModel)]="search" showCancelButton="true">
+  </ion-searchbar>
+  <div id="map_places" style="width: 100%; height: 300px">
+  </div>
+
+  <div>
+    <h4>Nearby courts</h4>
+  </div>
+  <ion-slides>
+    <ion-slide *ngFor="let court of courst">
+      <img [src]="court.photos[0].getUrl()">
+      <div class="inner">
+        <div class="header">
+          <h2>{{court.name}}</h2>
+          <h4>{{court.rating}}</h4>
+        </div>
+        <div class="body">
+          <p>{{court.location}}</p>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

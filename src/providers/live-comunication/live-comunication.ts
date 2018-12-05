@@ -96,4 +96,37 @@ export class LiveComunicationProvider {
     });
   }
 
+  public static async reloadGoogleplaces(sleep?: boolean) {
+    if (window.hasOwnProperty("google") === true)
+      return;
+
+    sleep = sleep || false;
+    if (sleep === true)
+      await new Promise(function (resolve) { setTimeout(resolve, 2000) });
+
+    try {
+      let script = document.createElement("script");
+      let key = "AIzaSyC6ecF25LKJaY3HpKH0iztKDDRgO60W10A";
+      script.setAttribute("src", `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places`);
+      document.body.appendChild(script);
+
+      await new Promise(resolve => {
+        setTimeout(async function () {
+          if (window.hasOwnProperty("google") === true) {
+            resolve();
+          } else {
+            await this.reloadGoogleplaces(true);
+            resolve();
+          }
+        }.bind(this), 1000);
+      });
+
+    }
+    catch (e) {
+      console.error(e);
+      await this.reloadGoogleplaces(true);
+    }
+
+  }
+
 }

@@ -29,6 +29,9 @@ import { EmojiProvider } from '../providers/emoji/emoji';
 import { ListChatPageModule } from '../pages/list-chat/list-chat.module';
 import { ListChatPage } from '../pages/list-chat/list-chat';
 import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
+import { SearchPlacesPageModule } from '../pages/search-places/search-places.module';
+import { SearchPage } from '../pages/search/search';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @NgModule({
   declarations: [
@@ -50,7 +53,8 @@ import { LiveComunicationProvider } from '../providers/live-comunication/live-co
     HttpClientModule,
     UpdateAccountPageModule,
     ChatPageModule,
-    ListChatPageModule
+    ListChatPageModule,
+    SearchPlacesPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,7 +64,8 @@ import { LiveComunicationProvider } from '../providers/live-comunication/live-co
     HomePage,
     TabsPage,
     ChatPage,
-    ListChatPage
+    ListChatPage,
+    SearchPage
   ],
   providers: [
     StatusBar,
@@ -71,7 +76,8 @@ import { LiveComunicationProvider } from '../providers/live-comunication/live-co
     RestProvider,
     Push,
     EmojiProvider,
-    LiveComunicationProvider
+    LiveComunicationProvider,
+    Geolocation
   ]
 })
 export class AppModule {}
