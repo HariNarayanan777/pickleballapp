@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { Storage } from '@ionic/storage';
+import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { ListChatPage } from '../list-chat/list-chat';
+import { ChatPage } from '../chat/chat';
 
 
 
@@ -25,6 +28,10 @@ export class CategoriesPage {
   }
 
   ionViewDidLoad() {
+    LiveComunicationProvider.eventsNotifications.onNoti = async function(notification){
+      await this.navCtrl.setRoot(ListChatPage)
+      this.navCtrl.push(ChatPage, {user:notification.from})
+    }.bind(this);
   }
 
   getNotifications(){
@@ -76,5 +83,9 @@ export class CategoriesPage {
       view: true
     }
     this.rest.patchData(`/notifications/${noti.id}`, payload).subscribe(res => console.log(res))
+  }
+
+  public toChat(user) {
+    this.navCtrl.push(ChatPage, { user });
   }
 }
