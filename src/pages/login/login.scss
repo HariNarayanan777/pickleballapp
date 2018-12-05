@@ -1,12 +1,50 @@
 page-login {
-    ion-content{
+    ion-content {
         background-position: center !important;
         background-size: cover !important;
         background-repeat: no-repeat !important;
-        .scroll-content{
+        .scroll-content {
             display: flex;
             align-items: flex-end;
-            button{
+            flex-wrap: wrap;
+            .area-login {
+                width: 100%;
+                flex-basis: 100%;
+                ion-list {
+                    width: 100%;
+                    flex-basis: 100%;
+                    flex-wrap: wrap;
+                }
+                ion-item {
+                    background-color: transparent !important;
+                    .item-inner {
+                        border-width: 0 !important;
+                        box-shadow: 0 0 white !important;
+                    }
+                    input {
+                        color: white;
+                    }
+                    ::-webkit-input-placeholder {
+                        color: white !important;
+                    }
+                }
+                .item-input:last-child {
+                    border-width: 0 !important;
+                    box-shadow: 0 0 white !important;
+                }
+                .buttons{
+                    margin-bottom: 15px;
+                    button:first-child{
+                        margin-right: 2rem;
+                    }
+                }
+                button{
+                    background-color: #488aff; 
+                    color: white; 
+                    padding: 10px 20px;
+                }
+            }
+            button {
                 border-radius: 5px;
                 text-transform: capitalize;
                 font-weight: bold;

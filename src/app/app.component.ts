@@ -9,6 +9,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { Push, PushObject } from '@ionic-native/push';
 import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
+import { AuthProvider } from '../providers/auth/auth';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +26,7 @@ export class MyApp {
     platform: Platform, statusBar: StatusBar,
     splashScreen: SplashScreen, public storage: Storage,
     public pusherNotification: Push, public http: HttpClient,
-    public lc: LiveComunicationProvider
+    public lc: LiveComunicationProvider, public auht: AuthProvider
   ) {
     MyApp.initNotifications = this.initNotifications.bind(this);
     platform.ready().then(() => {

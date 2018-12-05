@@ -5,6 +5,8 @@ import { TabsPage } from '../tabs/tabs';
 import { Storage } from '@ionic/storage';
 import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
+import { CreateAccountPage } from '../create-account/create-account';
+import { AuthProvider } from '../../providers/auth/auth';
 
 
 
@@ -14,7 +16,10 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: 'login.html',
 })
 export class LoginPage {
+
   fbLoginEndpoint: any = '/login-facebook';
+  public email = "";
+  public password = "";
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -25,7 +30,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
   }
 
   login() {
@@ -37,19 +41,33 @@ export class LoginPage {
       this.loginInDebugNavigator();
 
   }
+
+  public async LoginWithEmail() {
+    if (this.email === "" || this.password === "") {
+      this.alertCltr.create({
+        title: "Empty Fields",
+        buttons: ["OK"]
+      })
+        .present();
+      return;
+    }
+    let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
+    await AuthProvider.me.saveLoginUser(login);
+  }
+
   handleLogin(res) {
     if (res.hasOwnProperty('status') && res.status == 'connected') {
       this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
         let user = {
           "facebook": {
-              "userID": res['authResponse']['userID'],
-              "image": profile['picture_large']['data']['url']
+            "userID": res['authResponse']['userID'],
+            "image": profile['picture_large']['data']['url']
           },
           "user": {
-              "fullName": profile['first_name'] + ' ' + profile['last_name'],
-              "zipCode": "",
-              "rank": 0,
-              "email": profile['email']
+            "fullName": profile['first_name'] + ' ' + profile['last_name'],
+            "zipCode": "",
+            "rank": 0,
+            "email": profile['email']
           }
         }
         this.saveInAPI(user);
@@ -61,11 +79,7 @@ export class LoginPage {
 
   saveInAPI(res) {
     this.rest.putData(this.fbLoginEndpoint, res).subscribe(result => {
-      console.log("Profile", result);
-
-      this.storage.set('USER_ID', result['id']);
-      this.storage.set('LOGGED_IN', true);
-      this.navCtrl.setRoot(TabsPage);
+      AuthProvider.me.saveLoginUser(result);
     })
   }
 
@@ -80,12 +94,14 @@ export class LoginPage {
   private async loginDebug(data) {
     let id = data.id || "";
     let user = await this.http.get("/user/" + id).toPromise();
-    this.storage.set('USER_ID', user['id']);
-    this.storage.set('LOGGED_IN', true);
-    this.navCtrl.setRoot(TabsPage);
+    await AuthProvider.me.saveLoginUser(user);
   }
 
   logout() {
     this.fb.logout().then(res => console.log(res))
+  }
+
+  public createAccount() {
+    this.navCtrl.push(CreateAccountPage);
   }
 }

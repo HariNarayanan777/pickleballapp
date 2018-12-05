@@ -32,6 +32,9 @@ import { LiveComunicationProvider } from '../providers/live-comunication/live-co
 import { SearchPlacesPageModule } from '../pages/search-places/search-places.module';
 import { SearchPage } from '../pages/search/search';
 import { Geolocation } from '@ionic-native/geolocation';
+import { CreateAccountPageModule } from '../pages/create-account/create-account.module';
+import { CreateAccountPage } from '../pages/create-account/create-account';
+import { AuthProvider } from '../providers/auth/auth';
 
 @NgModule({
   declarations: [
@@ -54,7 +57,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     UpdateAccountPageModule,
     ChatPageModule,
     ListChatPageModule,
-    SearchPlacesPageModule
+    SearchPlacesPageModule,
+    CreateAccountPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -65,7 +69,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     TabsPage,
     ChatPage,
     ListChatPage,
-    SearchPage
+    SearchPage,
+    CreateAccountPage
   ],
   providers: [
     StatusBar,
@@ -77,7 +82,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     Push,
     EmojiProvider,
     LiveComunicationProvider,
-    Geolocation
+    Geolocation,
+    AuthProvider
   ]
 })
 export class AppModule {}

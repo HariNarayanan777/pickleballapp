@@ -86,7 +86,6 @@ export class SearchPlacesPage {
         if (res.length === 0) return;
         res = res[0];
       }
-      console.log(res);
 
       if (res.geometry) {
         this.lat = res.geometry.location.lat();
@@ -134,7 +133,8 @@ export class SearchPlacesPage {
       location: defaultBounds,
       radius: 50000,
       name: 'pickleball courts',
-      type: ['rv_park']
+      type: ['rv_park'],
+      fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
     };
     let service = new google.maps.places.PlacesService(this.map);
 
