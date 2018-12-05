@@ -55,7 +55,7 @@ export class CreateAccountPage {
           .present();
         return;
       }
-      console.log(this.birthDay);
+      
       let user: any = {
         fullName: this.fullName,
         email: this.email,

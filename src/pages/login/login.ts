@@ -7,6 +7,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
 import { CreateAccountPage } from '../create-account/create-account';
 import { AuthProvider } from '../../providers/auth/auth';
+import * as moment from 'moment';
 
 
 
@@ -103,5 +104,37 @@ export class LoginPage {
 
   public createAccount() {
     this.navCtrl.push(CreateAccountPage);
+  }
+
+  public getEmailForchangePassword() {
+    this.alertCltr.create({
+      inputs: [{ type: "email", label: "Email", placeholder: "Email", name: "email" }],
+      buttons: ["Cancel", { text: "Ok", handler: this.IForgotPassword.bind(this) }]
+    })
+      .present();
+  }
+
+  private async IForgotPassword(data) {
+    try {
+      if (!data.email) return;
+      let forgot = await this.http.put("/forgot-password", { email: data.email, dateTime: moment().toISOString() }).toPromise() as { msg: "not found" | "success" };
+      if (forgot.msg === "not found") {
+        this.alertCltr.create({
+          message: "No user with that email was found",
+          buttons: ["Ok"]
+        })
+          .present();
+        return;
+      }
+
+      this.alertCltr.create({
+        message: "Go to your email to change your email",
+        buttons: ["Ok"]
+      })
+        .present();
+    }
+    catch (e) {
+      console.error(e);
+    }
   }
 }
