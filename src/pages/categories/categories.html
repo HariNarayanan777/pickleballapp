@@ -26,6 +26,13 @@
 
 
               </ion-item>
+              <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
+                <ion-avatar item-start>
+                  <img [src]="n.data.from.loginFacebook.image">
+                </ion-avatar>
+                <h2>{{n.title}}</h2>
+          <p text-wrap>{{n.body}}</p>
+              </ion-item>
         </div>
         
     
