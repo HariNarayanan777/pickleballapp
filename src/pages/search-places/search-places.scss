@@ -1,3 +1,76 @@
 page-search-places {
-
+    #slides-types {
+        height: 40px !important;
+        margin: 10px 0 0 0 !important;
+        .slide-zoom {
+            padding: 0px 10px 0px 0px;
+            h4 {
+                margin: 0 !important;
+                font-size: 1.5rem !important;
+                padding: 8px 5px;
+                font-weight: normal;
+                border-radius: 20px;
+                color: #999999 !important;
+                border: 1px solid #999999;
+            }
+            h4.select {
+                color: white !important;
+                background-color: #009933 !important;
+            }
+        }
+    }
+    #title-nearby-courts h4{
+        border-bottom: 1px solid #ccc;
+        margin-left: 10px;
+        font-size: 1.7rem;
+    }
+    #courts {
+        ion-slide {
+            align-items: flex-start !important;
+        }
+        .inner-content {
+            margin: 10px;
+            border-radius: 20px;
+            -webkit-box-shadow: 3px 3px 12px 5px rgba(210, 211, 217, 1);
+            -moz-box-shadow: 3px 3px 12px 5px rgba(210, 211, 217, 1);
+            box-shadow: 3px 3px 12px 5px rgba(210, 211, 217, 1);
+            height: 260px !important;
+            img {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 20px 20px 0 0;
+            }
+            .inner {
+                padding: 5px;
+                h4,
+                p {
+                    margin: 0 !important;
+                    text-align: left;
+                    padding: 3px;
+                }
+                h4 {
+                    font-size: 1.5rem !important;
+                }
+                p {
+                    font-size: 1.4rem !important;
+                }
+                div {
+                    display: block;
+                    width: 100%;
+                }
+                div.header {
+                    display: flex;
+                    div {
+                        width: 50%;
+                        flex-basis: 50%;
+                    }
+                }
+                div.body {
+                    display: block;
+                    width: 100%;
+                }
+            }
+        }
+    }
 }

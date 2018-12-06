@@ -19,7 +19,8 @@ export class SearchPage {
   userID: any;
   disable: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private rest: RestProvider, private storage: Storage,
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+    private rest: RestProvider, private storage: Storage,
     public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
     this.searchControl = new FormControl();
     this.storage.get('USER_ID').then(res => {
