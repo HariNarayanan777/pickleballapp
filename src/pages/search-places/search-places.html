@@ -7,25 +7,75 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-searchbar type="text" [(ngModel)]="search" showCancelButton="true">
+<ion-content>
+
+  <ion-slides id="slides-types" slidesPerView="2.5">
+    <ion-slide>
+      <h4 [ngClass]="type===1?'select':''" (click)="setType(1)">Courts</h4>
+    </ion-slide>
+    <ion-slide>
+      <h4 [ngClass]="type===2?'select':''" (click)="setType(2)">Player</h4>
+    </ion-slide>
+    <ion-slide>
+      <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">Category</h4>
+    </ion-slide>
+  </ion-slides>
+
+  <!-- PARA BUSCAR PLAYER -->
+  <ion-searchbar [hidden]="type!==2" (input)="onSearchInput()" [(ngModel)]="searchTerm" [formControl]="searchControl"
+    [showCancelButton]="true" (ionCancel)="cancel()"></ion-searchbar>
+
+  <ion-row [hidden]="type!==2" *ngIf="searching" padding>
+    <ion-list>
+      <div class="flex-center" *ngIf="players.length < 1">
+        <p>Sorry, no results matched your criteria</p>
+      </div>
+      <div *ngIf="players.length > 0">
+        <ion-item>
+          <p class="list-title">Results for {{searchTerm}} in Players</p>
+        </ion-item>
+
+        <ion-item *ngFor="let p of players">
+          <ion-avatar item-start *ngIf="p.loginFacebook">
+            <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
+          </ion-avatar>
+          <button style="background: none;">
+            <h2 text-wrap>{{p.fullName}}</h2>
+          </button>
+          <button [disabled]="disable" *ngIf="p._id != userID" ion-button item-end [innerHtml]="p.requests != '' ? 'Cancel Request' : 'Add Friend' "
+            (click)="checkFriendRequest(p, $event)"></button>
+        </ion-item>
+      </div>
+
+
+    </ion-list>
+  </ion-row>
+
+  <!-- PARA BUSCAR COURTS IN MAP -->
+  <ion-searchbar id="search-courts-input" [hidden]="type!==1" type="text" [(ngModel)]="search" showCancelButton="true">
   </ion-searchbar>
-  <div id="map_places" style="width: 100%; height: 300px">
+  <div [hidden]="type!==1" id="map_places" style="width: 100%; height: 300px">
   </div>
 
-  <div>
+  <div id="title-nearby-courts" [hidden]="type!==1">
     <h4>Nearby courts</h4>
   </div>
-  <ion-slides>
+  <ion-slides [hidden]="type!==1" id="courts" slidesPerView="1.5">
     <ion-slide *ngFor="let court of courst">
-      <img [src]="court.photos[0].getUrl()">
-      <div class="inner">
-        <div class="header">
-          <h2>{{court.name}}</h2>
-          <h4>{{court.rating}}</h4>
-        </div>
-        <div class="body">
-          <p>{{court.location}}</p>
+      <div class="inner-content">
+        <img [src]="court.photos[0].getUrl()">
+        <div class="inner">
+          <div class="header">
+            <div>
+              <h4>{{court.name}}</h4>
+            </div>
+            <div>
+              <h4 style="text-align: right;">Rating: {{court.rating}}</h4>
+            </div>
+          </div>
+          <div class="body">
+            <p>{{court.location}}</p>
+          </div>
         </div>
       </div>
     </ion-slide>

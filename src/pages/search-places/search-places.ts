@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FormControl } from '@angular/forms';
+import { Storage } from '@ionic/storage';
+import { RestProvider } from '../../providers/rest/rest';
 
 declare var google: any;
 
@@ -12,6 +16,16 @@ declare var google: any;
 })
 export class SearchPlacesPage {
 
+  //Para busquedad de jugadores
+  searching: any = false;
+  shouldShowCancel: any = false;
+  searchTerm: string = '';
+  searchControl: FormControl;
+  public players: any = [];
+  userID: any;
+  disable: boolean = false;
+
+  //Para busquedad de courts
   public search = "";
   private autocomplete: any;
   public map: any;
@@ -21,23 +35,127 @@ export class SearchPlacesPage {
   public courst = [];
   public markers = [];
 
+  public type = 1;
+
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    private geolocation: Geolocation
+    private geolocation: Geolocation, public sanitizer: DomSanitizer,
+    private storage: Storage, private rest: RestProvider,
+    public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController
   ) {
+    this.searchControl = new FormControl();
+    this.storage.get('USER_ID').then(res => {
+      this.userID = res;
+    });
   }
 
   async ionViewDidLoad() {
+
+    this.searching = false;
+    this.shouldShowCancel = false;
+
     let position = await this.geolocation.getCurrentPosition();
     await LiveComunicationProvider.reloadGoogleplaces();
-    this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("input.searchbar-input"));
+    this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
     google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
-      var address = (document.querySelector("input.searchbar-input") as any).value;
+      var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
       this.setLocationOfSearch(address);
     }.bind(this));
     this.initMap(position);
+
+  }
+  //#region para busquedad de players
+  onSearchInput() {
+    if (this.searchTerm === "") {
+      this.searching = false;
+      this.shouldShowCancel = false;
+    } else {
+      this.searching = true;
+      this.shouldShowCancel = true;
+      this.getdata();
+    }
+
   }
 
+  getdata() {
+    this.rest.getData(`/users/finds/${this.userID}?name=${this.searchTerm}`).subscribe(
+      result => {
+        this.players = result;
+      },
+      err => {
+        console.error("Error : " + err);
+      });
+  }
+
+  cancel() {
+    this.searching = false;
+  }
+
+
+  checkFriendRequest(player, $event) {
+    this.disable = true;
+    if (typeof player['requests'] !== 'undefined' && player['requests'].length > 0) {
+      this.cancelRequestActionSheet(player, $event);
+    } else {
+      this.addFriend(player, $event);
+    }
+  }
+
+  addFriend(player, $event) {
+    let payload = {
+      from: this.userID,
+      to: player['_id']
+    }
+    this.rest.postData('/requestfriend', payload).subscribe(res => {
+      console.log("Request", res);
+      $event.srcElement.innerText = 'Cancel Request';
+      this.presentToast("Friendship Request sent!");
+      this.disable = false;
+    })
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+  cancelRequestActionSheet(player, $event) {
+    const actionSheet = this.actionSheetCtrl.create({
+      title: 'Modify your album',
+      buttons: [
+        {
+          text: 'Cancel Request',
+          role: 'destructive',
+          handler: () => {
+            console.log('Destructive clicked');
+            this.cancelRequest(player, $event);
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  cancelRequest(player, $event) {
+    this.rest.removeData('/requestfriend/' + player['requests'][0]['id']).subscribe(res => {
+      console.log("Cancel Request", res);
+      $event.srcElement.innerText = 'Add Friend';
+      this.presentToast("Friendship Request cancelled!");
+      this.disable = false;
+    })
+  }
+  //#endregion
+
+  //#region Para busquedad de courts
   private async initMap(position) {
 
     this.lat = position.coords.latitude;
@@ -149,7 +267,7 @@ export class SearchPlacesPage {
             name: result.name,
             location: result.vicinity,
             photos: result.photos,
-            rating: result.rating
+            rating: result.rating,
           })
 
         }
@@ -185,5 +303,10 @@ export class SearchPlacesPage {
     }
 
   }
+
+  public setType(num: number) {
+    this.type = num;
+  }
+  //#endregion
 
 }
