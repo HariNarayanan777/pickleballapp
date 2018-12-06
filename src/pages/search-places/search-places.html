@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Search Places</ion-title>
+    <ion-title>Search Places And Friends</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -14,10 +14,10 @@
       <h4 [ngClass]="type===1?'select':''" (click)="setType(1)">Courts</h4>
     </ion-slide>
     <ion-slide>
-      <h4 [ngClass]="type===2?'select':''" (click)="setType(2)">Player</h4>
-    </ion-slide>
+        <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">RV Resorts</h4>
+      </ion-slide>
     <ion-slide>
-      <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">Category</h4>
+      <h4 [ngClass]="type===2?'select':''" (click)="setType(2)">Player</h4>
     </ion-slide>
   </ion-slides>
 
@@ -52,25 +52,26 @@
   </ion-row>
 
   <!-- PARA BUSCAR COURTS IN MAP -->
-  <ion-searchbar id="search-courts-input" [hidden]="type!==1" type="text" [(ngModel)]="search" showCancelButton="true">
+  <ion-searchbar id="search-courts-input" [hidden]="type===2" type="text" [(ngModel)]="search" showCancelButton="true">
   </ion-searchbar>
-  <div [hidden]="type!==1" id="map_places" style="width: 100%; height: 300px">
+  <div [hidden]="type===2" id="map_places" style="width: 100%; height: 300px">
   </div>
 
-  <div id="title-nearby-courts" [hidden]="type!==1">
+  <div id="title-nearby-courts" [hidden]="type===2">
     <h4>Nearby courts</h4>
   </div>
-  <ion-slides [hidden]="type!==1" id="courts" slidesPerView="1.5">
+  <ion-slides [hidden]="type===2" id="courts" slidesPerView="1.5">
     <ion-slide *ngFor="let court of courst">
       <div class="inner-content">
-        <img [src]="court.photos[0].getUrl()">
+          <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0].getUrl()">
+          <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">
         <div class="inner">
           <div class="header">
             <div>
               <h4>{{court.name}}</h4>
             </div>
             <div>
-              <h4 style="text-align: right;">Rating: {{court.rating}}</h4>
+              <h4 style="text-align: right;" *ngIf="court.rating">Rating: {{court.rating}}</h4>
             </div>
           </div>
           <div class="body">

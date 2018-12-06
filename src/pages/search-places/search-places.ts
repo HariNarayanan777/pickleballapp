@@ -247,13 +247,18 @@ export class SearchPlacesPage {
     this.courst = [];
     this.cleanMarkers();
     var defaultBounds = new google.maps.LatLng(this.lat, this.lng);
-    var options = {
+    var options: any = {
       location: defaultBounds,
       radius: 50000,
-      name: 'pickleball courts',
-      type: ['rv_park'],
       fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
     };
+
+    if (this.type === 3) {
+      options.type = ['rv_park'];
+    } else {
+      options.name = 'pickleball courts';
+    }
+
     let service = new google.maps.places.PlacesService(this.map);
 
     service.nearbySearch(options, (results, status, pagination) => {
@@ -304,8 +309,15 @@ export class SearchPlacesPage {
 
   }
 
+  public loadImage(court){
+    court.loadImage = true;
+  }
+
   public setType(num: number) {
     this.type = num;
+    if (this.type !== 2) {
+      this.getCourts();
+    }
   }
   //#endregion
 

@@ -14,8 +14,8 @@ import { SearchPlacesPage } from '../search-places/search-places';
 })
 export class TabsPage {
 
-  // tab1Root = SearchPlacesPage;
-  tab1Root = HomePage;
+  tab1Root = SearchPlacesPage;
+  // tab1Root = HomePage;
   tab2Root = CategoriesPage;
   tab3Root = ListChatPage;
   tab4Root = SearchPage;
