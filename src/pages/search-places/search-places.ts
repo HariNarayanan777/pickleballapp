@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { RestProvider } from '../../providers/rest/rest';
+import { HttpClient } from '@angular/common/http';
 
 declare var google: any;
 
@@ -15,6 +16,10 @@ declare var google: any;
   templateUrl: 'search-places.html',
 })
 export class SearchPlacesPage {
+
+  //Para busquedad de torneos
+  public torneoName = "";
+  public tournaments = [];
 
   //Para busquedad de jugadores
   searching: any = false;
@@ -41,7 +46,8 @@ export class SearchPlacesPage {
     public navCtrl: NavController, public navParams: NavParams,
     private geolocation: Geolocation, public sanitizer: DomSanitizer,
     private storage: Storage, private rest: RestProvider,
-    public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController
+    public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController,
+    public http: HttpClient
   ) {
     this.searchControl = new FormControl();
     this.storage.get('USER_ID').then(res => {
@@ -64,6 +70,55 @@ export class SearchPlacesPage {
     this.initMap(position);
 
   }
+
+  //#region para busquedad de torneos
+  public async buscarTorneo() {
+    if(this.torneoName===""){
+      this.tournaments = [];
+      return;
+    }
+    try {
+      this.tournaments = await this.http.get(`/tournaments-search?name=${this.torneoName}`).toPromise() as any[];
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  public cancelBuscarTorneo(){
+    this.tournaments = [];
+  }
+
+  public saved(tournaments) {
+    let idUser = this.userID;
+    return tournaments.savedTournaments.findIndex(it => {
+      return it.user === idUser;
+    }) !== -1;
+  }
+
+  public async addOrRemove(tour, save) {
+    let idUser = this.userID;
+    if (save === true) {
+      let index = tour.savedTournaments.findIndex(it => {
+        return it.user === idUser;
+      });
+      await this.http.delete('/savedtournaments/' + tour.savedTournaments[index].id).toPromise();
+      if (tour.savedTournaments.length === 1)
+        tour.savedTournaments = [];
+      else
+        tour.savedTournaments.splice(index, 1);
+
+    } else {
+      let index = tour.savedTournaments.findIndex(it => {
+        return it.user === idUser;
+      });
+      await this.http.post('/savedtournaments', { user: idUser, tournament: tour.id }).toPromise();
+      tour.savedTournaments.push({ user: idUser, tournament: tour.id });
+    }
+  }
+
+  //#endregion
+
   //#region para busquedad de players
   onSearchInput() {
     if (this.searchTerm === "") {
@@ -309,7 +364,7 @@ export class SearchPlacesPage {
 
   }
 
-  public loadImage(court){
+  public loadImage(court) {
     court.loadImage = true;
   }
 
