@@ -17,7 +17,7 @@
         </ion-item>
 
         <ion-item *ngFor="let p of players">
-          <ion-avatar item-start>
+          <ion-avatar *ngIf="p.loginFacebook" item-start>
             <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
           </ion-avatar>
           <button style="background: none;">

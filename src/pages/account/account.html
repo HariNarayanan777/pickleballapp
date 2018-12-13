@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons start class="start-btn">
@@ -19,11 +18,13 @@
 </ion-header>
 
 
-<ion-content >
+<ion-content>
+
+  <ion-grid>
     <ion-row>
       <ion-col col-12>
         <div class="image-holder">
-            <img [src]="profileImg" alt="">
+          <img [src]="profileImg" alt="">
         </div>
         <p text-center>Rank: {{rank}}</p>
         <div class="star-rank">
@@ -32,25 +33,36 @@
           <ion-icon name="ios-star"></ion-icon>
           <ion-icon name="ios-star"></ion-icon>
           <ion-icon name="ios-star"></ion-icon>
-
         </div>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-list>
-          <ion-item>
-              <ion-label><ion-icon name="ios-card"></ion-icon>Name</ion-label>
-              <ion-input type="text" disabled [(ngModel)]="fullName"></ion-input>
-            </ion-item>
-            
-              <ion-item>
-                  <ion-label><ion-icon name="ios-mail-outline"></ion-icon> Email</ion-label>
-                  <ion-input type="text" disabled [(ngModel)]="email"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label><ion-icon name="ios-pin-outline"></ion-icon> Zipcode</ion-label>
-                    <ion-input type="text" disabled [(ngModel)]="zipcode"></ion-input>
-                  </ion-item>
-      </ion-list>
-    </ion-row>
+  </ion-grid>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>
+        <ion-icon name="ios-card"></ion-icon>Name
+      </ion-label>
+      <ion-input type="text" disabled [(ngModel)]="fullName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <ion-icon name="ios-mail-outline"></ion-icon> Email
+      </ion-label>
+      <ion-input type="text" disabled [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <ion-icon name="ios-pin-outline"></ion-icon> Zipcode
+      </ion-label>
+      <ion-input type="text" disabled [(ngModel)]="zipcode"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <button ion-button (click)="toFutureTournments()">
+      Future Tournaments
+    </button>
+  </ion-item>
+
 </ion-content>

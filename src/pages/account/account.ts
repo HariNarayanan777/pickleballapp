@@ -7,6 +7,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { UpdateAccountPage } from '../update-account/update-account';
 import { MyApp } from '../../app/app.component';
 import { HttpClient } from '@angular/common/http';
+import { FutureTournamentsPage } from '../future-tournaments/future-tournaments';
 
 
 @IonicPage()
@@ -103,6 +104,10 @@ export class AccountPage {
       }
     });
     modal.present();
+  }
+
+  public toFutureTournments(){
+    this.navCtrl.push(FutureTournamentsPage);
   }
 
 }

@@ -15,11 +15,17 @@ export class AuthProvider {
 
   public async saveLoginUser(user) {
     await this.storage.set('USER_ID', user['id']);
-    if(user.token){
+    if (user.token) {
       await this.storage.set('USER_TOKEN', user['token']);
     }
     await this.storage.set('LOGGED_IN', true);
     this.app.getRootNavs()[0].setRoot(TabsPage);
+  }
+
+  public async getIdUser(): Promise<string> {
+    let id = await this.storage.get('USER_ID') as string;
+    if (id) return id;
+    return "";
   }
 
 }

@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Future Tournaments</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item *ngFor="let tour of tournaments">
+      <ion-thumbnail *ngIf="tour.imgs" item-start>
+        <img [src]="tour.imgs[0]">
+      </ion-thumbnail>
+      {{tour.title}}
+      <button ion-button item-end (click)="addOrRemove(tour, saved(tour))">{{saved(tour)===true?'Remove':'Save'}}</button>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

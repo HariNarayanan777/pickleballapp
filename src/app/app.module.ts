@@ -35,6 +35,8 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { CreateAccountPageModule } from '../pages/create-account/create-account.module';
 import { CreateAccountPage } from '../pages/create-account/create-account';
 import { AuthProvider } from '../providers/auth/auth';
+import { FutureTournamentsPageModule } from '../pages/future-tournaments/future-tournaments.module';
+import { FutureTournamentsPage } from '../pages/future-tournaments/future-tournaments';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import { AuthProvider } from '../providers/auth/auth';
     ChatPageModule,
     ListChatPageModule,
     SearchPlacesPageModule,
-    CreateAccountPageModule
+    CreateAccountPageModule,
+    FutureTournamentsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -70,7 +73,8 @@ import { AuthProvider } from '../providers/auth/auth';
     ChatPage,
     ListChatPage,
     SearchPage,
-    CreateAccountPage
+    CreateAccountPage,
+    FutureTournamentsPage
   ],
   providers: [
     StatusBar,
