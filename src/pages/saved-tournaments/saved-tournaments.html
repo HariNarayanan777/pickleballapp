@@ -1,0 +1,20 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Saved Tournaments</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let tour of tournaments" (click)="toView(tour.tournament) ">
+      <ion-thumbnail *ngIf="tour.tournament.imgs" item-start>
+        <img [src]="tour.tournament.imgs[0]">
+      </ion-thumbnail>
+      {{tour.tournament.title}}
+    </ion-item>
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{tournament.title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card>
+
+    <ion-slides slidesPerView="1" paginationType="progress" pager="true" [hidden]="!tournament.imgs">
+      <ion-slide *ngFor="let img of tournament.imgs">
+        <img [src]="img">
+      </ion-slide>
+    </ion-slides>
+
+    <ion-item *ngIf="tournament.dates">
+      <h4>Dates</h4>
+      <p>{{tournament.dates}}</p>
+    </ion-item>
+    <ion-card-content>
+      <h4>Address</h4>
+      <p>{{tournament.address}}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col col-6 *ngIf="tournament.registrationStart">
+        <h4>Registration Start</h4>
+        <p>{{dateToFormat(tournament.registrationStart)}}</p>
+      </ion-col>
+      <ion-col col-6 *ngIf="tournament.endRegistration">
+        <h4>Registration End</h4>
+        <p>{{dateToFormat(tournament.endRegistration)}}</p>
+      </ion-col>
+    </ion-row>
+
+    <div id="map_tournament" style="width: 100%; height: 300px;"></div>
+
+  </ion-card>
+
+</ion-content>

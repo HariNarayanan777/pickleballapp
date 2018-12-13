@@ -50,7 +50,7 @@ export class FutureTournamentsPage {
       let index = tour.savedTournaments.findIndex(it => {
         return it.user === idUser;
       });
-      await this.http.get('/savedtournaments/' + tour.savedTournaments[index].id).toPromise();
+      await this.http.delete('/savedtournaments/' + tour.savedTournaments[index].id).toPromise();
       if (tour.savedTournaments.length === 1)
         tour.savedTournaments = [];
       else

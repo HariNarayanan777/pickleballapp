@@ -37,6 +37,10 @@ import { CreateAccountPage } from '../pages/create-account/create-account';
 import { AuthProvider } from '../providers/auth/auth';
 import { FutureTournamentsPageModule } from '../pages/future-tournaments/future-tournaments.module';
 import { FutureTournamentsPage } from '../pages/future-tournaments/future-tournaments';
+import { SavedTournamentsPageModule } from '../pages/saved-tournaments/saved-tournaments.module';
+import { ViewTournamentPageModule } from '../pages/view-tournament/view-tournament.module';
+import { SavedTournamentsPage } from '../pages/saved-tournaments/saved-tournaments';
+import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
 
 @NgModule({
   declarations: [
@@ -61,7 +65,9 @@ import { FutureTournamentsPage } from '../pages/future-tournaments/future-tourna
     ListChatPageModule,
     SearchPlacesPageModule,
     CreateAccountPageModule,
-    FutureTournamentsPageModule
+    FutureTournamentsPageModule,
+    SavedTournamentsPageModule,
+    ViewTournamentPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -74,7 +80,9 @@ import { FutureTournamentsPage } from '../pages/future-tournaments/future-tourna
     ListChatPage,
     SearchPage,
     CreateAccountPage,
-    FutureTournamentsPage
+    FutureTournamentsPage,
+    SavedTournamentsPage,
+    ViewTournamentPage
   ],
   providers: [
     StatusBar,

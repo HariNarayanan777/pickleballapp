@@ -8,6 +8,7 @@ import { UpdateAccountPage } from '../update-account/update-account';
 import { MyApp } from '../../app/app.component';
 import { HttpClient } from '@angular/common/http';
 import { FutureTournamentsPage } from '../future-tournaments/future-tournaments';
+import { SavedTournamentsPage } from '../saved-tournaments/saved-tournaments';
 
 
 @IonicPage()
@@ -108,6 +109,10 @@ export class AccountPage {
 
   public toFutureTournments(){
     this.navCtrl.push(FutureTournamentsPage);
+  }
+
+  public toSavedTournments(){
+    this.navCtrl.push(SavedTournamentsPage);
   }
 
 }
