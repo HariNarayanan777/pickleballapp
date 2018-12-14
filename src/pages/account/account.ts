@@ -9,6 +9,7 @@ import { MyApp } from '../../app/app.component';
 import { HttpClient } from '@angular/common/http';
 import { FutureTournamentsPage } from '../future-tournaments/future-tournaments';
 import { SavedTournamentsPage } from '../saved-tournaments/saved-tournaments';
+import { ShareAppPage } from '../share-app/share-app';
 
 
 @IonicPage()
@@ -18,12 +19,12 @@ import { SavedTournamentsPage } from '../saved-tournaments/saved-tournaments';
 })
 export class AccountPage {
 
-  profileImg:any;
-  userID:any;
-  fullName:any;
-  email:any;
-  zipcode:any;
-  rank:any;
+  profileImg: any;
+  userID: any;
+  fullName: any;
+  email: any;
+  zipcode: any;
+  rank: any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -107,11 +108,15 @@ export class AccountPage {
     modal.present();
   }
 
-  public toFutureTournments(){
+  public shareApp() {
+    this.navCtrl.push(ShareAppPage);
+  }
+
+  public toFutureTournments() {
     this.navCtrl.push(FutureTournamentsPage);
   }
 
-  public toSavedTournments(){
+  public toSavedTournments() {
     this.navCtrl.push(SavedTournamentsPage);
   }
 

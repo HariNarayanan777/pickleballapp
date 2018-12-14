@@ -41,6 +41,8 @@ import { SavedTournamentsPageModule } from '../pages/saved-tournaments/saved-tou
 import { ViewTournamentPageModule } from '../pages/view-tournament/view-tournament.module';
 import { SavedTournamentsPage } from '../pages/saved-tournaments/saved-tournaments';
 import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
+import { ShareAppPageModule } from '../pages/share-app/share-app.module';
+import { ShareAppPage } from '../pages/share-app/share-app';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
     CreateAccountPageModule,
     FutureTournamentsPageModule,
     SavedTournamentsPageModule,
-    ViewTournamentPageModule
+    ViewTournamentPageModule,
+    ShareAppPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -82,7 +85,8 @@ import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
     CreateAccountPage,
     FutureTournamentsPage,
     SavedTournamentsPage,
-    ViewTournamentPage
+    ViewTournamentPage,
+    ShareAppPage
   ],
   providers: [
     StatusBar,
