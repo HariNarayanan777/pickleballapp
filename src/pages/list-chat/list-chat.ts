@@ -29,9 +29,13 @@ export class ListChatPage {
         user = it.to;
       else
         user = it.from;
-      user.photo = user.loginFacebook.image || "";
+      user.photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
       return user;
     });
+  }
+
+  private validProperty(prop) {
+    return prop !== undefined && prop !== null;
   }
 
   public toChat(user) {

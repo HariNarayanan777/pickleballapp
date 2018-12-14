@@ -1,41 +1,39 @@
 <ion-content>
   <ion-list>
-      <ion-list-header>
-          Notifications
-        </ion-list-header>
-        <div *ngFor="let n of notifications">
-          
-            <ion-item *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
-                <ion-avatar item-start>
-                    <img [src]="n.data.from.loginFacebook.image">
-                  </ion-avatar>
-                  <h2>{{n.title}} {{n.data.from.fullName}}</h2>
-                  <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="secondary" (click)="responseRequest(n, true)">
-                      <ion-icon name="ios-checkmark"></ion-icon>
-                    </button>
-                    <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="danger" (click)="responseRequest(n, false)">
-                        <ion-icon name="ios-close"></ion-icon>
-                      </button>
-              
-              </ion-item>
-              <ion-item *ngIf="n.type == 'acceptFriend'">
-                    <ion-avatar item-start>
-                            <img [src]="n.data.to.loginFacebook.image">
-                          </ion-avatar>
-                    <h2 text-wrap>{{n.title}}</h2>
+    <ion-list-header>
+      Notifications
+    </ion-list-header>
+    <div *ngFor="let n of notifications">
+
+      <ion-item *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
+        <ion-avatar *ngIf="existImage(n.data.from)" item-start>
+          <img [src]="getImage(n.data.from)">
+        </ion-avatar>
+        <h2>{{n.title}} {{n.data.from.fullName}}</h2>
+        <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="secondary" (click)="responseRequest(n, true)">
+          <ion-icon name="ios-checkmark"></ion-icon>
+        </button>
+        <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="danger" (click)="responseRequest(n, false)">
+          <ion-icon name="ios-close"></ion-icon>
+        </button>
+
+      </ion-item>
+      <ion-item *ngIf="n.type == 'acceptFriend'">
+        <ion-avatar *ngIf="existImage(n.data.to)" item-start>
+          <img [src]="getImage(n.data.to)">
+        </ion-avatar>
+        <h2 text-wrap>{{n.title}}</h2>
+      </ion-item>
+      <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
+        <ion-avatar item-start>
+          <img [src]="n.data.from.loginFacebook.image">
+        </ion-avatar>
+        <h2>{{n.title}}</h2>
+        <p text-wrap>{{n.body}}</p>
+      </ion-item>
+    </div>
 
 
-              </ion-item>
-              <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
-                <ion-avatar item-start>
-                  <img [src]="n.data.from.loginFacebook.image">
-                </ion-avatar>
-                <h2>{{n.title}}</h2>
-          <p text-wrap>{{n.body}}</p>
-              </ion-item>
-        </div>
-        
-    
 
   </ion-list>
 

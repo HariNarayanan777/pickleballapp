@@ -14,33 +14,47 @@ import { ChatPage } from '../chat/chat';
   templateUrl: 'categories.html',
 })
 export class CategoriesPage {
-  userID:any;
-  notifications:any = [];
-  disable:boolean = false;
+  userID: any;
+  notifications: any = [];
+  disable: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage, private toastCtrl: ToastController) {
-      this.storage.get('USER_ID').then(res => {
-        this.userID = res;
-        this.getNotifications();
-  
-      });
+    this.storage.get('USER_ID').then(res => {
+      this.userID = res;
+      this.getNotifications();
+
+    });
   }
 
   ionViewDidLoad() {
-    LiveComunicationProvider.eventsNotifications.onNoti = async function(notification){
+    LiveComunicationProvider.eventsNotifications.onNoti = async function (notification) {
       await this.navCtrl.setRoot(ListChatPage)
-      this.navCtrl.push(ChatPage, {user:notification.from})
+      this.navCtrl.push(ChatPage, { user: notification.from })
     }.bind(this);
   }
 
-  getNotifications(){
+  getNotifications() {
     this.rest.getData(`/notifications?where={"user":"${this.userID}"}`).subscribe(res => {
       console.log(res);
       this.notifications = res;
     })
   }
-  responseRequest(noti, response){
+
+  public existImage(user) {
+    let photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+    return photo !== "";
+  }
+
+  public getImage(user){
+    return  this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+  }
+
+  private validProperty(prop) {
+    return prop !== undefined && prop !== null;
+  }
+
+  responseRequest(noti, response) {
     var card = document.getElementById('noti-' + noti['id']);
     const btns = Array.from(card.querySelectorAll('button'));
 
@@ -54,13 +68,13 @@ export class CategoriesPage {
     }
 
     console.log(payload);
-    this.rest.patchData(`/requestfriend/${noti.data.id}`, payload).subscribe(res =>{
+    this.rest.patchData(`/requestfriend/${noti.data.id}`, payload).subscribe(res => {
       console.log("Noti", res);
-      
+
       btns.forEach(btn => {
-          btn.style.display = 'none';
+        btn.style.display = 'none';
       });
-      if(response == true){
+      if (response == true) {
         this.presentToast('You and ' + noti['data']['from']['fullName'] + ' are friends now.');
       }
       this.disable = false;
@@ -78,7 +92,7 @@ export class CategoriesPage {
     toast.present();
   }
 
-  updateNotiStatus(noti){
+  updateNotiStatus(noti) {
     let payload = {
       view: true
     }
