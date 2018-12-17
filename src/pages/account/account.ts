@@ -57,15 +57,22 @@ export class AccountPage {
     })
   }
 
-  logout() {
+  async logout() {
     if (this.platform.is("cordova")) {
-      this.fb.logout().then(res => {
-        console.log(res);
+      let withEmail = await this.storage.get('SESIONEMAIL');
+      if (withEmail === true) {
         this.storage.set('LOGGED_IN', false);
         MyApp.setNotifications = false;
-        this.removeToken();
         this.app.getRootNav().setRoot(LoginPage);
-      });
+      } else {
+        this.fb.logout().then(res => {
+          console.log(res);
+          this.storage.set('LOGGED_IN', false);
+          MyApp.setNotifications = false;
+          this.removeToken();
+          this.app.getRootNav().setRoot(LoginPage);
+        });
+      }
     } else {
       this.storage.set('LOGGED_IN', false);
       MyApp.setNotifications = false;

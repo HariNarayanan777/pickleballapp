@@ -13,12 +13,16 @@ export class AuthProvider {
     AuthProvider.me = this;
   }
 
-  public async saveLoginUser(user) {
+  public async saveLoginUser(user, withEmailAndPassword?) {
+    withEmailAndPassword = withEmailAndPassword || false;
     await this.storage.set('USER_ID', user['id']);
     if (user.token) {
       await this.storage.set('USER_TOKEN', user['token']);
     }
     await this.storage.set('LOGGED_IN', true);
+    if(withEmailAndPassword===true){
+      await this.storage.set('SESIONEMAIL', true);
+    }
     this.app.getRootNavs()[0].setRoot(TabsPage);
   }
 

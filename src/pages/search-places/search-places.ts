@@ -229,7 +229,7 @@ export class SearchPlacesPage {
       this.lat = event.latLng.lat;
       this.lng = event.latLng.lng;
       let image = {
-        url: './assets/imgs/icon-marker.png',
+        url: './assets/imgs/icon-marker-default.png',
         // This marker is 20 pixels wide by 32 pixels high.
         size: new google.maps.Size(24, 24),
         // The origin for this image is (0, 0).
@@ -264,13 +264,13 @@ export class SearchPlacesPage {
         this.lat = res.geometry.location.lat();
         this.lng = res.geometry.location.lng();
         let image = {
-          url: './assets/imgs/icon-marker.png',
+          url: './assets/imgs/icon-marker-default.png',
           // This marker is 20 pixels wide by 32 pixels high.
-          size: new google.maps.Size(24, 24),
+          size: new google.maps.Size(30, 59),
           // The origin for this image is (0, 0).
           origin: new google.maps.Point(0, 0),
           // The anchor for this image is the base of the flagpole at (0, 32).
-          anchor: new google.maps.Point(0, 8)
+          anchor: new google.maps.Point(15, 59)
         };
 
         new google.maps.Marker({
@@ -341,13 +341,13 @@ export class SearchPlacesPage {
       let lat = result.geometry.location.lat();
       let lng = result.geometry.location.lng();
       let image = {
-        url: './assets/imgs/icon-marker2.png',
+        url: './assets/imgs/icon-marker-default.png',
         // This marker is 20 pixels wide by 32 pixels high.
-        size: new google.maps.Size(24, 24),
+        size: new google.maps.Size(30, 59),
         // The origin for this image is (0, 0).
         origin: new google.maps.Point(0, 0),
         // The anchor for this image is the base of the flagpole at (0, 32).
-        anchor: new google.maps.Point(0, 8)
+        anchor: new google.maps.Point(15, 59)
       };
 
       let marker = new google.maps.Marker({

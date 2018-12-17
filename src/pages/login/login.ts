@@ -53,7 +53,7 @@ export class LoginPage {
       return;
     }
     let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
-    await AuthProvider.me.saveLoginUser(login);
+    await AuthProvider.me.saveLoginUser(login, true);
   }
 
   handleLogin(res) {
