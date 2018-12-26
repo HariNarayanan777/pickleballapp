@@ -9,13 +9,13 @@
 
 <ion-content>
 
-  <ion-slides id="slides-types" slidesPerView="2.5">
+  <ion-slides id="slides-types" slidesPerView="1.5">
     <ion-slide>
-      <h4 [ngClass]="type===1?'select':''" (click)="setType(1)">Courts</h4>
+      <h4 [ngClass]="type===1?'select':''" (click)="setType(1)">Tournaments, RV Resort & Courts</h4>
     </ion-slide>
-    <ion-slide>
-      <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">RV Resorts</h4>
-    </ion-slide>
+    <!-- <ion-slide> -->
+      <!-- <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">RV Resorts</h4> -->
+    <!-- </ion-slide> -->
     <ion-slide>
       <h4 [ngClass]="type===2?'select':''" (click)="setType(2)">Player</h4>
     </ion-slide>

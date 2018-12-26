@@ -36,6 +36,7 @@ export class SearchPlacesPage {
   public map: any;
   public lat = 0;
   public lng = 0;
+  marker: any;
 
   public courst = [];
   public markers = [];
@@ -53,6 +54,7 @@ export class SearchPlacesPage {
     this.storage.get('USER_ID').then(res => {
       this.userID = res;
     });
+    this.ionViewDidLoad();
   }
 
   async ionViewDidLoad() {
@@ -62,6 +64,7 @@ export class SearchPlacesPage {
 
     let position = await this.geolocation.getCurrentPosition();
     await LiveComunicationProvider.reloadGoogleplaces();
+    console.log("loading google maps");
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
     google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
       var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
@@ -73,7 +76,7 @@ export class SearchPlacesPage {
 
   //#region para busquedad de torneos
   public async buscarTorneo() {
-    if(this.torneoName===""){
+    if (this.torneoName === "") {
       this.tournaments = [];
       return;
     }
@@ -85,7 +88,7 @@ export class SearchPlacesPage {
     }
   }
 
-  public cancelBuscarTorneo(){
+  public cancelBuscarTorneo() {
     this.tournaments = [];
   }
 
@@ -222,31 +225,37 @@ export class SearchPlacesPage {
       },
       zoom: 8
     };
-
     this.map = new google.maps.Map(document.getElementById("map_places"), mapOptions);
 
-    google.maps.event.addListener(this.map, 'click', function (event) {
-      this.lat = event.latLng.lat;
-      this.lng = event.latLng.lng;
-      let image = {
-        url: './assets/imgs/icon-marker-default.png',
-        // This marker is 20 pixels wide by 32 pixels high.
-        size: new google.maps.Size(24, 24),
-        // The origin for this image is (0, 0).
-        origin: new google.maps.Point(0, 0),
-        // The anchor for this image is the base of the flagpole at (0, 32).
-        anchor: new google.maps.Point(0, 8)
-      };
 
-      new google.maps.Marker({
-        animation: 'DROP',
-        position: event.latLng,
-        map: this.map,
-        icon: image
+
+    this.marker = new google.maps.Marker({
+      animation: 'DROP',
+      position: {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      },
+      map: this.map,
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      }
+    });
+    this.map.setCenter({ lat: this.lat, lng: this.lng });
+
+
+    google.maps.event.addListener(this.map, 'click', function (event) {
+      console.log(event);
+      this.lat = event.latLng.lat();
+      this.lng = event.latLng.lng();
+
+      this.marker.setPosition({
+        lat: this.lat,
+        lng: this.lng
       });
       this.map.setCenter({ lat: this.lat, lng: this.lng });
       this.getCourts();
-    });
+      this.getTournaments();
+    }.bind(this));
 
     this.getCourts();
   }
@@ -263,28 +272,14 @@ export class SearchPlacesPage {
       if (res.geometry) {
         this.lat = res.geometry.location.lat();
         this.lng = res.geometry.location.lng();
-        let image = {
-          url: './assets/imgs/icon-marker-default.png',
-          // This marker is 20 pixels wide by 32 pixels high.
-          size: new google.maps.Size(30, 59),
-          // The origin for this image is (0, 0).
-          origin: new google.maps.Point(0, 0),
-          // The anchor for this image is the base of the flagpole at (0, 32).
-          anchor: new google.maps.Point(15, 59)
-        };
 
-        new google.maps.Marker({
-          animation: 'DROP',
-          position: {
-            lat: this.lat,
-            lng: this.lng
-          },
-          map: this.map,
-          icon: image
+        this.marker.setPosition({
+          lat: this.lat,
+          lng: this.lng
         });
-
         this.map.setCenter({ lat: this.lat, lng: this.lng });
         this.getCourts();
+        this.getTournaments(this.lat, this.lng);
       }
 
     }.bind(this));
@@ -298,56 +293,83 @@ export class SearchPlacesPage {
     this.markers = [];
   }
 
-  private getCourts() {
+  private async getCourts() {
     this.courst = [];
     this.cleanMarkers();
-    var defaultBounds = new google.maps.LatLng(this.lat, this.lng);
-    var options: any = {
+    let defaultBounds = new google.maps.LatLng(this.lat, this.lng);
+    let options: any = {
       location: defaultBounds,
       radius: 50000,
       fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
     };
+    options.name = 'pickleball courts';
 
-    if (this.type === 3) {
-      options.type = ['rv_park'];
-    } else {
-      options.name = 'pickleball courts';
-    }
 
     let service = new google.maps.places.PlacesService(this.map);
 
-    service.nearbySearch(options, (results, status, pagination) => {
-      console.log(results, status, pagination);
-      pagination.nextPage();
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (let result of results) {
-          this.courst.push({
-            lat: result.geometry.location.lat(),
-            lng: result.geometry.location.lng(),
-            name: result.name,
-            location: result.vicinity,
-            photos: result.photos,
-            rating: result.rating,
-          })
+    let results = await new Promise((resolve, reject) => {
+      service.nearbySearch(options, (results, status, pagination) => {
+        console.log(results, status, pagination);
+        pagination.nextPage();
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          for (let result of results) {
+            this.courst.push({
+              lat: result.geometry.location.lat(),
+              lng: result.geometry.location.lng(),
+              name: result.name,
+              location: result.vicinity,
+              photos: result.photos,
+              rating: result.rating,
+            })
 
+          }
+          resolve(results);
         }
-        this.setMarkersOfPlaces(results)
-      }
-    });
+      });
+    }) as any[];
+
+    var options2: any = {
+      location: defaultBounds,
+      radius: 50000,
+      fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
+    };
+    options2.type = ['rv_park'];
+    let results2 = await new Promise((resolve, reject) => {
+      service.nearbySearch(options2, (results, status, pagination) => {
+        console.log(results, status, pagination);
+        pagination.nextPage();
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          for (let result of results) {
+            this.courst.push({
+              lat: result.geometry.location.lat(),
+              lng: result.geometry.location.lng(),
+              name: result.name,
+              location: result.vicinity,
+              photos: result.photos,
+              rating: result.rating,
+            })
+
+          }
+          resolve(results);
+        }
+      });
+    })  as any[];
+
+    this.setMarkersOfPlaces(results, results2);
   }
 
-  private setMarkersOfPlaces(results) {
-    for (let result of results) {
+  private setMarkersOfPlaces(results_courts, results_rv) {
+    for (let result of results_courts) {
       let lat = result.geometry.location.lat();
       let lng = result.geometry.location.lng();
       let image = {
-        url: './assets/imgs/icon-marker-default.png',
+        url: './assets/imgs/pickleball-icon.png',
         // This marker is 20 pixels wide by 32 pixels high.
-        size: new google.maps.Size(30, 59),
+        size: new google.maps.Size(20, 20),
         // The origin for this image is (0, 0).
         origin: new google.maps.Point(0, 0),
         // The anchor for this image is the base of the flagpole at (0, 32).
-        anchor: new google.maps.Point(15, 59)
+        anchor: new google.maps.Point(10, 10)
       };
 
       let marker = new google.maps.Marker({
@@ -362,6 +384,58 @@ export class SearchPlacesPage {
       this.markers.push(marker);
     }
 
+    for (let result of results_rv) {
+      let lat = result.geometry.location.lat();
+      let lng = result.geometry.location.lng();
+      let image = {
+        url: './assets/imgs/camper.png',
+        // This marker is 20 pixels wide by 32 pixels high.
+        size: new google.maps.Size(35, 21),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is the base of the flagpole at (0, 32).
+        anchor: new google.maps.Point(17.5, 21)
+      };
+
+      let marker = new google.maps.Marker({
+        animation: 'DROP',
+        position: {
+          lat,
+          lng
+        },
+        map: this.map,
+        icon: image
+      });
+      this.markers.push(marker);
+    }
+
+  }
+
+  private async getTournaments(lat, lng) {
+    try {
+      let tournamets = await this.http.get(`/tournaments-ubication?lat=${lat}&lng=${lng}`).toPromise() as any[];
+      for (let tour of tournamets) {
+        let image = {
+          url: './assets/imgs/medal.png',
+          // This marker is 20 pixels wide by 32 pixels high.
+          size: new google.maps.Size(20, 41),
+          // The origin for this image is (0, 0).
+          origin: new google.maps.Point(0, 0),
+          // The anchor for this image is the base of the flagpole at (0, 32).
+          anchor: new google.maps.Point(10, 20.5)
+        };
+
+        new google.maps.Marker({
+          animation: 'DROP',
+          position: tour.latLng,
+          map: this.map,
+          icon: image
+        });
+      }
+    }
+    catch (e) {
+      console.error(e);
+    }
   }
 
   public loadImage(court) {
