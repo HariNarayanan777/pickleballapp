@@ -43,6 +43,7 @@ import { SavedTournamentsPage } from '../pages/saved-tournaments/saved-tournamen
 import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
 import { ShareAppPageModule } from '../pages/share-app/share-app.module';
 import { ShareAppPage } from '../pages/share-app/share-app';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { ShareAppPage } from '../pages/share-app/share-app';
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     RestProvider,
     Push,
+    Diagnostic,
     EmojiProvider,
     LiveComunicationProvider,
     Geolocation,

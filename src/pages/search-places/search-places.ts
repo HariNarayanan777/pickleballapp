@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 declare var google: any;
 
@@ -48,7 +49,7 @@ export class SearchPlacesPage {
     private geolocation: Geolocation, public sanitizer: DomSanitizer,
     private storage: Storage, private rest: RestProvider,
     public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController,
-    public http: HttpClient
+    public http: HttpClient, public diagnostic: Diagnostic
   ) {
     this.searchControl = new FormControl();
     this.storage.get('USER_ID').then(res => {
@@ -61,16 +62,28 @@ export class SearchPlacesPage {
 
     this.searching = false;
     this.shouldShowCancel = false;
-
-    let position = await this.geolocation.getCurrentPosition();
     await LiveComunicationProvider.reloadGoogleplaces();
     console.log("loading google maps");
+
+    let position: any;
+    if (await this.diagnostic.isLocationAuthorized() === false) {
+      await this.diagnostic.requestLocationAuthorization()
+      if (await this.diagnostic.isLocationAuthorized() === true) {
+        position = await this.geolocation.getCurrentPosition();
+        this.initMap(position);
+      } else {
+        this.initMap();
+      }
+    } else {
+      position = await this.geolocation.getCurrentPosition();
+      this.initMap(position);
+    }
+    
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
     google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
       var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
       this.setLocationOfSearch(address);
     }.bind(this));
-    this.initMap(position);
 
   }
 
@@ -214,10 +227,13 @@ export class SearchPlacesPage {
   //#endregion
 
   //#region Para busquedad de courts
-  private async initMap(position) {
+  private async initMap(position?) {
+    
+    if (position) {
+      this.lat = position.coords.latitude;
+      this.lng = position.coords.longitude;
+    }
 
-    this.lat = position.coords.latitude;
-    this.lng = position.coords.longitude;
     let mapOptions: any = {
       center: {
         lat: position.coords.latitude,
@@ -226,9 +242,6 @@ export class SearchPlacesPage {
       zoom: 8
     };
     this.map = new google.maps.Map(document.getElementById("map_places"), mapOptions);
-
-
-
     this.marker = new google.maps.Marker({
       animation: 'DROP',
       position: {
@@ -241,7 +254,6 @@ export class SearchPlacesPage {
       }
     });
     this.map.setCenter({ lat: this.lat, lng: this.lng });
-
 
     google.maps.event.addListener(this.map, 'click', function (event) {
       console.log(event);
@@ -353,7 +365,7 @@ export class SearchPlacesPage {
           resolve(results);
         }
       });
-    })  as any[];
+    }) as any[];
 
     this.setMarkersOfPlaces(results, results2);
   }
