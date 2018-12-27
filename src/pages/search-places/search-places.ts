@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { Storage } from '@ionic/storage';
 import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { AuthProvider } from '../../providers/auth/auth';
 
 declare var google: any;
 
@@ -49,7 +50,8 @@ export class SearchPlacesPage {
     private geolocation: Geolocation, public sanitizer: DomSanitizer,
     private storage: Storage, private rest: RestProvider,
     public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController,
-    public http: HttpClient, public diagnostic: Diagnostic
+    public http: HttpClient, public diagnostic: Diagnostic,
+    private platform: Platform, public loadingCtrl: LoadingController
   ) {
     this.searchControl = new FormControl();
     this.storage.get('USER_ID').then(res => {
@@ -66,19 +68,24 @@ export class SearchPlacesPage {
     console.log("loading google maps");
 
     let position: any;
-    if (await this.diagnostic.isLocationAuthorized() === false) {
-      await this.diagnostic.requestLocationAuthorization()
-      if (await this.diagnostic.isLocationAuthorized() === true) {
+    if (this.platform.is("cordova") === true) {
+      if (await this.diagnostic.isLocationAuthorized() === false) {
+        await this.diagnostic.requestLocationAuthorization()
+        if (await this.diagnostic.isLocationAuthorized() === true) {
+          position = await this.geolocation.getCurrentPosition();
+          this.initMap(position);
+        } else {
+          this.initMap();
+        }
+      } else {
         position = await this.geolocation.getCurrentPosition();
         this.initMap(position);
-      } else {
-        this.initMap();
       }
     } else {
       position = await this.geolocation.getCurrentPosition();
       this.initMap(position);
     }
-    
+
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
     google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
       var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
@@ -228,7 +235,7 @@ export class SearchPlacesPage {
 
   //#region Para busquedad de courts
   private async initMap(position?) {
-    
+
     if (position) {
       this.lat = position.coords.latitude;
       this.lng = position.coords.longitude;
@@ -460,6 +467,30 @@ export class SearchPlacesPage {
       this.getCourts();
     }
   }
+
+  public async saveCourts() {
+    let load = this.loadingCtrl.create();
+    load.present();
+    try {
+      let user = await AuthProvider.me.getIdUser();
+      let courts = this.courst.filter(it => {
+        return it.lng !== null && it.lng !== undefined &&
+              it.lat !== null && it.lat !== undefined;
+      }).map(it => {
+        it.coordinates = [it.lng, it.lat];
+        delete it.lng;
+        delete it.lat;
+        it.user = user;
+        return it;
+      });
+      await this.http.post("/court-bulk", { courts }).toPromise();
+      this.presentToast("Courts Saved");
+    } catch (err) {
+      console.error(err);
+    }
+    load.dismiss();
+  }
+
   //#endregion
 
 }
