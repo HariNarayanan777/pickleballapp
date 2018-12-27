@@ -65,4 +65,8 @@ export class FutureTournamentsPage {
     }
   }
 
+  public errorImage(e){
+    e.target.src = "./assets/imgs/court-sport-default.jpg";
+  }
+
 }
