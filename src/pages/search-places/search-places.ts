@@ -36,8 +36,8 @@ export class SearchPlacesPage {
   public search = "";
   private autocomplete: any;
   public map: any;
-  public lat = 0;
-  public lng = 0;
+  public lat = 36.778259;
+  public lng = -119.417931;
   marker: any;
 
   public courst = [];
@@ -57,7 +57,7 @@ export class SearchPlacesPage {
     this.storage.get('USER_ID').then(res => {
       this.userID = res;
     });
-    this.ionViewDidLoad();
+    // this.ionViewDidLoad();
   }
 
   async ionViewDidLoad() {
@@ -66,24 +66,30 @@ export class SearchPlacesPage {
     this.shouldShowCancel = false;
     await LiveComunicationProvider.reloadGoogleplaces();
     console.log("loading google maps");
+    await this.initMap();
 
     let position: any;
     if (this.platform.is("cordova") === true) {
+      console.log("cordova");
       if (await this.diagnostic.isLocationAuthorized() === false) {
-        await this.diagnostic.requestLocationAuthorization()
+        await this.diagnostic.requestLocationAuthorization();
+        console.log("pide solicitud");
         if (await this.diagnostic.isLocationAuthorized() === true) {
+          console.log("Location Authorized");
           position = await this.geolocation.getCurrentPosition();
-          this.initMap(position);
-        } else {
-          this.initMap();
+          console.log("init mapa");
+          this.setPosition(position);
         }
       } else {
+        console.log("pide position");
         position = await this.geolocation.getCurrentPosition();
-        this.initMap(position);
+        console.log("init mapa");
+        this.setPosition(position);
       }
+      console.log("cordova finish");
     } else {
       position = await this.geolocation.getCurrentPosition();
-      this.initMap(position);
+      this.setPosition(position);
     }
 
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
@@ -234,17 +240,12 @@ export class SearchPlacesPage {
   //#endregion
 
   //#region Para busquedad de courts
-  private async initMap(position?) {
-
-    if (position) {
-      this.lat = position.coords.latitude;
-      this.lng = position.coords.longitude;
-    }
-
+  private async initMap() {
+    
     let mapOptions: any = {
       center: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+        lat: this.lat,
+        lng: this.lng
       },
       zoom: 8
     };
@@ -252,8 +253,8 @@ export class SearchPlacesPage {
     this.marker = new google.maps.Marker({
       animation: 'DROP',
       position: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+        lat: this.lat,
+        lng: this.lng
       },
       map: this.map,
       icon: {
@@ -277,6 +278,16 @@ export class SearchPlacesPage {
     }.bind(this));
 
     this.getCourts();
+  }
+
+  private setPosition(position) {
+    this.lat = position.coords.latitude;
+    this.lat = position.coords.longitud;
+    this.marker.setPosition({
+      lat: this.lat,
+      lng: this.lng
+    });
+    this.map.setCenter({ lat: this.lat, lng: this.lng });
   }
 
   private setLocationOfSearch(address: string) {
@@ -475,7 +486,7 @@ export class SearchPlacesPage {
       let user = await AuthProvider.me.getIdUser();
       let courts = this.courst.filter(it => {
         return it.lng !== null && it.lng !== undefined &&
-              it.lat !== null && it.lat !== undefined;
+          it.lat !== null && it.lat !== undefined;
       }).map(it => {
         it.coordinates = [it.lng, it.lat];
         delete it.lng;
