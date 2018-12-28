@@ -44,6 +44,8 @@ import { ViewTournamentPage } from '../pages/view-tournament/view-tournament';
 import { ShareAppPageModule } from '../pages/share-app/share-app.module';
 import { ShareAppPage } from '../pages/share-app/share-app';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { CourtsSavedPageModule } from '../pages/courts-saved/courts-saved.module';
+import { CourtsSavedPage } from '../pages/courts-saved/courts-saved';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
     FutureTournamentsPageModule,
     SavedTournamentsPageModule,
     ViewTournamentPageModule,
-    ShareAppPageModule
+    ShareAppPageModule,
+    CourtsSavedPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -87,7 +90,8 @@ import { Diagnostic } from '@ionic-native/diagnostic';
     FutureTournamentsPage,
     SavedTournamentsPage,
     ViewTournamentPage,
-    ShareAppPage
+    ShareAppPage,
+    CourtsSavedPage
   ],
   providers: [
     StatusBar,

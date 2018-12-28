@@ -19,7 +19,7 @@ page-search-places {
             }
         }
     }
-    #title-nearby-courts h4{
+    #title-nearby-courts h4 {
         border-bottom: 1px solid #ccc;
         margin-left: 10px;
         font-size: 1.7rem;
@@ -72,5 +72,28 @@ page-search-places {
                 }
             }
         }
+    }
+    button.button-save {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        line-height: 50px;
+        position: absolute;
+        margin-left: -44%;
+        margin-top: 15px;
+        color: #fff;
+        background-color: #488aff;
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
+        -webkit-transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        .button-inner {
+            font-size: 1rem !important;
+        }
+    }
+    button.button-save.remove{
+        background-color: #f53d3d !important;
     }
 }

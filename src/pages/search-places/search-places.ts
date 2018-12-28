@@ -41,6 +41,7 @@ export class SearchPlacesPage {
   marker: any;
 
   public courst = [];
+  public courstSaved = [];
   public markers = [];
 
   public type = 1;
@@ -64,39 +65,40 @@ export class SearchPlacesPage {
 
     this.searching = false;
     this.shouldShowCancel = false;
+
+  }
+
+  async ngAfterViewInit() {
+
     await LiveComunicationProvider.reloadGoogleplaces();
     console.log("loading google maps");
     await this.initMap();
-
-    let position: any;
-    if (this.platform.is("cordova") === true) {
-      console.log("cordova");
-      if (await this.diagnostic.isLocationAuthorized() === false) {
-        await this.diagnostic.requestLocationAuthorization();
-        console.log("pide solicitud");
-        if (await this.diagnostic.isLocationAuthorized() === true) {
-          console.log("Location Authorized");
-          position = await this.geolocation.getCurrentPosition();
-          console.log("init mapa");
-          this.setPosition(position);
-        }
-      } else {
-        console.log("pide position");
-        position = await this.geolocation.getCurrentPosition();
-        console.log("init mapa");
-        this.setPosition(position);
-      }
-      console.log("cordova finish");
-    } else {
-      position = await this.geolocation.getCurrentPosition();
-      this.setPosition(position);
-    }
 
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
     google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
       var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
       this.setLocationOfSearch(address);
     }.bind(this));
+
+    await this.getCourtsSaved();
+
+    let position: any;
+    if (this.platform.is("cordova") === true) {
+      if (await this.diagnostic.isLocationAuthorized() === false) {
+        await this.diagnostic.requestLocationAuthorization();
+        if (await this.diagnostic.isLocationAuthorized() === true) {
+          position = await this.geolocation.getCurrentPosition();
+          this.setPosition(position);
+        }
+      } else {
+        position = await this.geolocation.getCurrentPosition();
+        this.setPosition(position);
+      }
+    } else {
+      position = await this.geolocation.getCurrentPosition();
+      this.setPosition(position);
+    }
+
 
   }
 
@@ -241,7 +243,7 @@ export class SearchPlacesPage {
 
   //#region Para busquedad de courts
   private async initMap() {
-    
+
     let mapOptions: any = {
       center: {
         lat: this.lat,
@@ -281,8 +283,9 @@ export class SearchPlacesPage {
   }
 
   private setPosition(position) {
+    console.log(position);
     this.lat = position.coords.latitude;
-    this.lat = position.coords.longitud;
+    this.lng = position.coords.longitude;
     this.marker.setPosition({
       lat: this.lat,
       lng: this.lng
@@ -339,7 +342,7 @@ export class SearchPlacesPage {
 
     let results = await new Promise((resolve, reject) => {
       service.nearbySearch(options, (results, status, pagination) => {
-        console.log(results, status, pagination);
+        // console.log(results, status, pagination);
         pagination.nextPage();
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (let result of results) {
@@ -366,7 +369,7 @@ export class SearchPlacesPage {
     options2.type = ['rv_park'];
     let results2 = await new Promise((resolve, reject) => {
       service.nearbySearch(options2, (results, status, pagination) => {
-        console.log(results, status, pagination);
+        // console.log(results, status, pagination);
         pagination.nextPage();
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (let result of results) {
@@ -441,6 +444,26 @@ export class SearchPlacesPage {
 
   }
 
+  private async getCourtsSaved() {
+    let user = await AuthProvider.me.getIdUser();
+    let query = { user };
+    this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
+    console.log(this.courstSaved);
+  }
+
+  public isSavedCourt(court) {
+    let index = this.courstSaved.findIndex(it => {
+      // console.log(it.coordinates.lng === court.lng && it.coordinates.lat === court.lat);
+      // console.log(it.coordinates.lng, court.lng, it.coordinates.lat, court.lat);
+      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+    });
+    if (index === -1) {
+      return { saved: false, index };
+    }
+
+    return { saved: true, index };
+  }
+
   private async getTournaments(lat, lng) {
     try {
       let tournamets = await this.http.get(`/tournaments-ubication?lat=${lat}&lng=${lng}`).toPromise() as any[];
@@ -484,15 +507,24 @@ export class SearchPlacesPage {
     load.present();
     try {
       let user = await AuthProvider.me.getIdUser();
+      // let courts = JSON.parse( JSON.stringify(this.courst) ) as any[];
+      // console.log(courts);
       let courts = this.courst.filter(it => {
         return it.lng !== null && it.lng !== undefined &&
           it.lat !== null && it.lat !== undefined;
       }).map(it => {
-        it.coordinates = [it.lng, it.lat];
-        delete it.lng;
-        delete it.lat;
-        it.user = user;
-        return it;
+        let ite = JSON.parse(JSON.stringify(it));
+        ite.coordinates = [ite.lng, ite.lat];
+        delete ite.lng;
+        delete ite.lat;
+        ite.user = user;
+        if (ite.photos) {
+          ite.photos = it.photos.map(i => {
+            // console.log(i);
+            return i.getUrl();
+          });
+        }
+        return ite;
       });
       await this.http.post("/court-bulk", { courts }).toPromise();
       this.presentToast("Courts Saved");
@@ -500,6 +532,40 @@ export class SearchPlacesPage {
       console.error(err);
     }
     load.dismiss();
+  }
+
+  public async saveCourt(court) {
+    if (court.lng !== null && court.lng !== undefined &&
+      court.lat !== null && court.lat !== undefined) {
+      try {
+        let user = await AuthProvider.me.getIdUser();
+        let ite = JSON.parse(JSON.stringify(court));
+        ite.coordinates = [ite.lng, ite.lat];
+        delete ite.lng;
+        delete ite.lat;
+        ite.user = user;
+        if (ite.photos) {
+          ite.photos = court.photos.map(i => {
+            return i.getUrl();
+          });
+        }
+        await this.http.post("/court", ite).toPromise();
+        this.presentToast("Saved Court");
+        await this.getCourtsSaved();
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  public async removeCourt(court) {
+    let pos = await this.isSavedCourt(court);
+    if(pos.saved === true){
+      await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
+      this.presentToast("Courst Removed");
+      await this.getCourtsSaved();
+    }
   }
 
   //#endregion

@@ -1,0 +1,26 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Courts</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card *ngFor="let court of courts">
+    <ion-item>
+      <h2>{{court.name}}</h2>
+      <p>Rating: {{court.rating}}</p>
+    </ion-item>
+    <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0]">
+    <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">
+    <ion-card-content>
+      <p>
+        {{court.location}}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

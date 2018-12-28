@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { FutureTournamentsPage } from '../future-tournaments/future-tournaments';
 import { SavedTournamentsPage } from '../saved-tournaments/saved-tournaments';
 import { ShareAppPage } from '../share-app/share-app';
+import { CourtsSavedPage } from '../courts-saved/courts-saved';
 
 
 @IonicPage()
@@ -125,6 +126,10 @@ export class AccountPage {
 
   public toSavedTournments() {
     this.navCtrl.push(SavedTournamentsPage);
+  }
+
+  public toSavedCourts(){
+    this.navCtrl.push(CourtsSavedPage);
   }
 
 }
