@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Courts And Tournaments</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-list-header>
+      Courts
+    </ion-list-header>
+    <ion-item *ngFor="let court of resultsCourts">{{court.name}}</ion-item>
+  </ion-list>
+  <ion-list>
+    <ion-list-header>
+      Tournaments
+    </ion-list-header>
+    <ion-item *ngFor="let tour of resultsTournaments">
+      <ion-avatar item-start *ngIf="tour.imgs">
+        <img [src]="tour.imgs[0]" style="width: 70px; height: 70px;">
+      </ion-avatar>
+      <button style="background: none;">
+        <h2 text-wrap>{{tour.title}}</h2>
+      </button>
+      <button ion-button item-end (click)="addOrRemove(tour, tour.isSave)">{{tour.isSave===true?'Remove':'Save'}}</button>
+    </ion-item>
+  </ion-list>
+</ion-content>

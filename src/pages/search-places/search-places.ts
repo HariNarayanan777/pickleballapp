@@ -9,6 +9,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AuthProvider } from '../../providers/auth/auth';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 declare var google: any;
 
@@ -58,7 +59,7 @@ export class SearchPlacesPage {
     this.storage.get('USER_ID').then(res => {
       this.userID = res;
     });
-    // this.ionViewDidLoad();
+    HelpersProvider.me.startBackgroundLocation();
   }
 
   async ionViewDidLoad() {
@@ -71,7 +72,7 @@ export class SearchPlacesPage {
   async ngAfterViewInit() {
 
     await LiveComunicationProvider.reloadGoogleplaces();
-    console.log("loading google maps");
+    // console.log("loading google maps");
     await this.initMap();
 
     this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
@@ -82,23 +83,9 @@ export class SearchPlacesPage {
 
     await this.getCourtsSaved();
 
-    let position: any;
-    if (this.platform.is("cordova") === true) {
-      if (await this.diagnostic.isLocationAuthorized() === false) {
-        await this.diagnostic.requestLocationAuthorization();
-        if (await this.diagnostic.isLocationAuthorized() === true) {
-          position = await this.geolocation.getCurrentPosition();
-          this.setPosition(position);
-        }
-      } else {
-        position = await this.geolocation.getCurrentPosition();
-        this.setPosition(position);
-      }
-    } else {
-      position = await this.geolocation.getCurrentPosition();
-      this.setPosition(position);
-    }
-
+    let position = await HelpersProvider.me.getMyPosition();
+    // console.log("MyPosition", position);
+    this.setPosition(position);
 
   }
 
@@ -193,7 +180,7 @@ export class SearchPlacesPage {
       to: player['_id']
     }
     this.rest.postData('/requestfriend', payload).subscribe(res => {
-      console.log("Request", res);
+      // console.log("Request", res);
       $event.srcElement.innerText = 'Cancel Request';
       this.presentToast("Friendship Request sent!");
       this.disable = false;
@@ -266,7 +253,7 @@ export class SearchPlacesPage {
     this.map.setCenter({ lat: this.lat, lng: this.lng });
 
     google.maps.event.addListener(this.map, 'click', function (event) {
-      console.log(event);
+      // console.log(event);
       this.lat = event.latLng.lat();
       this.lng = event.latLng.lng();
 
@@ -276,13 +263,13 @@ export class SearchPlacesPage {
       });
       this.map.setCenter({ lat: this.lat, lng: this.lng });
       this.getCourts();
-      this.getTournaments();
+      this.getTournaments(this.lat, this.lng);
     }.bind(this));
 
     this.getCourts();
   }
 
-  private setPosition(position) {
+  private async setPosition(position) {
     console.log(position);
     this.lat = position.coords.latitude;
     this.lng = position.coords.longitude;
@@ -290,7 +277,11 @@ export class SearchPlacesPage {
       lat: this.lat,
       lng: this.lng
     });
+    console.log("after set position!!");
     this.map.setCenter({ lat: this.lat, lng: this.lng });
+    await this.getCourts();
+    await this.getTournaments(this.lat, this.lng);
+    console.log("set position!!");
   }
 
   private setLocationOfSearch(address: string) {

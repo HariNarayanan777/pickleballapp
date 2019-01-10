@@ -83,4 +83,10 @@
     </button>
   </ion-item>
 
+  <ion-item *ngIf="validNear()">
+    <button ion-button (click)="toNearCourtsTournaments()">
+      {{getNearEntityMessage()}}
+    </button>
+  </ion-item>
+
 </ion-content>

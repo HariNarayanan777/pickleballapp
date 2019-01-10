@@ -11,6 +11,8 @@ import { FutureTournamentsPage } from '../future-tournaments/future-tournaments'
 import { SavedTournamentsPage } from '../saved-tournaments/saved-tournaments';
 import { ShareAppPage } from '../share-app/share-app';
 import { CourtsSavedPage } from '../courts-saved/courts-saved';
+import { HelpersProvider } from '../../providers/helpers/helpers';
+import { NearCourtsAndTournamentsPage } from '../near-courts-and-tournaments/near-courts-and-tournaments';
 
 
 @IonicPage()
@@ -26,7 +28,8 @@ export class AccountPage {
   email: any;
   zipcode: any;
   rank: any;
-
+  public resultsCourts = [];
+  public resultsTournaments = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private fb: Facebook,
@@ -40,7 +43,40 @@ export class AccountPage {
     this.init();
   }
 
-  ionViewDidLoad() {
+  async ionViewWillEnter() {
+    try {
+      // let miPosition = await HelpersProvider.me.getMyPosition();
+      // if (miPosition) {
+        // let lng = miPosition.coords.longitude;
+        // let lat = miPosition.coords.latitude;
+        let lng = -85.82501576;
+        let lat = 11.43211537;
+        this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
+        this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
+        console.log(this.resultsCourts, this.resultsTournaments);
+      // }
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  public validNear() {
+    return this.resultsCourts.length > 0 || this.resultsTournaments.length > 0
+  }
+
+  public getNearEntityMessage() {
+    if (this.resultsCourts.length > 0 && this.resultsTournaments.length === 0) {
+      return "It's close to Courts";
+    }
+    if (this.resultsCourts.length === 0 && this.resultsTournaments.length > 0) {
+      return "It's close to Tournaments";
+    }
+    if (this.resultsCourts.length > 0 && this.resultsTournaments.length > 0) {
+      return "It is close to Courts and Tournaments";
+    }
+
+    return "";
   }
 
   init() {
@@ -128,8 +164,12 @@ export class AccountPage {
     this.navCtrl.push(SavedTournamentsPage);
   }
 
-  public toSavedCourts(){
+  public toSavedCourts() {
     this.navCtrl.push(CourtsSavedPage);
+  }
+
+  public toNearCourtsTournaments() {
+    this.navCtrl.push(NearCourtsAndTournamentsPage, { resultsCourts: this.resultsCourts, resultsTournaments: this.resultsTournaments });
   }
 
 }

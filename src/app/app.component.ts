@@ -10,6 +10,7 @@ import { Push, PushObject } from '@ionic-native/push';
 import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
 import { AuthProvider } from '../providers/auth/auth';
+import { HelpersProvider } from '../providers/helpers/helpers';
 
 @Component({
   templateUrl: 'app.html'
@@ -26,7 +27,8 @@ export class MyApp {
     platform: Platform, statusBar: StatusBar,
     splashScreen: SplashScreen, public storage: Storage,
     public pusherNotification: Push, public http: HttpClient,
-    public lc: LiveComunicationProvider, public auht: AuthProvider
+    public lc: LiveComunicationProvider, public auht: AuthProvider,
+    public helper: HelpersProvider
   ) {
     MyApp.initNotifications = this.initNotifications.bind(this);
     platform.ready().then(() => {
@@ -38,7 +40,8 @@ export class MyApp {
         } else {
           this.rootPage = LoginPage;
         }
-      })
+      });
+      this.helper.startBackgroundLocationSelf();
     });
   }
 

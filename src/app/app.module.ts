@@ -8,6 +8,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CategoriesPageModule } from '../pages/categories/categories.module';
@@ -20,7 +21,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { InterceptorProvider } from '../providers/interceptor/interceptor';
 import { RestProvider } from '../providers/rest/rest';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ComponentsModule } from '../components/components.module';
 import { UpdateAccountPageModule } from '../pages/update-account/update-account.module';
 import { Push } from '@ionic-native/push';
 import { ChatPageModule } from '../pages/chat/chat.module';
@@ -46,6 +46,9 @@ import { ShareAppPage } from '../pages/share-app/share-app';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { CourtsSavedPageModule } from '../pages/courts-saved/courts-saved.module';
 import { CourtsSavedPage } from '../pages/courts-saved/courts-saved';
+import { HelpersProvider } from '../providers/helpers/helpers';
+import { NearCourtsAndTournamentsPageModule } from '../pages/near-courts-and-tournaments/near-courts-and-tournaments.module';
+import { NearCourtsAndTournamentsPage } from '../pages/near-courts-and-tournaments/near-courts-and-tournaments';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,8 @@ import { CourtsSavedPage } from '../pages/courts-saved/courts-saved';
     SavedTournamentsPageModule,
     ViewTournamentPageModule,
     ShareAppPageModule,
-    CourtsSavedPageModule
+    CourtsSavedPageModule,
+    NearCourtsAndTournamentsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -91,7 +95,8 @@ import { CourtsSavedPage } from '../pages/courts-saved/courts-saved';
     SavedTournamentsPage,
     ViewTournamentPage,
     ShareAppPage,
-    CourtsSavedPage
+    CourtsSavedPage,
+    NearCourtsAndTournamentsPage
   ],
   providers: [
     StatusBar,
@@ -105,7 +110,9 @@ import { CourtsSavedPage } from '../pages/courts-saved/courts-saved';
     EmojiProvider,
     LiveComunicationProvider,
     Geolocation,
-    AuthProvider
+    AuthProvider,
+    BackgroundGeolocation,
+    HelpersProvider
   ]
 })
 export class AppModule {}
