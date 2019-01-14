@@ -13,6 +13,8 @@ import { ShareAppPage } from '../share-app/share-app';
 import { CourtsSavedPage } from '../courts-saved/courts-saved';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { NearCourtsAndTournamentsPage } from '../near-courts-and-tournaments/near-courts-and-tournaments';
+import { ListChatPage } from '../list-chat/list-chat';
+import { ListFriendPage } from '../list-friend/list-friend';
 
 
 @IonicPage()
@@ -170,6 +172,10 @@ export class AccountPage {
 
   public toNearCourtsTournaments() {
     this.navCtrl.push(NearCourtsAndTournamentsPage, { resultsCourts: this.resultsCourts, resultsTournaments: this.resultsTournaments });
+  }
+
+  public toViewFriends(){
+    this.navCtrl.push(ListFriendPage);
   }
 
 }

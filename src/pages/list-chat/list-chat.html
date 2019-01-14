@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let user of users" (click)="toChat(user)">
+    <ion-item *ngFor="let user of list" (click)="toChat(user)">
       <ion-avatar item-start *ngIf="user.photo!==''">
         <img [src]="user.photo">
       </ion-avatar>

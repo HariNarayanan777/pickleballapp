@@ -1,0 +1,24 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>List Friends</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-searchbar (input)="onSearchInput()" [(ngModel)]="searchTerm" showCancelButton="true"
+    (ionCancel)="cancel()"></ion-searchbar>
+
+  <ion-list>
+    <ion-item [hidden]="!validFiltro(user)" *ngFor="let user of list">
+      <ion-avatar item-start *ngIf="user.photo!==''">
+        <img [src]="user.photo">
+      </ion-avatar>
+      {{user.fullName}}
+      <ion-icon name="ios-trash-outline" item-end color="danger" (click)="deleteFriend(user)"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
