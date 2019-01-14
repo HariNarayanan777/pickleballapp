@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { AuthProvider } from '../../providers/auth/auth';
+import { ChatPage } from '../chat/chat';
 
 @IonicPage()
 @Component({
@@ -12,12 +13,16 @@ export class ListFriendPage {
 
   public list = [];
   public searchTerm = "";
+  public toChat = false;
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     public http: HttpClient
   ) {
     this.getFriends();
+    if (this.navParams.get("toChat") !== undefined) {
+      this.toChat = true;
+    }
   }
 
   public onSearchInput() { }
@@ -56,6 +61,12 @@ export class ListFriendPage {
     catch (e) {
       console.error(e);
     }
+  }
+
+  public async toChatView(user) {
+    if (this.toChat === false) return;
+    await this.navCtrl.pop({ animation: "ios-transition" });
+    this.navCtrl.push(ChatPage, { user }, { animation: "ios-transition" });
   }
 
 }
