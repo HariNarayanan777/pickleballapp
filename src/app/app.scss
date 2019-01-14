@@ -1,6 +1,4 @@
 // http://ionicframework.com/docs/theming/
-
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,16 +12,22 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-
-.tabbar{
+.tabbar {
     background: #fff !important;
 }
 
-.tab-button{
+.tab-button {
     min-height: 3.6rem !important;
 }
 
-.tab-button-icon{
+.tab-button-icon {
     height: 20px !important;
     font-size: 20px !important;
+}
+
+#notification-rst {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 50%;
 }

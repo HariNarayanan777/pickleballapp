@@ -9,7 +9,7 @@
         <ion-avatar *ngIf="existImage(n.data.from)" item-start>
           <img [src]="getImage(n.data.from)">
         </ion-avatar>
-        <h2>{{n.title}} {{n.data.from.fullName}}</h2>
+        <h2>{{n.title}}</h2>
         <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="secondary" (click)="responseRequest(n, true)">
           <ion-icon name="ios-checkmark"></ion-icon>
         </button>

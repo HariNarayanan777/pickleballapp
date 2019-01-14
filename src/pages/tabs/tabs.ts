@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HomePage } from '../home/home';
 import { CategoriesPage } from '../categories/categories';
 import { SearchPage } from '../search/search';
@@ -8,11 +8,14 @@ import { ListChatPage } from '../list-chat/list-chat';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { Storage } from '@ionic/storage';
 import { SearchPlacesPage } from '../search-places/search-places';
+import { Tabs } from 'ionic-angular';
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
+
+  @ViewChild('myTabs') tabRef: Tabs;
 
   tab1Root = SearchPlacesPage;
   // tab1Root = HomePage;
@@ -23,7 +26,22 @@ export class TabsPage {
 
   constructor(public storage: Storage, public lc: LiveComunicationProvider) {
     MyApp.initNotifications();
-    this.subscribeWebSocketsRoom();
+    this.initSocketEvents();
+  }
+
+  private async initSocketEvents() {
+    await this.subscribeWebSocketsRoom();
+    LiveComunicationProvider.eventsNotifications.onNoti = async function (notification) {
+      let select = this.tabRef.getSelected();
+      if (select === null || select.tabIcon !== "ios-notifications-outline") {
+        let _div = document.getElementById("notification-rst");
+        if (_div === null) {
+          let div = document.createElement("div");
+          div.setAttribute("id", "notification-rst");
+          document.querySelector('[ng-reflect-name="ios-notifications-outline"]').parentElement.appendChild(div);
+        }
+      }
+    }.bind(this);
   }
 
   private async subscribeWebSocketsRoom() {

@@ -16,14 +16,14 @@
           <p class="list-title">Results for {{searchTerm}} in Players</p>
         </ion-item>
 
-        <ion-item *ngFor="let p of players">
+        <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
           <ion-avatar *ngIf="p.loginFacebook" item-start>
             <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
           </ion-avatar>
           <button style="background: none;">
             <h2 text-wrap>{{p.fullName}}</h2>
           </button>
-          <button [disabled]="disable" *ngIf="p._id != userID" ion-button item-end [innerHtml]="p.requests != '' ? 'Cancel Request' : 'Add Friend' "
+          <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
             (click)="checkFriendRequest(p, $event)"></button>
 
         </ion-item>

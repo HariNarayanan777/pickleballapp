@@ -20,18 +20,18 @@ export class CategoriesPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage, private toastCtrl: ToastController) {
-    this.storage.get('USER_ID').then(res => {
-      this.userID = res;
-      this.getNotifications();
+  }
 
-    });
+  async ionViewWillEnter() {
+    let _div = document.getElementById("notification-rst")
+    if (_div !== null) {
+      _div.parentElement.removeChild(_div);
+    }
+    this.userID = await this.storage.get("USER_ID");
+    this.getNotifications();
   }
 
   ionViewDidLoad() {
-    LiveComunicationProvider.eventsNotifications.onNoti = async function (notification) {
-      await this.navCtrl.setRoot(ListChatPage)
-      this.navCtrl.push(ChatPage, { user: notification.from })
-    }.bind(this);
   }
 
   getNotifications() {
@@ -46,8 +46,8 @@ export class CategoriesPage {
     return photo !== "";
   }
 
-  public getImage(user){
-    return  this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+  public getImage(user) {
+    return this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
   }
 
   private validProperty(prop) {

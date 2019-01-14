@@ -19,7 +19,7 @@ export class ListChatPage {
   ) {
   }
 
-  async ionViewDidLoad() {
+  async ionViewWillEnter() {
     let userID: any = await this.storage.get("USER_ID");
     let query = { "or": [{ from: userID, response: true }, { to: userID, response: true }] };
     let users = await this.http.get(`/requestfriend?where=${JSON.stringify(query)}`).toPromise() as any[];

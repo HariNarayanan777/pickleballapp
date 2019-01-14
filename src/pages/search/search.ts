@@ -19,17 +19,19 @@ export class SearchPage {
   userID: any;
   disable: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, 
+  constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage,
     public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
     this.searchControl = new FormControl();
-    this.storage.get('USER_ID').then(res => {
-      this.userID = res;
-    });
 
   }
 
-  ionViewDidLoad() {
+  async ionViewWillEnter() {
+    this.onSearchInput();
+  }
+
+  async ionViewDidLoad() {
+    this.userID = await this.storage.get('USER_ID');
     this.searching = false;
     this.shouldShowCancel = false;
   }
@@ -52,7 +54,6 @@ export class SearchPage {
       result => {
         console.log("Result", result);
         this.players = result;
-
       },
       err => {
         console.error("Error : " + err);
@@ -64,15 +65,18 @@ export class SearchPage {
   }
 
   checkFriendRequest(player, $event) {
-    this.disable = true;
-    if (typeof player['requests'] !== 'undefined' && player['requests'].length > 0) {
-      this.cancelRequestActionSheet(player, $event);
-    } else {
+    if (this.sendRequestAllow(player) === true) {
       this.addFriend(player, $event);
     }
+    let index = player.requests.findIndex(it => {
+      if (it.response === null) return true;
+      return false;
+    });
+    if (index !== -1)
+      this.cancelRequestActionSheet($event, player.requests[index]);
   }
 
-  addFriend(player, $event) {
+  public addFriend(player, $event) {
     let payload = {
       from: this.userID,
       to: player['_id']
@@ -81,7 +85,7 @@ export class SearchPage {
       console.log("Request", res);
       $event.srcElement.innerText = 'Cancel Request';
       this.presentToast("Friendship Request sent!");
-      this.disable = false;
+      this.onSearchInput();
     })
   }
 
@@ -93,7 +97,30 @@ export class SearchPage {
     toast.present();
   }
 
-  cancelRequestActionSheet(player, $event) {
+  public sendRequestAllow(user) {
+    if (user.requests.length === 0) return true;
+    let indexResponseTrue = user.requests.findIndex(it => {
+      if (it.response === true || it.response === null) return true;
+      return false;
+    });
+    console.log("all", indexResponseTrue);
+    return indexResponseTrue === -1;
+  }
+
+  public isFriend(user) {
+    let isFriend = false;
+    for (let request of user.requests) {
+      if (request.response === true) {
+        isFriend = true;
+        break;
+      }
+
+    }
+
+    return !isFriend;
+  }
+
+  cancelRequestActionSheet($event, request) {
     const actionSheet = this.actionSheetCtrl.create({
       title: 'Modify your album',
       buttons: [
@@ -102,7 +129,7 @@ export class SearchPage {
           role: 'destructive',
           handler: () => {
             console.log('Destructive clicked');
-            this.cancelRequest(player, $event);
+            this.cancelRequest($event, request);
           }
         }, {
           text: 'Cancel',
@@ -116,12 +143,13 @@ export class SearchPage {
     actionSheet.present();
   }
 
-  cancelRequest(player, $event) {
-    this.rest.removeData('/requestfriend/' + player['requests'][0]['id']).subscribe(res => {
-      console.log("Cancel Request", res);
+  cancelRequest($event, request) {
+    this.rest.removeData('/requestfriend/' + request['id']).subscribe(res => {
+      this.onSearchInput();
       $event.srcElement.innerText = 'Add Friend';
       this.presentToast("Friendship Request cancelled!");
-      this.disable = false;
+      this.onSearchInput();
     })
   }
+
 }

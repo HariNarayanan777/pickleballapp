@@ -25,7 +25,7 @@ export class HelpersProvider {
       desiredAccuracy: 10,
       stationaryRadius: 20,
       distanceFilter: 30,
-      debug: true,
+      debug: false,
       stopOnTerminate: false,
       url: InterceptorProvider.tranformUrl("/user-location-background"),
       syncUrl: InterceptorProvider.tranformUrl("/user-locaion-background-fail"),
@@ -51,7 +51,7 @@ export class HelpersProvider {
       desiredAccuracy: 10,
       stationaryRadius: 20,
       distanceFilter: 30,
-      debug: true,
+      debug: false,
       stopOnTerminate: false,
       url: InterceptorProvider.tranformUrl("/user-location-background"),
       httpHeaders: {

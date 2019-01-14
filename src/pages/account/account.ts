@@ -45,16 +45,16 @@ export class AccountPage {
 
   async ionViewWillEnter() {
     try {
-      // let miPosition = await HelpersProvider.me.getMyPosition();
-      // if (miPosition) {
-        // let lng = miPosition.coords.longitude;
-        // let lat = miPosition.coords.latitude;
-        let lng = -85.82501576;
-        let lat = 11.43211537;
+      let miPosition = await HelpersProvider.me.getMyPosition();
+      if (miPosition) {
+        let lng = miPosition.coords.longitude;
+        let lat = miPosition.coords.latitude;
+        // let lng = -85.82501576;
+        // let lat = 11.43211537;
         this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
         this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
         console.log(this.resultsCourts, this.resultsTournaments);
-      // }
+      }
     }
     catch (e) {
       console.error(e);
