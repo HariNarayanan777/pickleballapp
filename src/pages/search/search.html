@@ -1,35 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Search All Players</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
 <ion-content>
   <form action="." (ngSubmit)="onSearchInput()">
-
     <ion-searchbar (input)="onSearchInput()" [(ngModel)]="searchTerm" [formControl]="searchControl" [showCancelButton]="true"
       (ionCancel)="cancel()"></ion-searchbar>
   </form>
 
 
-  <ion-row *ngIf="searching" padding>
-    <ion-list>
-      <div class="flex-center" *ngIf="players.length < 1">
-        <p>Sorry, no results matched your criteria</p>
-      </div>
-      <div *ngIf="players.length > 0">
-        <ion-item>
-          <p class="list-title">Results for {{searchTerm}} in Players</p>
-        </ion-item>
+  <ion-list *ngIf="searching">
+    <div class="flex-center" *ngIf="players.length < 1">
+      <p>Sorry, no results matched your criteria</p>
+    </div>
+    <div *ngIf="players.length > 0">
+      <ion-item>
+        <p class="list-title">Results for {{searchTerm}} in Players</p>
+      </ion-item>
 
-        <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
-          <ion-avatar *ngIf="p.loginFacebook" item-start>
-            <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
-          </ion-avatar>
-          <button style="background: none;">
-            <h2 text-wrap>{{p.fullName}}</h2>
-          </button>
-          <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
-            (click)="checkFriendRequest(p, $event)"></button>
+      <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
+        <ion-avatar item-start>
+          <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
+        </ion-avatar>
+        <h2 text-wrap>{{p.fullName}} - Skill Level: {{p.rank}}</h2>
+        <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
+        <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
+          (click)="checkFriendRequest(p, $event)"></button>
+      </ion-item>
+    </div>
+  </ion-list>
 
-        </ion-item>
-      </div>
-
-
-    </ion-list>
-  </ion-row>
 </ion-content>

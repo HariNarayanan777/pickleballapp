@@ -13,6 +13,7 @@ export class UpdateAccountPage {
   userID:any;
   fName:any;
   lName:any;
+  public fname = "";
   email:any;
   zipcode:any;
   profile:any;
@@ -34,8 +35,9 @@ export class UpdateAccountPage {
     this.rest.getData('/user/' + this.userID).subscribe(data => {
       this.profile = data;
       console.log(data);
-      this.fName = data['firstName'];
-      this.lName = data['lastName'];
+      // this.fName = data['firstName'];
+      // this.lName = data['lastName'];
+      this.fname = data["fullName"];
       this.email = data['email'];
       this.zipcode = data['zipCode'];
       this.searchable = data['searchable'];
@@ -44,8 +46,7 @@ export class UpdateAccountPage {
   }
 
   updateAccount(){
-   this.profile['firstName'] = this.fName;
-   this.profile['lastName'] = this.lName;
+   this.profile['fullName'] = this.fname; 
    this.profile['email'] = this.email;
    this.profile['zipCode'] = this.zipcode;
    this.profile['searchable'] = this.searchable;

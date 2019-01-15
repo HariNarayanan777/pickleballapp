@@ -170,8 +170,20 @@ export class SearchPlacesPage {
       });
   }
 
+  public errorImage(e){
+    e.target.src = "./assets/imgs/default-user.png";
+  }
+
+  public getUrlImage(player){
+    if(player.loginFacebook){
+      return player.loginFacebook.image;
+    }
+    return "";
+  }
+
   cancel() {
     this.searching = false;
+    this.players = [];
   }
 
 

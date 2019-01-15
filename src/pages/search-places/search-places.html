@@ -35,7 +35,7 @@
           <p class="list-title">Results for {{torneoName}} in Tournaments</p>
         </ion-item>
 
-        <ion-item *ngFor="let tour of tournaments" >
+        <ion-item *ngFor="let tour of tournaments">
           <ion-avatar item-start *ngIf="tour.imgs" (click)="toTournamen(tour)">
             <img [src]="tour.imgs[0]" style="width: 70px; height: 70px;">
           </ion-avatar>
@@ -67,12 +67,11 @@
         </ion-item>
 
         <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
-          <ion-avatar item-start *ngIf="p.loginFacebook">
-            <img [src]="p.loginFacebook.image" style="width: 70px; height: 70px;">
+          <ion-avatar item-start>
+            <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
           </ion-avatar>
-          <button style="background: none;">
-            <h2 text-wrap>{{p.fullName}}</h2>
-          </button>
+          <h2 text-wrap>{{p.fullName}} - Skill Level: {{p.rank}}</h2>
+          <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
           <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
             (click)="checkFriendRequest(p, $event)"></button>
         </ion-item>
@@ -95,7 +94,8 @@
   <ion-slides [hidden]="type===2||type===4" id="courts" slidesPerView="1.5">
     <ion-slide *ngFor="let court of courst" (click)="toCourtSlide(court)">
       <button ion-button class="button-save" (click)="saveCourt(court)" [hidden]="isSavedCourt(court).saved">Save</button>
-      <button ion-button class="button-save" [ngClass]="isSavedCourt(court).saved===true?'remove':''" (click)="removeCourt(court)" [hidden]="!isSavedCourt(court).saved">Remove</button>
+      <button ion-button class="button-save" [ngClass]="isSavedCourt(court).saved===true?'remove':''" (click)="removeCourt(court)"
+        [hidden]="!isSavedCourt(court).saved">Remove</button>
       <div class="inner-content">
         <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0]">
         <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">

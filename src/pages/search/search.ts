@@ -23,7 +23,6 @@ export class SearchPage {
     private rest: RestProvider, private storage: Storage,
     public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
     this.searchControl = new FormControl();
-
   }
 
   async ionViewWillEnter() {
@@ -34,6 +33,17 @@ export class SearchPage {
     this.userID = await this.storage.get('USER_ID');
     this.searching = false;
     this.shouldShowCancel = false;
+  }
+
+  public errorImage(e){
+    e.target.src = "./assets/imgs/default-user.png";
+  }
+
+  public getUrlImage(player){
+    if(player.loginFacebook){
+      return player.loginFacebook.image;
+    }
+    return "";
   }
 
   onSearchInput() {
@@ -62,6 +72,7 @@ export class SearchPage {
 
   cancel() {
     this.searching = false;
+    this.players = [];
   }
 
   checkFriendRequest(player, $event) {
