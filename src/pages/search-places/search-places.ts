@@ -374,7 +374,7 @@ export class SearchPlacesPage {
               lng: result.geometry.location.lng(),
               name: result.name,
               location: result.vicinity,
-              photos: result.photos,
+              photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
               rating: result.rating,
             })
 
@@ -401,7 +401,7 @@ export class SearchPlacesPage {
               lng: result.geometry.location.lng(),
               name: result.name,
               location: result.vicinity,
-              photos: result.photos,
+              photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
               rating: result.rating,
             })
 
@@ -412,6 +412,12 @@ export class SearchPlacesPage {
     }) as any[];
 
     this.setMarkersOfPlaces(results, results2);
+  }
+
+  public getUrlSmallImage(photos) {
+    return photos.map(it => {
+      return it.getUrl({ 'maxWidth': 200, 'maxHeight': 200 });
+    });
   }
 
   private setMarkersOfPlaces(results_courts, results_rv) {
@@ -565,12 +571,6 @@ export class SearchPlacesPage {
         delete ite.lng;
         delete ite.lat;
         ite.user = user;
-        if (ite.photos) {
-          ite.photos = it.photos.map(i => {
-            // console.log(i);
-            return i.getUrl();
-          });
-        }
         return ite;
       });
       await this.http.post("/court-bulk", { courts }).toPromise();
@@ -591,11 +591,6 @@ export class SearchPlacesPage {
         delete ite.lng;
         delete ite.lat;
         ite.user = user;
-        if (ite.photos) {
-          ite.photos = court.photos.map(i => {
-            return i.getUrl();
-          });
-        }
         await this.http.post("/court", ite).toPromise();
         this.presentToast("Saved Court");
         await this.getCourtsSaved();
