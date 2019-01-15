@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import * as moment from "moment";
+import { AuthProvider } from '../../providers/auth/auth';
+import { HttpClient } from '@angular/common/http';
 
 declare var google;
 
@@ -12,15 +14,19 @@ declare var google;
 export class ViewCourtPage {
 
   public court: any = {};
-  public map:any = {};
+  public map: any = {};
+  public courstSaved = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController, public navParams: NavParams,
+    public http: HttpClient, public toastCtrl: ToastController
+  ) {
     this.court = this.navParams.get("court");
-    console.log(this.court);
+    // console.log(this.court);
   }
 
   async ionViewDidLoad() {
-
+    this.getCourtsSaved();
     let mapOptions: any = {
       center: {
         lat: this.court.lat,
@@ -55,6 +61,69 @@ export class ViewCourtPage {
 
   public dateToFormat(date) {
     return moment(date).format("ddd DD/MM/YYYY");
+  }
+
+  public saveOrRemove() {
+    if (this.isSavedCourt(this.court).saved === true) {
+      this.removeCourt(this.court);
+    }else{
+      this.save(this.court);
+    }
+  }
+
+  public async save(court) {
+    if (court.lng !== null && court.lng !== undefined &&
+      court.lat !== null && court.lat !== undefined) {
+      try {
+        let user = await AuthProvider.me.getIdUser();
+        let ite = JSON.parse(JSON.stringify(court));
+        ite.coordinates = [ite.lng, ite.lat];
+        delete ite.lng;
+        delete ite.lat;
+        ite.user = user;
+        await this.http.post("/court", ite).toPromise();
+        this.presentToast("Saved Court");
+        await this.getCourtsSaved();
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  public async removeCourt(court) {
+    let pos = await this.isSavedCourt(court);
+    if (pos.saved === true) {
+      await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
+      this.presentToast("Courst Removed");
+      await this.getCourtsSaved();
+    }
+  }
+
+  private async getCourtsSaved() {
+    let user = await AuthProvider.me.getIdUser();
+    let query = { user };
+    this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
+    console.log(this.courstSaved);
+  }
+
+  public isSavedCourt(court) {
+    let index = this.courstSaved.findIndex(it => {
+      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+    });
+    if (index === -1) {
+      return { saved: false, index };
+    }
+
+    return { saved: true, index };
+  }
+
+  public presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 
 }

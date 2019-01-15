@@ -51,17 +51,21 @@ export class SearchPlacesPage {
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    private geolocation: Geolocation, public sanitizer: DomSanitizer,
-    private storage: Storage, private rest: RestProvider,
-    public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController,
-    public http: HttpClient, public diagnostic: Diagnostic,
-    private platform: Platform, public loadingCtrl: LoadingController
+    public sanitizer: DomSanitizer, private storage: Storage,
+    private rest: RestProvider, public actionSheetCtrl: ActionSheetController,
+    public toastCtrl: ToastController, public http: HttpClient,
+    public diagnostic: Diagnostic, public loadingCtrl: LoadingController
   ) {
     this.searchControl = new FormControl();
     this.storage.get('USER_ID').then(res => {
       this.userID = res;
     });
     HelpersProvider.me.startBackgroundLocation();
+  }
+
+  async ionViewWillEnter() {
+    this.getCourtsSaved();
+    this.buscarTorneo();
   }
 
   async ionViewDidLoad() {
@@ -138,7 +142,7 @@ export class SearchPlacesPage {
   }
 
   public toTournamen(tournament) {
-    this.navCtrl.push(ViewTournamentPage, { tournament });
+    this.navCtrl.push(ViewTournamentPage, { tournament, save: true });
   }
 
   //#endregion
