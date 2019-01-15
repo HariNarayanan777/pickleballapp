@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{tournament.title}}</ion-title>
+    <ion-title>Tournament</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -11,7 +11,12 @@
 
   <ion-card>
 
-    <ion-slides slidesPerView="1" paginationType="progress" pager="true" [hidden]="!tournament.imgs">
+    <ion-item>
+      <h2>{{tournament.title}}</h2>
+      <p>{{tournament.address}}</p>
+    </ion-item>
+
+    <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!tournament.imgs">
       <ion-slide *ngFor="let img of tournament.imgs">
         <img [src]="img">
       </ion-slide>
@@ -21,10 +26,11 @@
       <h4>Dates</h4>
       <p>{{tournament.dates}}</p>
     </ion-item>
-    <ion-card-content>
+
+    <!-- <ion-card-content>
       <h4>Address</h4>
       <p>{{tournament.address}}</p>
-    </ion-card-content>
+    </ion-card-content> -->
 
     <ion-row>
       <ion-col col-6 *ngIf="tournament.registrationStart">

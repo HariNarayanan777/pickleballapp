@@ -1,0 +1,34 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Court</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card>
+
+    <ion-item>
+      <h2>{{court.name}}</h2>
+      <p>{{court.location}}</p>
+    </ion-item>
+
+    <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!court.photos">
+      <ion-slide *ngFor="let img of court.photos">
+        <img [src]="img.getUrl()">
+      </ion-slide>
+    </ion-slides>
+
+    <ion-item>
+      <h4>Rating</h4>
+      <p>{{court.rating}}</p>
+    </ion-item>
+
+    <div id="map_court" style="width: 100%; height: 300px;"></div>
+
+  </ion-card>
+
+</ion-content>

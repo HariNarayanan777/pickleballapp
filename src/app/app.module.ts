@@ -51,6 +51,8 @@ import { NearCourtsAndTournamentsPageModule } from '../pages/near-courts-and-tou
 import { NearCourtsAndTournamentsPage } from '../pages/near-courts-and-tournaments/near-courts-and-tournaments';
 import { ListFriendPageModule } from '../pages/list-friend/list-friend.module';
 import { ListFriendPage } from '../pages/list-friend/list-friend';
+import { ViewCourtPage } from '../pages/view-court/view-court';
+import { ViewCourtPageModule } from '../pages/view-court/view-court.module';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,8 @@ import { ListFriendPage } from '../pages/list-friend/list-friend';
     ShareAppPageModule,
     CourtsSavedPageModule,
     NearCourtsAndTournamentsPageModule,
-    ListFriendPageModule
+    ListFriendPageModule,
+    ViewCourtPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -100,7 +103,8 @@ import { ListFriendPage } from '../pages/list-friend/list-friend';
     ShareAppPage,
     CourtsSavedPage,
     NearCourtsAndTournamentsPage,
-    ListFriendPage
+    ListFriendPage,
+    ViewCourtPage
   ],
   providers: [
     StatusBar,

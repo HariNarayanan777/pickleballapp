@@ -24,6 +24,9 @@ export class SavedTournamentsPage {
   async ionViewDidLoad() {
     this.idUser = await AuthProvider.me.getIdUser();
     this.tournaments = await this.http.get(`/savedtournaments?where={"user":"${this.idUser}"}&limit=100`).toPromise() as any;
+    this.tournaments = this.tournaments.filter(it=>{
+      return it.tournament !== null && it.tournament !== undefined;
+    });
   }
 
   public toView(tournament) {

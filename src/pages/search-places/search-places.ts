@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AuthProvider } from '../../providers/auth/auth';
 import { HelpersProvider } from '../../providers/helpers/helpers';
+import { ViewCourtPage } from '../view-court/view-court';
+import { ViewTournamentPage } from '../view-tournament/view-tournament';
 
 declare var google: any;
 
@@ -135,6 +137,10 @@ export class SearchPlacesPage {
     }
   }
 
+  public toTournamen(tournament) {
+    this.navCtrl.push(ViewTournamentPage, { tournament });
+  }
+
   //#endregion
 
   //#region para busquedad de players
@@ -166,24 +172,27 @@ export class SearchPlacesPage {
 
 
   checkFriendRequest(player, $event) {
-    this.disable = true;
-    if (typeof player['requests'] !== 'undefined' && player['requests'].length > 0) {
-      this.cancelRequestActionSheet(player, $event);
-    } else {
+    if (this.sendRequestAllow(player) === true) {
       this.addFriend(player, $event);
     }
+    let index = player.requests.findIndex(it => {
+      if (it.response === null) return true;
+      return false;
+    });
+    if (index !== -1)
+      this.cancelRequestActionSheet($event, player.requests[index]);
   }
 
-  addFriend(player, $event) {
+  public addFriend(player, $event) {
     let payload = {
       from: this.userID,
       to: player['_id']
     }
     this.rest.postData('/requestfriend', payload).subscribe(res => {
-      // console.log("Request", res);
+      console.log("Request", res);
       $event.srcElement.innerText = 'Cancel Request';
       this.presentToast("Friendship Request sent!");
-      this.disable = false;
+      this.onSearchInput();
     })
   }
 
@@ -195,7 +204,30 @@ export class SearchPlacesPage {
     toast.present();
   }
 
-  cancelRequestActionSheet(player, $event) {
+  public sendRequestAllow(user) {
+    if (user.requests.length === 0) return true;
+    let indexResponseTrue = user.requests.findIndex(it => {
+      if (it.response === true || it.response === null) return true;
+      return false;
+    });
+    console.log("all", indexResponseTrue);
+    return indexResponseTrue === -1;
+  }
+
+  public isFriend(user) {
+    let isFriend = false;
+    for (let request of user.requests) {
+      if (request.response === true) {
+        isFriend = true;
+        break;
+      }
+
+    }
+
+    return !isFriend;
+  }
+
+  cancelRequestActionSheet($event, request) {
     const actionSheet = this.actionSheetCtrl.create({
       title: 'Modify your album',
       buttons: [
@@ -204,7 +236,7 @@ export class SearchPlacesPage {
           role: 'destructive',
           handler: () => {
             console.log('Destructive clicked');
-            this.cancelRequest(player, $event);
+            this.cancelRequest($event, request);
           }
         }, {
           text: 'Cancel',
@@ -218,12 +250,12 @@ export class SearchPlacesPage {
     actionSheet.present();
   }
 
-  cancelRequest(player, $event) {
-    this.rest.removeData('/requestfriend/' + player['requests'][0]['id']).subscribe(res => {
-      console.log("Cancel Request", res);
+  cancelRequest($event, request) {
+    this.rest.removeData('/requestfriend/' + request['id']).subscribe(res => {
+      this.onSearchInput();
       $event.srcElement.innerText = 'Add Friend';
       this.presentToast("Friendship Request cancelled!");
-      this.disable = false;
+      this.onSearchInput();
     })
   }
   //#endregion
@@ -432,7 +464,31 @@ export class SearchPlacesPage {
       });
       this.markers.push(marker);
     }
+    this.setEventToMarkers();
+  }
 
+  private setEventToMarkers() {
+    for (let marker of this.markers) {
+      google.maps.event.addListener(marker, 'click', e => {
+        console.log(e.latLng.lat(), e.latLng.lng());
+        this.toCourt(e.latLng.lat(), e.latLng.lng());
+      });
+    }
+  }
+
+  public toCourtSlide(court) {
+    if (court.lng !== null && court.lng !== undefined &&
+      court.lat !== null && court.lat !== undefined) {
+      this.toCourt(court.lat, court.lng);
+    }
+  }
+
+  private toCourt(lat: number, lng: number) {
+    let court = this.courst.find(it => {
+      return it.lat === lat && it.lng === lng;
+    });
+    if (court !== null && court !== undefined)
+      this.navCtrl.push(ViewCourtPage, { court });
   }
 
   private async getCourtsSaved() {
@@ -552,7 +608,7 @@ export class SearchPlacesPage {
 
   public async removeCourt(court) {
     let pos = await this.isSavedCourt(court);
-    if(pos.saved === true){
+    if (pos.saved === true) {
       await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
       this.presentToast("Courst Removed");
       await this.getCourtsSaved();
