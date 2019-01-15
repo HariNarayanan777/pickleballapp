@@ -47,4 +47,11 @@
 
   </ion-card>
 
+  <ion-fab bottom right *ngIf="save">
+    <button ion-fab icon-only [style.backgroundColor]="saved(tournament)===false?'#488aff':'#f53d3d'" (click)="addOrRemove(tournament, saved(tournament))">
+      <!-- <ion-icon name="md-add"></ion-icon> -->
+      {{saved(tournament)===true?'Remove':'Save'}}
+    </button>
+  </ion-fab>
+
 </ion-content>
