@@ -1,4 +1,77 @@
 page-account {
+    ion-content{
+        background-color: #000000;
+        background-image: linear-gradient(#000000, #222731);
+        .scroll-content{
+            padding-top: 70px !important;
+            .title-name{
+                color: #fff;
+                text-align: center;
+                font-weight: bold;
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+            .location{
+                color: #5f6165;
+                text-align: center;
+                font-size: 15px;
+                margin: 0;
+                ion-icon{
+                    color: #bea805;
+                    margin-right: 5px;
+                }
+            }
+            .description{
+                color: #fff;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 500;
+                width: 80%;
+                margin: 12px auto; 
+            }
+            ion-segment{
+                margin-top: 30px;
+                margin-bottom: 0px;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                span{
+                    font-size: 16px;
+                    line-height: 2.8rem;
+                    margin-left: 5px;
+                    font-weight: 500;
+                }
+            }
+            .segment-button{
+                background: transparent !important;
+                border: none !important;
+                color: #fff !important;
+                border-radius: 0 !important;
+               
+            }
+            .segment-button.segment-activated{
+                background: transparent !important;
+                border: none !important;
+                border-bottom: 2px solid #bea805 !important;
+                color: #fff;
+                border-radius: 0 !important;
+
+            }
+            .segments{
+                width: 100% !important;
+                .segment-title{
+                    margin: 0;
+                    color: #fff !important;
+                    font-size: 15px;
+                    text-transform: uppercase;
+                    font-weight: 400;
+                    letter-spacing: 1px;
+                    padding-left: 15px;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
 ion-header{
     ion-toolbar{
         min-height: 40px !important;

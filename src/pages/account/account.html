@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons start class="start-btn">
       <button ion-button icon-only (click)="presentModal()">
@@ -15,30 +15,58 @@
     </ion-buttons>
 
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 
-<ion-content>
+<ion-content >
 
   <ion-grid>
-    <ion-row>
+    <ion-row padding>
       <ion-col col-12>
         <div class="image-holder">
-          <img [src]="profileImg" alt="">
-        </div>
-        <p text-center>Rank: {{rank}}</p>
-        <div class="star-rank">
-          <ion-icon name="ios-star"></ion-icon>
-          <ion-icon name="ios-star"></ion-icon>
-          <ion-icon name="ios-star"></ion-icon>
-          <ion-icon name="ios-star"></ion-icon>
-          <ion-icon name="ios-star"></ion-icon>
-        </div>
+          <img src="../../assets/imgs/default-user.png" alt="">
+        </div> 
+        <p class="title-name">{{fullName}}</p> 
+        <p class="location"> <ion-icon name="ios-pin"></ion-icon> Your location</p> 
+        <p class="location"> <ion-icon name="ios-at"></ion-icon>{{email}}</p> 
+        <p class="description"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ut eveniet ea </p> 
+ 
       </ion-col>
+
+    </ion-row>
+    <ion-row>
+        <ion-col col-12>
+
+      <ion-segment [(ngModel)]="segment">
+        <ion-segment-button value="friends">
+            <ion-icon name="ios-people-outline"></ion-icon> <span>Friends</span>
+        </ion-segment-button>
+        <ion-segment-button value="places">
+            <ion-icon name="ios-pin-outline"></ion-icon> <span>Places</span>
+        </ion-segment-button>
+        <ion-segment-button value="events">
+          <ion-icon name="ios-calendar-outline"></ion-icon> <span>Events</span> 
+        </ion-segment-button>
+      </ion-segment>
+        </ion-col>
+
+        <div [ngSwitch]="segment" class="segments">
+            <div col-12 *ngSwitchCase="'events'">
+              <h3 class="segment-title">Upcoming events</h3>
+            </div>
+              <div col-12 *ngSwitchCase="'places'">
+                  <h3 class="segment-title">Places</h3>
+                </div>
+                <div col-12 *ngSwitchCase="'friends'">
+                    <h3 class="segment-title">Friends</h3>
+                  </div>
+        </div>
+
+   
     </ion-row>
   </ion-grid>
 
-  <ion-list>
+  <!-- <ion-list>
     <ion-item>
       <ion-label>
         <ion-icon name="ios-card"></ion-icon>Name
@@ -57,9 +85,9 @@
       </ion-label>
       <ion-input type="text" disabled [(ngModel)]="zipcode"></ion-input>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
-  <ion-item>
+  <!-- <ion-item>
     <button ion-button (click)="toViewFriends()">
       View Friends
     </button>
@@ -93,6 +121,6 @@
     <button ion-button (click)="toNearCourtsTournaments()">
       {{getNearEntityMessage()}}
     </button>
-  </ion-item>
+  </ion-item> -->
 
 </ion-content>
