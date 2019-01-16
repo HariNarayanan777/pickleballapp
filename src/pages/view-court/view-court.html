@@ -31,8 +31,12 @@
 
   </ion-card>
 
+  <ion-list id="users-courts">
+    <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Kill Level: {{puser.rank}}</ion-item>
+  </ion-list>
+
   <ion-fab bottom right>
-    <button ion-fab icon-only  [style.backgroundColor]="isSavedCourt(court).saved===false?'#488aff':'#f53d3d'" (click)="saveOrRemove()">
+    <button ion-fab icon-only [style.backgroundColor]="isSavedCourt(court).saved===false?'#488aff':'#f53d3d'" (click)="saveOrRemove()">
       <!-- <ion-icon name="md-add"></ion-icon> -->
       {{isSavedCourt(court).saved===true?'Remove':'Save'}}
     </button>

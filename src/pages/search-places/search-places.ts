@@ -45,6 +45,7 @@ export class SearchPlacesPage {
 
   public courst = [];
   public courstSaved = [];
+  public courstSaveds = [];
   public markers = [];
 
   public type = 1;
@@ -170,12 +171,12 @@ export class SearchPlacesPage {
       });
   }
 
-  public errorImage(e){
+  public errorImage(e) {
     e.target.src = "./assets/imgs/default-user.png";
   }
 
-  public getUrlImage(player){
-    if(player.loginFacebook){
+  public getUrlImage(player) {
+    if (player.loginFacebook) {
       return player.loginFacebook.image;
     }
     return "";
@@ -426,7 +427,10 @@ export class SearchPlacesPage {
         }
       });
     }) as any[];
-
+    this.courst = this.courst.map(it => {
+      it.users = this.getUsersCourt(it);
+      return it;
+    });
     this.setMarkersOfPlaces(results, results2);
   }
 
@@ -517,7 +521,28 @@ export class SearchPlacesPage {
     let user = await AuthProvider.me.getIdUser();
     let query = { user };
     this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
-    console.log(this.courstSaved);
+    this.courstSaveds = await this.http.get(`/court?limit=400`).toPromise() as any[];
+  }
+
+  public getUsersCourt(court) {
+    let users = [];
+    if (court.lng !== null && court.lng !== undefined &&
+      court.lat !== null && court.lat !== undefined) {
+      try {
+        let _courts = this.courstSaveds.filter(it => {
+          return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+        });
+        // console.log(_courts);
+        users = _courts.map(it => {
+          return it.user;
+        });
+        users = users.filter(it => { return it !== undefined && it !== null && it.id !== this.userID; })
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+    return users;
   }
 
   public isSavedCourt(court) {

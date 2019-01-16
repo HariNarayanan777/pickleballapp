@@ -1,47 +1,44 @@
 page-search-places {
-    .toolbar-background{
+    .toolbar-background {
         background: #000000 !important;
     }
-    ion-content{
+    ion-content {
         background: #2e363d !important;
-        .scroll-content{
+        .scroll-content {
             margin-top: 60px !important;
         }
     }
-    .toolbar-ios ion-title{
+    .toolbar-ios ion-title {
         padding: 0 50px 1px !important;
         padding-top: 30px !important;
-
     }
-    ion-navbar{
+    ion-navbar {
         padding-top: 20px !important;
         min-height: 60px !important;
         height: 60px !important;
-        button{
+        button {
             color: #bea805 !important;
             border: 1px solid !important;
             border-radius: 50% !important;
             width: 25px !important;
-            height: 25px !important; 
+            height: 25px !important;
             font-size: 12px !important;
         }
-        ion-title{
+        ion-title {
             text-align: left;
-            .toolbar-title-ios, .toolbar-title-md{
+            .toolbar-title-ios,
+            .toolbar-title-md {
                 text-align: left;
                 color: #fff;
-
             }
         }
-
-        .text-btn{
+        .text-btn {
             border: none !important;
             color: #fff !important;
             text-transform: uppercase;
             padding-right: 25px;
             letter-spacing: 1px;
         }
-       
     }
     #slides-types {
         height: 40px !important;
@@ -110,7 +107,7 @@ page-search-places {
                 p {
                     font-size: 12px !important;
                     color: #b3b3b3;
-                    ion-icon{
+                    ion-icon {
                         color: #ffe000;
                         margin-right: 5px;
                     }
@@ -153,14 +150,18 @@ page-search-places {
             font-size: 1rem !important;
         }
     }
-    button.button-save.remove{
+    button.button-save.remove {
         background-color: #f53d3d !important;
     }
-
-    .nearby-bg{
+    .nearby-bg {
         background: #eae5e5;
     }
-
-   
-   
+    #users-courts {
+        ion-item {
+            padding-left: 5px;
+            color: white;
+            font-size: 1.3rem;
+            background-color: transparent !important;
+        }
+    }
 }
