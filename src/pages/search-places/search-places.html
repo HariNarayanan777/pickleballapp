@@ -118,6 +118,9 @@
           </div>
           <div class="body">
             <p> <ion-icon name="ios-pin"></ion-icon> {{court.location}}</p>
+            <ion-list id="users-courts">
+              <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Kill Level: {{puser.rank}}</ion-item>
+            </ion-list>
           </div>
         </div>
       </div>
