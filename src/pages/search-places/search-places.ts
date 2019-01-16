@@ -285,7 +285,7 @@ export class SearchPlacesPage {
         lat: this.lat,
         lng: this.lng
       },
-      zoom: 8
+      zoom: 12
     };
     this.map = new google.maps.Map(document.getElementById("map_places"), mapOptions);
     this.marker = new google.maps.Marker({
