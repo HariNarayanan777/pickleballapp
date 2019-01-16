@@ -1,17 +1,17 @@
 <ion-header>
 
   <ion-navbar>
-      <ion-buttons start style="order: 1">
-          <button ion-button icon-only>
-            <ion-icon name="ios-person-outline"></ion-icon>
-          </button>
-        </ion-buttons>
+    <ion-buttons start style="order: 1">
+      <button ion-button icon-only>
+        <ion-icon name="ios-person-outline"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>PickleConnect</ion-title>
     <ion-buttons end>
-        <button class="text-btn" ion-button clear>
-          Filter
-        </button>
-      </ion-buttons>
+      <button class="text-btn" ion-button clear>
+        Filter
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -23,9 +23,9 @@
     <ion-slide>
       <h4 [ngClass]="type===1?'select':''" (click)="setType(1)">All</h4>
     </ion-slide>
-    <!-- <ion-slide> -->
-    <!-- <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">RV Resorts</h4> -->
-    <!-- </ion-slide> -->
+    <ion-slide>
+      <h4 [ngClass]="type===3?'select':''" (click)="setType(3)">Courts</h4>
+    </ion-slide>
     <ion-slide>
       <h4 [ngClass]="type===2?'select':''" (click)="setType(2)">Player</h4>
     </ion-slide>
@@ -97,35 +97,37 @@
   </ion-searchbar>
   <div [hidden]="type===2||type===4" id="map_places" style="width: 100%; height: 300px">
   </div>
-<div class="nearby-bg">
-  <div id="title-nearby-courts" [hidden]="type===2||type===4">
-    <h4>Nearby Courts</h4>
-  </div>
-  <ion-slides [hidden]="type===2||type===4" id="courts" slidesPerView="1.5">
-    <ion-slide *ngFor="let court of courst" (click)="toCourtSlide(court)">
-      <button ion-button class="button-save" (click)="saveCourt(court)" [hidden]="isSavedCourt(court).saved">Save</button>
-      <button ion-button class="button-save" [ngClass]="isSavedCourt(court).saved===true?'remove':''" (click)="removeCourt(court)"
-        [hidden]="!isSavedCourt(court).saved">Remove</button>
-      <div class="inner-content">
-        <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0]">
-        <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">
-        <div class="inner">
-          <div class="header">
+  <div class="nearby-bg">
+    <div id="title-nearby-courts" [hidden]="type===2||type===4">
+      <h4>Nearby Courts</h4>
+    </div>
+    <ion-slides [hidden]="type===2||type===4" id="courts" slidesPerView="1.5">
+      <ion-slide *ngFor="let court of courst" (click)="toCourtSlide(court)">
+        <button ion-button class="button-save" (click)="saveCourt(court)" [hidden]="isSavedCourt(court).saved">Save</button>
+        <button ion-button class="button-save" [ngClass]="isSavedCourt(court).saved===true?'remove':''" (click)="removeCourt(court)"
+          [hidden]="!isSavedCourt(court).saved">Remove</button>
+        <div class="inner-content">
+          <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0]">
+          <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">
+          <div class="inner">
+            <div class="header">
               <h4 class="court-name">{{court.name}}</h4>
-            <!-- <div>
+              <!-- <div>
               <h4 style="text-align: right;" *ngIf="court.rating">Rating: {{court.rating}}</h4>
             </div> -->
-          </div>
-          <div class="body">
-            <p> <ion-icon name="ios-pin"></ion-icon> {{court.location}}</p>
-            <!-- <ion-list id="users-courts">
+            </div>
+            <div class="body">
+              <p>
+                <ion-icon name="ios-pin"></ion-icon> {{court.location}}
+              </p>
+              <!-- <ion-list id="users-courts">
               <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Kill Level: {{puser.rank}}</ion-item>
             </ion-list> -->
+            </div>
           </div>
         </div>
-      </div>
-    </ion-slide>
-  </ion-slides>
-</div>
+      </ion-slide>
+    </ion-slides>
+  </div>
 
 </ion-content>
