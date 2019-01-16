@@ -52,7 +52,7 @@
           <button style="background: none;" (click)="toTournamen(tour)">
             <h2 text-wrap>{{tour.title}}</h2>
           </button>
-          <button ion-button item-end (click)="addOrRemove(tour, saved(tour))">{{saved(tour)===true?'Remove':'Save'}}</button>
+          <button ion-button item-end class="button-save-tournament" (click)="addOrRemove(tour, saved(tour))">{{saved(tour)===true?'Remove':'Save'}}</button>
           <!-- <button [disabled]="disable" *ngIf="p._id != userID" ion-button item-end [innerHtml]="p.requests != '' ? 'Cancel Request' : 'Add Friend' "
             (click)="checkFriendRequest(p, $event)"></button> -->
         </ion-item>
@@ -80,7 +80,8 @@
           <ion-avatar item-start>
             <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
           </ion-avatar>
-          <h2 text-wrap>{{p.fullName}} - Skill Level: {{p.rank}}</h2>
+          <h2 text-wrap>{{p.fullName}}</h2>
+          <p>Skill Level: {{p.rank}}</p>
           <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
           <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
             (click)="checkFriendRequest(p, $event)"></button>
