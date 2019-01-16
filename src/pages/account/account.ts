@@ -32,6 +32,7 @@ export class AccountPage {
   rank: any;
   public resultsCourts = [];
   public resultsTournaments = [];
+  segment:any = 'events';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private fb: Facebook,
