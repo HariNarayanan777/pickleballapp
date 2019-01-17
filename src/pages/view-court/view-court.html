@@ -32,7 +32,7 @@
   </ion-card>
 
   <ion-list id="users-courts">
-    <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Skill Level: {{puser.rank}}</ion-item>
+    <ion-item *ngFor="let skill of orderXSkill">Skill Level: {{skill.skill}} - {{skill.users.length}} Players</ion-item>
   </ion-list>
 
   <ion-fab bottom right>

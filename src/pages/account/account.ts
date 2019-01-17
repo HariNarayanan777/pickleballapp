@@ -129,6 +129,8 @@ export class AccountPage {
 
   async logout() {
     if (this.platform.is("cordova")) {
+      await this.removeToken();
+      await MyApp.unregisterNotifications();
       let withEmail = await this.storage.get('SESIONEMAIL');
       if (withEmail === true) {
         this.storage.set('LOGGED_IN', false);
@@ -139,7 +141,6 @@ export class AccountPage {
           console.log(res);
           this.storage.set('LOGGED_IN', false);
           MyApp.setNotifications = false;
-          this.removeToken();
           this.app.getRootNav().setRoot(LoginPage);
         });
       }
@@ -157,7 +158,6 @@ export class AccountPage {
       await this.http.put("/logout", { token, id: userID }, { responseType: "text" }).toPromise();
       await this.storage.remove("tokenNotification");
       await this.storage.remove("USER_ID");
-      localStorage.removeItem("updateTokens");
     }
     catch (e) {
       console.error(e);
