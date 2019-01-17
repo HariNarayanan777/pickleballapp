@@ -16,7 +16,22 @@
 
   </ion-toolbar>
 </ion-header> -->
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start style="order: 1">
+      <button ion-button icon-only (click)="presentModal()">
+        <ion-icon name="ios-create-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Account</ion-title>
+    <ion-buttons end>
+      <button icon-only (click)="logout()" ion-button >
+        <ion-icon name="ios-log-out"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 
+</ion-header>
 
 <ion-content>
 
@@ -24,7 +39,7 @@
     <ion-row padding>
       <ion-col col-12>
         <div class="image-holder">
-          <img src="../../assets/imgs/default-user.png" alt="">
+          <img [src]="profileImg" alt="">
         </div>
         <p class="title-name">{{fullName}}</p>
         <p class="location">
@@ -82,37 +97,37 @@
     <ion-row>
       <ion-col col-12 id="buttons-actions">
         <ion-item>
-          <button ion-button (click)="toViewFriends()">
+          <button  full ion-button (click)="toViewFriends()">
             View Friends
           </button>
         </ion-item>
 
         <ion-item>
-          <button ion-button (click)="shareApp()">
+          <button full ion-button (click)="shareApp()">
             Share PickleConnect
           </button>
         </ion-item>
 
         <ion-item>
-          <button ion-button (click)="toFutureTournments()">
+          <button full ion-button (click)="toFutureTournments()">
             Future Tournaments
           </button>
         </ion-item>
 
         <ion-item>
-          <button ion-button (click)="toSavedTournments()">
+          <button full ion-button (click)="toSavedTournments()">
             Saved Tournaments
           </button>
         </ion-item>
 
         <ion-item>
-          <button ion-button (click)="toSavedCourts()">
+          <button full ion-button (click)="toSavedCourts()">
             Saved Courts
           </button>
         </ion-item>
 
         <ion-item *ngIf="validNear()">
-          <button ion-button (click)="toNearCourtsTournaments()">
+          <button full ion-button (click)="toNearCourtsTournaments()">
             {{getNearEntityMessage()}}
           </button>
         </ion-item>

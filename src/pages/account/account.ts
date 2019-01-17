@@ -120,6 +120,10 @@ export class AccountPage {
   getProfileImage() {
     this.fb.api('me?fields=picture.width(720).height(720).as(picture_large)', []).then(picture => {
       this.profileImg = picture['picture_large']['data']['url'];
+      console.log("imafe", this.profileImg);
+    }, err => {
+      console.log("error", err);
+      this.profileImg = '../../assets/imgs/default-user.png'
     })
   }
 
