@@ -1,14 +1,24 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Search All Players</ion-title>
+    <ion-buttons start style="order: 1">
+      <button ion-button icon-only>
+        <ion-icon name="ios-person-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>PickleConnect</ion-title>
+    <ion-buttons end>
+      <button class="text-btn" ion-button clear>
+        Filter
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
   <form action="." (ngSubmit)="onSearchInput()">
-    <ion-searchbar (input)="onSearchInput()" [(ngModel)]="searchTerm" [formControl]="searchControl" [showCancelButton]="true"
+    <ion-searchbar (input)="onSearchInput()" placeholder="Search all players" [(ngModel)]="searchTerm" [formControl]="searchControl" [showCancelButton]="true"
       (ionCancel)="cancel()"></ion-searchbar>
   </form>
 
