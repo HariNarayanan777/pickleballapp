@@ -1,65 +1,63 @@
 page-account {
-    ion-content{
+    ion-content {
         background-color: #000000;
         background-image: linear-gradient(#000000, #222731);
-        .scroll-content{
+        .scroll-content {
             padding-top: 70px !important;
-            .title-name{
+            .title-name {
                 color: #fff;
                 text-align: center;
                 font-weight: bold;
                 font-size: 18px;
                 margin-bottom: 5px;
             }
-            .location{
+            .location {
                 color: #5f6165;
                 text-align: center;
                 font-size: 15px;
                 margin: 0;
-                ion-icon{
+                ion-icon {
                     color: #bea805;
                     margin-right: 5px;
                 }
             }
-            .description{
+            .description {
                 color: #fff;
                 text-align: center;
                 font-size: 12px;
                 font-weight: 500;
                 width: 80%;
-                margin: 12px auto; 
+                margin: 12px auto;
             }
-            ion-segment{
+            ion-segment {
                 margin-top: 30px;
                 margin-bottom: 0px;
                 justify-content: center;
                 align-items: center;
                 display: flex;
-                span{
+                span {
                     font-size: 16px;
                     line-height: 2.8rem;
                     margin-left: 5px;
                     font-weight: 500;
                 }
             }
-            .segment-button{
+            .segment-button {
                 background: transparent !important;
                 border: none !important;
                 color: #fff !important;
                 border-radius: 0 !important;
-               
             }
-            .segment-button.segment-activated{
+            .segment-button.segment-activated {
                 background: transparent !important;
                 border: none !important;
                 border-bottom: 2px solid #bea805 !important;
                 color: #fff;
                 border-radius: 0 !important;
-
             }
-            .segments{
+            .segments {
                 width: 100% !important;
-                .segment-title{
+                .segment-title {
                     margin: 0;
                     color: #fff !important;
                     font-size: 15px;
@@ -71,44 +69,60 @@ page-account {
                 }
             }
         }
+        .friend-item {
+            background-color: transparent !important;
+            color: white !important;
+            padding-left: 20px !important;
+            .item-inner {
+                border-width: 0 !important;
+            }
+        }
+        #buttons-actions {
+            ion-item {
+                background-color: transparent !important;
+                color: white !important;
+                button {
+                    background-color: transparent !important;
+                }
+                .item-inner {
+                    border-width: 0 !important;
+                }
+            }
+        }
     }
-ion-header{
-    ion-toolbar{
-        min-height: 40px !important;
-        box-shadow: none !important;
-        .toolbar-content{
-            text-align: center;
-            order: 2;
-        }
-
-        .start-btn{
-            order: 1;
-        }
-        .end-btn{
-            order: 2;
+    ion-header {
+        ion-toolbar {
+            min-height: 40px !important;
+            box-shadow: none !important;
+            .toolbar-content {
+                text-align: center;
+                order: 2;
+            }
+            .start-btn {
+                order: 1;
+            }
+            .end-btn {
+                order: 2;
+            }
         }
     }
-}
-
-ion-header:after{
-    background: none !important;
-}
-
-.image-holder{
-    text-align: center;
-    img{
-        height: 120px;
-        width: 120px;
-        border-radius: 50%;
+    ion-header:after {
+        background: none !important;
+    }
+    .image-holder {
         text-align: center;
+        img {
+            height: 120px;
+            width: 120px;
+            border-radius: 50%;
+            text-align: center;
+        }
     }
-}
-
-.star-rank{
-    text-align: center;
-    ion-icon{
-        font-size: 20px;
-        color: gold;
+    .star-rank {
+        text-align: center;
+        ion-icon {
+            font-size: 20px;
+            color: gold;
+        }
     }
-}
 }

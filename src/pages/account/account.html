@@ -18,52 +18,107 @@
 </ion-header> -->
 
 
-<ion-content >
+<ion-content>
 
   <ion-grid>
     <ion-row padding>
       <ion-col col-12>
         <div class="image-holder">
           <img src="../../assets/imgs/default-user.png" alt="">
-        </div> 
-        <p class="title-name">{{fullName}}</p> 
-        <p class="location"> <ion-icon name="ios-pin"></ion-icon> Your location</p> 
-        <p class="location"> <ion-icon name="ios-at"></ion-icon>{{email}}</p> 
-        <p class="description"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ut eveniet ea </p> 
- 
+        </div>
+        <p class="title-name">{{fullName}}</p>
+        <p class="location">
+          <ion-icon name="ios-pin"></ion-icon> Your location
+        </p>
+        <p class="location">
+          <ion-icon name="ios-at"></ion-icon>{{email}}
+        </p>
+        <p class="description"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ut eveniet ea </p>
+
       </ion-col>
 
     </ion-row>
+
     <ion-row>
-        <ion-col col-12>
+      <ion-col col-12>
 
-      <ion-segment [(ngModel)]="segment">
-        <ion-segment-button value="friends">
+        <ion-segment [(ngModel)]="segment">
+          <ion-segment-button value="friends">
             <ion-icon name="ios-people-outline"></ion-icon> <span>Friends</span>
-        </ion-segment-button>
-        <ion-segment-button value="places">
+          </ion-segment-button>
+          <ion-segment-button value="places">
             <ion-icon name="ios-pin-outline"></ion-icon> <span>Places</span>
-        </ion-segment-button>
-        <ion-segment-button value="events">
-          <ion-icon name="ios-calendar-outline"></ion-icon> <span>Events</span> 
-        </ion-segment-button>
-      </ion-segment>
-        </ion-col>
+          </ion-segment-button>
+          <ion-segment-button value="events">
+            <ion-icon name="ios-calendar-outline"></ion-icon> <span>Events</span>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
 
-        <div [ngSwitch]="segment" class="segments">
-            <div col-12 *ngSwitchCase="'events'">
-              <h3 class="segment-title">Upcoming events</h3>
-            </div>
-              <div col-12 *ngSwitchCase="'places'">
-                  <h3 class="segment-title">Places</h3>
-                </div>
-                <div col-12 *ngSwitchCase="'friends'">
-                    <h3 class="segment-title">Friends</h3>
-                  </div>
+      <div [ngSwitch]="segment" class="segments">
+        <div col-12 *ngSwitchCase="'events'">
+          <h3 class="segment-title">Upcoming events</h3>
+          <ion-item class="friend-item" *ngFor="let tour of listEvents">
+            <h2>{{tour.title}}</h2>
+            <p>{{tour.address}}</p>
+          </ion-item>
         </div>
+        <div col-12 *ngSwitchCase="'places'">
+          <h3 class="segment-title">Places</h3>
+          <ion-item class="friend-item" *ngFor="let court of listCourts">
+            <h2>{{court.name}}</h2>
+            <p>{{court.location}}</p>
+          </ion-item>
+        </div>
+        <div col-12 *ngSwitchCase="'friends'">
+          <h3 class="segment-title">Friends</h3>
+          <ion-item class="friend-item" *ngFor="let friend of listFriend">{{friend.fullName}}</ion-item>
+        </div>
+      </div>
 
-   
+
     </ion-row>
+
+    <ion-row>
+      <ion-col col-12 id="buttons-actions">
+        <ion-item>
+          <button ion-button (click)="toViewFriends()">
+            View Friends
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button (click)="shareApp()">
+            Share PickleConnect
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button (click)="toFutureTournments()">
+            Future Tournaments
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button (click)="toSavedTournments()">
+            Saved Tournaments
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button (click)="toSavedCourts()">
+            Saved Courts
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="validNear()">
+          <button ion-button (click)="toNearCourtsTournaments()">
+            {{getNearEntityMessage()}}
+          </button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
   </ion-grid>
 
   <!-- <ion-list>
@@ -87,40 +142,6 @@
     </ion-item>
   </ion-list> -->
 
-  <!-- <ion-item>
-    <button ion-button (click)="toViewFriends()">
-      View Friends
-    </button>
-  </ion-item>
 
-  <ion-item>
-    <button ion-button (click)="shareApp()">
-      Share PickleConnect
-    </button>
-  </ion-item>
-
-  <ion-item>
-    <button ion-button (click)="toFutureTournments()">
-      Future Tournaments
-    </button>
-  </ion-item>
-
-  <ion-item>
-    <button ion-button (click)="toSavedTournments()">
-      Saved Tournaments
-    </button>
-  </ion-item>
-
-  <ion-item>
-    <button ion-button (click)="toSavedCourts()">
-      Saved Courts
-    </button>
-  </ion-item>
-
-  <ion-item *ngIf="validNear()">
-    <button ion-button (click)="toNearCourtsTournaments()">
-      {{getNearEntityMessage()}}
-    </button>
-  </ion-item> -->
 
 </ion-content>

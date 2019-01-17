@@ -15,6 +15,7 @@ import { HelpersProvider } from '../../providers/helpers/helpers';
 import { NearCourtsAndTournamentsPage } from '../near-courts-and-tournaments/near-courts-and-tournaments';
 import { ListChatPage } from '../list-chat/list-chat';
 import { ListFriendPage } from '../list-friend/list-friend';
+import { AuthProvider } from '../../providers/auth/auth';
 
 
 @IonicPage()
@@ -30,9 +31,12 @@ export class AccountPage {
   email: any;
   zipcode: any;
   rank: any;
+  public listFriend = [];
+  public listEvents = [];
+  public listCourts = [];
   public resultsCourts = [];
   public resultsTournaments = [];
-  segment:any = 'events';
+  segment: any = 'events';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private fb: Facebook,
@@ -52,16 +56,38 @@ export class AccountPage {
       if (miPosition) {
         let lng = miPosition.coords.longitude;
         let lat = miPosition.coords.latitude;
-        // let lng = -85.82501576;
-        // let lat = 11.43211537;
         this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
         this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
-        console.log(this.resultsCourts, this.resultsTournaments);
+        await this.getFriends();
+        let user = await AuthProvider.me.getIdUser(),
+          query = { user };
+        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}`).toPromise() as any[];
+        this.listEvents = await this.http.get(`/tournaments?limit=10`).toPromise() as any[];
       }
     }
     catch (e) {
       console.error(e);
     }
+  }
+
+  async getFriends() {
+    let userID: any = await AuthProvider.me.getIdUser();
+    let query = { "or": [{ from: userID, response: true }, { to: userID, response: true }] };
+    let users = await this.http.get(`/requestfriend?where=${JSON.stringify(query)}`).toPromise() as any[];
+    this.listFriend = users.map(it => {
+      let user;
+      if (it.from.id === userID)
+        user = it.to;
+      else
+        user = it.from;
+      user.photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+      user.requestID = it.id;
+      return user;
+    });
+  }
+
+  private validProperty(prop) {
+    return prop !== undefined && prop !== null;
   }
 
   public validNear() {
@@ -175,7 +201,7 @@ export class AccountPage {
     this.navCtrl.push(NearCourtsAndTournamentsPage, { resultsCourts: this.resultsCourts, resultsTournaments: this.resultsTournaments });
   }
 
-  public toViewFriends(){
+  public toViewFriends() {
     this.navCtrl.push(ListFriendPage);
   }
 

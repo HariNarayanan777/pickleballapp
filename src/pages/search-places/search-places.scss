@@ -138,8 +138,10 @@ page-search-places {
         position: absolute;
         margin-left: -44%;
         margin-top: 15px;
-        color: #fff;
-        background-color: #488aff;
+        // color: #fff;
+        // background-color: #488aff;
+        background-color: #2e363d;
+        color: #ffe000;
         -webkit-box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
         box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
         -webkit-transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -150,15 +152,12 @@ page-search-places {
             font-size: 1rem !important;
         }
     }
-    button.button-save.remove {
-        background-color: #f53d3d !important;
-    }
     .nearby-bg {
         background: #eae5e5;
     }
     .button-save-tournament{
         background: #2e363d;
-        color: #ffe000;;
+        color: #ffe000;
     }
     #users-courts {
         ion-item {
