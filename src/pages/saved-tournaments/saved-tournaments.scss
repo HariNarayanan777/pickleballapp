@@ -1,3 +1,54 @@
 page-saved-tournaments {
+    .toolbar-background {
+        background: #000000 !important;
+    }
+    .toolbar-ios ion-title {
+        padding: 0 50px 1px !important;
+        padding-top: 30px !important;
+    }
+    ion-navbar {
+        padding-top: 20px !important;
+        min-height: 60px !important;
+        height: 60px !important;
+        button {
+            color: #bea805 !important;
+            
+        }
+        ion-title {
+            .toolbar-title-ios,
+            .toolbar-title-md {
+                color: #fff;
+            }
+        }
+        .text-btn {
+            border: none !important;
+            color: #fff !important;
+            text-transform: uppercase;
+            padding-right: 25px;
+            letter-spacing: 1px;
+        }
+    }
 
+    ion-content{
+        .scroll-content{
+            background: #eae5e5 !important;
+            ion-list{
+                ion-item{
+                    background: transparent !important;
+                    border: none !important;
+                    .item-inner{
+                        border: none !important;
+                    }
+                    button{
+                        color: #2e363d !important;
+                        background-color: #bea805 !important;
+                        border: none !important;
+                        border-radius: 5px;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+        }
+    }
 }
