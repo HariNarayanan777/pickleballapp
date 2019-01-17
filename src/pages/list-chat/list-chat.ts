@@ -30,6 +30,10 @@ export class ListChatPage {
     });
   }
 
+  public errorImage(e) {
+    e.target.src = "./assets/imgs/default-user.png";
+  }
+
   private validProperty(prop) {
     return prop !== undefined && prop !== null;
   }

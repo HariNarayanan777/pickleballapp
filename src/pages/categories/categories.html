@@ -24,7 +24,7 @@
 
       <ion-item *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
         <ion-avatar *ngIf="existImage(n.data.from)" item-start>
-          <img [src]="getImage(n.data.from)">
+          <img [src]="getImage(n.data.from)" (error)="errorImage($event)">
         </ion-avatar>
         <h2>{{n.title}}</h2>
         <button *ngIf="!n.view" [disabled]="disable" ion-button icon-only small color="secondary" (click)="responseRequest(n, true)">
@@ -37,13 +37,13 @@
       </ion-item>
       <ion-item *ngIf="n.type == 'acceptFriend'">
         <ion-avatar *ngIf="existImage(n.data.to)" item-start>
-          <img [src]="getImage(n.data.to)">
+          <img [src]="getImage(n.data.to)" (error)="errorImage($event)">
         </ion-avatar>
         <h2 text-wrap>{{n.title}}</h2>
       </ion-item>
       <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
         <ion-avatar item-start>
-          <img [src]="n.data.from.loginFacebook.image">
+          <img [src]="n.data.from.loginFacebook.image" (error)="errorImage($event)">
         </ion-avatar>
         <h2>{{n.title}}</h2>
         <p text-wrap>{{n.body}}</p>

@@ -38,7 +38,10 @@ export class ChatPage {
     private storage: Storage, private lc: LiveComunicationProvider
   ) {
     this.to = this.navParams.get("user");
-    //this.photo = this.to.loginFacebook.image || "";
+    console.log(this.to);
+    if (this.to.loginFacebook) {
+      this.photo = this.to.loginFacebook.image || "";
+    }
   }
 
   ngAfterViewInit() {
@@ -111,6 +114,10 @@ export class ChatPage {
 
   ionViewDidLeave() {
     this.lc.unsubscribeEvent("new-chat");
+  }
+
+  public errorImage(e) {
+    e.target.src = "./assets/imgs/default-user.png";
   }
 
   public loadImage(msg) {

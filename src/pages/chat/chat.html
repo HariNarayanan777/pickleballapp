@@ -1,10 +1,8 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-row>
-      <!-- <img class="user-img" [src]="photo"> -->
-      <ion-title>{{to.fullName}}</ion-title>
-    </ion-row>
+    <img class="nav-avatar" [src]="photo" (error)="errorImage($event)">
+    <ion-title>{{to.fullName}}</ion-title>
   </ion-navbar>
 
 </ion-header>

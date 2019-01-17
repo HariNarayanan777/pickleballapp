@@ -13,8 +13,8 @@
 
   <ion-list>
     <ion-item [hidden]="!validFiltro(user)" *ngFor="let user of list" (click)="toChatView(user)">
-      <ion-avatar item-start *ngIf="user.photo!==''">
-        <img [src]="user.photo">
+      <ion-avatar item-start>
+        <img [src]="user.photo" (error)="errorImage($event)">
       </ion-avatar>
       {{user.fullName}}
       <ion-icon *ngIf="toChat===false" name="ios-trash-outline" item-end color="danger" (click)="deleteFriend(user)"></ion-icon>

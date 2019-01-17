@@ -34,15 +34,19 @@
   </ion-list>
 
   <ion-list>
-    <ion-list-header>
-      <ion-label>KILL LEVEL</ion-label>
-      <ion-badge item-end color="secondary">{{level}}</ion-badge>
-    </ion-list-header>
     <ion-item>
-      <ion-range min="1" max="100" [(ngModel)]="level" color="secondary">
-        <ion-label range-left>1</ion-label>
-        <ion-label range-right>100</ion-label>
-      </ion-range>
+        <ion-label>Skill Level</ion-label>
+        <ion-select [(ngModel)]="level">
+          <ion-option value="1">1</ion-option>
+          <ion-option value="1.5">1.5</ion-option>
+          <ion-option value="2">2</ion-option>
+          <ion-option value="2.5">2.5</ion-option>
+          <ion-option value="3">3</ion-option>
+          <ion-option value="3.5">3.5</ion-option>
+          <ion-option value="4">4</ion-option>
+          <ion-option value="4.5">4.5</ion-option>
+          <ion-option value="5">5</ion-option>
+        </ion-select>
     </ion-item>
   </ion-list>
 

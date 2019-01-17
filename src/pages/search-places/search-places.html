@@ -103,11 +103,11 @@
       <h4>Nearby Courts</h4>
     </div>
     <ion-slides [hidden]="type===2||type===4" id="courts" slidesPerView="1.5">
-      <ion-slide *ngFor="let court of courst" (click)="toCourtSlide(court)">
+      <ion-slide *ngFor="let court of courst">
         <button ion-button class="button-save" (click)="saveCourt(court)" [hidden]="isSavedCourt(court).saved">Save</button>
         <button ion-button class="button-save" [ngClass]="isSavedCourt(court).saved===true?'remove':''" (click)="removeCourt(court)"
           [hidden]="!isSavedCourt(court).saved">Remove</button>
-        <div class="inner-content">
+        <div class="inner-content" (click)="toCourtSlide(court)">
           <img [hidden]="!court.loadImage" *ngIf="court.photos&&court.photos.length>0" (load)="loadImage(court)" [src]="court.photos[0]">
           <img [hidden]="court.loadImage" src="./assets/imgs/court-sport-default.jpg">
           <div class="inner">

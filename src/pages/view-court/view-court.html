@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Court</ion-title>
+    <ion-title>Details</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -32,7 +32,7 @@
   </ion-card>
 
   <ion-list id="users-courts">
-    <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Kill Level: {{puser.rank}}</ion-item>
+    <ion-item *ngFor="let puser of court.users">{{puser.fullName}} - Skill Level: {{puser.rank}}</ion-item>
   </ion-list>
 
   <ion-fab bottom right>

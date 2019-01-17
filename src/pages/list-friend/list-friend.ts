@@ -25,6 +25,10 @@ export class ListFriendPage {
     }
   }
 
+  public errorImage(e) {
+    e.target.src = "./assets/imgs/default-user.png";
+  }
+
   public onSearchInput() { }
 
   public validFiltro(user) {

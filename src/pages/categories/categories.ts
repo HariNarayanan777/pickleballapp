@@ -46,6 +46,10 @@ export class CategoriesPage {
     return photo !== "";
   }
 
+  public errorImage(e) {
+    e.target.src = "./assets/imgs/default-user.png";
+  }
+
   public getImage(user) {
     return this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
   }

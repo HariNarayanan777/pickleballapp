@@ -6,7 +6,7 @@
         <ion-icon name="ios-person-outline"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Friends List</ion-title>
+    <ion-title>Chat</ion-title>
     <ion-buttons end>
       <button class="text-btn" ion-button clear>
         Filter
@@ -20,8 +20,8 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let user of users" (click)="toChat(user)">
-      <ion-avatar item-start *ngIf="user.photo!==''">
-        <img [src]="user.photo">
+      <ion-avatar item-start >
+        <img [src]="user.photo" (error)="errorImage($event)">
       </ion-avatar>
       {{user.fullName}}
     </ion-item>
