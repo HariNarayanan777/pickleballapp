@@ -38,7 +38,7 @@ export class ChatPage {
     private storage: Storage, private lc: LiveComunicationProvider
   ) {
     this.to = this.navParams.get("user");
-    this.photo = this.to.loginFacebook.image || "";
+    //this.photo = this.to.loginFacebook.image || "";
   }
 
   ngAfterViewInit() {

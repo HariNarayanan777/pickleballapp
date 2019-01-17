@@ -1,6 +1,7 @@
 page-chat {
-    $userBackgroundColor: #fff;
-    $toUserBackgroundColor: #fe324d;
+    $userBackgroundColor: #000000;
+    $toUserBackgroundColor: #bea805;
+   
     #loadtoUp {
         display: flex;
         justify-content: center;
@@ -17,7 +18,7 @@ page-chat {
         padding-left: 15% !important;
     }
     ion-content .scroll-content {
-        background-color: #f2f5f8;
+        background-color: #eae5e5;
     }
     ion-footer {
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.11);
@@ -154,6 +155,40 @@ page-chat {
                 color: #fe324d !important;
                 font-weight: bold;
             }
+        }
+    }
+
+    .toolbar-background {
+        background: #000000 !important;
+    }
+    .toolbar-ios ion-title {
+        padding: 0 50px 1px !important;
+        padding-top: 30px !important;
+    }
+    ion-navbar {
+        padding-top: 20px !important;
+        min-height: 60px !important;
+        height: 60px !important;
+        button {
+            color: #bea805 !important;
+            ion-icon{
+                color: #bea805 !important;
+            }
+           
+        }
+        ion-title {
+            text-align: left;
+            .toolbar-title-ios,
+            .toolbar-title-md {
+                color: #fff;
+            }
+        }
+        .text-btn {
+            border: none !important;
+            color: #fff !important;
+            text-transform: uppercase;
+            padding-right: 25px;
+            letter-spacing: 1px;
         }
     }
 }
