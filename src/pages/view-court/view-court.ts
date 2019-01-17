@@ -16,6 +16,7 @@ export class ViewCourtPage {
   public court: any = {};
   public map: any = {};
   public courstSaved = [];
+  public orderXSkill: { skill: number, users: any[] }[] = [];
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -66,7 +67,7 @@ export class ViewCourtPage {
   public saveOrRemove() {
     if (this.isSavedCourt(this.court).saved === true) {
       this.removeCourt(this.court);
-    }else{
+    } else {
       this.save(this.court);
     }
   }
@@ -104,7 +105,15 @@ export class ViewCourtPage {
     let user = await AuthProvider.me.getIdUser();
     let query = { user };
     this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
-    console.log(this.courstSaved);
+    for (let user of this.court.users) {
+      let index = this.orderXSkill.findIndex(it => {
+        return it.skill = user.rank;
+      });
+      if (index !== -1)
+        this.orderXSkill[index].users.push(user);
+      else
+        this.orderXSkill.push({ skill: user.rank, users: [user] });
+    }
   }
 
   public isSavedCourt(court) {

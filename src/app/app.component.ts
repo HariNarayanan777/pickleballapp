@@ -22,7 +22,7 @@ export class MyApp {
 
   public static initNotifications: Function = () => { };
   public static setNotifications = false;
-
+  public static unregisterNotifications: Function = () => { };
   constructor(
     platform: Platform, statusBar: StatusBar,
     splashScreen: SplashScreen, public storage: Storage,
@@ -31,6 +31,7 @@ export class MyApp {
     public helper: HelpersProvider
   ) {
     MyApp.initNotifications = this.initNotifications.bind(this);
+    MyApp.unregisterNotifications = this.unregisterNotifications.bind(this);
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
@@ -43,6 +44,10 @@ export class MyApp {
       });
       this.helper.startBackgroundLocationSelf();
     });
+  }
+
+  public async unregisterNotifications() {
+    await this.pushObject.unregister();
   }
 
   public initNotifications() {
@@ -100,10 +105,6 @@ export class MyApp {
 
   private async updateTokens(token: string) {
     try {
-      let updateTokens = localStorage.getItem("updateTokens");
-      if (updateTokens) {
-        return;
-      }
       let userID: any = await this.storage.get("USER_ID");
       if (userID) {
         let user: any = await this.http.get(`/user/${userID}`).toPromise();
@@ -117,7 +118,6 @@ export class MyApp {
         tokens = user.tokens;
         await this.http.patch(`/user/${user.id}`, { tokens }).toPromise();
         await this.storage.set("tokenNotification", token);
-        localStorage.setItem("updateTokens", JSON.stringify({ set: true }));
       }
     }
     catch (e) {
