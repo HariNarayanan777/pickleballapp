@@ -33,8 +33,9 @@ export class MyApp {
     MyApp.initNotifications = this.initNotifications.bind(this);
     MyApp.unregisterNotifications = this.unregisterNotifications.bind(this);
     platform.ready().then(() => {
-      statusBar.styleDefault();
       splashScreen.hide();
+      statusBar.overlaysWebView(false);
+      statusBar.backgroundColorByHexString('#bea805');
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
           this.rootPage = TabsPage;
