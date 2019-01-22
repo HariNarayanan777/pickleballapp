@@ -16,13 +16,19 @@
 
 </ion-header>
 <ion-content>
+
+
   <ion-list>
+
     <ion-list-header>
       Notifications
     </ion-list-header>
+
+    <ion-searchbar (ionInput)="buscarNotfications()" [(ngModel)]="buscar"></ion-searchbar>
+
     <div *ngFor="let n of notifications">
 
-      <ion-item *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
+      <ion-item [hidden]="!coincido(n)" *ngIf="n.type == 'requestFriend'" id="noti-{{n.id}}" [style.backgroundColor]="n.view ? 'lightgray' : 'white'">
         <ion-avatar *ngIf="existImage(n.data.from)" item-start>
           <img [src]="getImage(n.data.from)" (error)="errorImage($event)">
         </ion-avatar>
@@ -35,13 +41,13 @@
         </button>
 
       </ion-item>
-      <ion-item *ngIf="n.type == 'acceptFriend'">
+      <ion-item [hidden]="!coincido(n)" *ngIf="n.type == 'acceptFriend'">
         <ion-avatar *ngIf="existImage(n.data.to)" item-start>
           <img [src]="getImage(n.data.to)" (error)="errorImage($event)">
         </ion-avatar>
         <h2 text-wrap>{{n.title}}</h2>
       </ion-item>
-      <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
+      <ion-item [hidden]="!coincido(n)" *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
         <ion-avatar item-start>
           <img [src]="getImage(n.data.from)" (error)="errorImage($event)">
         </ion-avatar>
