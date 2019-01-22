@@ -14,6 +14,8 @@
     <ion-item>
       <h2>{{tournament.title}}</h2>
       <p>{{tournament.address}}</p>
+      <a target="_blank" href="https://www.google.com/maps/@{{tournament.latLng.lat}},{{tournament.latLng.lng}},15z">Directions</a>
+
     </ion-item>
 
     <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!tournament.imgs">
