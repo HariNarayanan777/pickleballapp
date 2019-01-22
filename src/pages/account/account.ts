@@ -96,13 +96,13 @@ export class AccountPage {
 
   public getNearEntityMessage() {
     if (this.resultsCourts.length > 0 && this.resultsTournaments.length === 0) {
-      return "It's close to Courts";
+      return "Nearby Courts";
     }
     if (this.resultsCourts.length === 0 && this.resultsTournaments.length > 0) {
-      return "It's close to Tournaments";
+      return "Nearby Tournaments";
     }
     if (this.resultsCourts.length > 0 && this.resultsTournaments.length > 0) {
-      return "It is close to Courts and Tournaments";
+      return "Nearby Tournaments & Courts";
     }
 
     return "";
