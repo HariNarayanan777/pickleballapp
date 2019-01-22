@@ -131,6 +131,7 @@ export class AccountPage {
     if (this.platform.is("cordova")) {
       await this.removeToken();
       await MyApp.unregisterNotifications();
+      await HelpersProvider.me.stopBackgroundLocation();
       let withEmail = await this.storage.get('SESIONEMAIL');
       if (withEmail === true) {
         this.storage.set('LOGGED_IN', false);

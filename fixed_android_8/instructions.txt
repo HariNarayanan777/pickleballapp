@@ -1,0 +1,3 @@
+open android studio
+to folder /app/java/com/marianhello/bgloc
+replace LocationService.java

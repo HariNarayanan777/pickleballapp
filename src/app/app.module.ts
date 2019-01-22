@@ -117,9 +117,9 @@ import { ViewCourtPageModule } from '../pages/view-court/view-court.module';
     Diagnostic,
     EmojiProvider,
     LiveComunicationProvider,
+    BackgroundGeolocation,
     Geolocation,
     AuthProvider,
-    BackgroundGeolocation,
     HelpersProvider
   ]
 })

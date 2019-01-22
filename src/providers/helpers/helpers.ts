@@ -63,7 +63,7 @@ export class HelpersProvider {
       .subscribe((location: BackgroundGeolocationResponse) => {
 
         console.log(location);
-
+        this.backgroundGeolocation.finish();
       });
 
     // start recording location

@@ -17,6 +17,7 @@ export class CategoriesPage {
   userID: any;
   notifications: any = [];
   disable: boolean = false;
+  public skip = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage, private toastCtrl: ToastController) {
@@ -34,10 +35,23 @@ export class CategoriesPage {
   ionViewDidLoad() {
   }
 
-  getNotifications() {
-    this.rest.getData(`/notifications?where={"user":"${this.userID}"}`).subscribe(res => {
-      console.log(res);
-      this.notifications = res;
+  getNotifications(infiniteScroll?) {
+    let query = {
+      or: [
+        { user: this.userID, type: "chat" },
+        { user: this.userID, type: "acceptFriend" },
+        { user: this.userID, type: "requestFriend" }
+      ]
+    };
+    this.rest.getData(`/notifications?where=${JSON.stringify(query)}&sort=createdAt DESC&limit=10&skip=${this.skip}`).subscribe(res => {
+      let rsts: any = res; console.log(rsts);
+      if (rsts.length > 0) {
+        this.notifications = this.notifications.concat(rsts);
+        this.skip += 10;
+      }
+
+      if (infiniteScroll)
+        infiniteScroll.complete();
     })
   }
 

@@ -16,7 +16,7 @@
 
 </ion-header>
 <ion-content>
-  <ion-list> 
+  <ion-list>
     <ion-list-header>
       Notifications
     </ion-list-header>
@@ -43,7 +43,7 @@
       </ion-item>
       <ion-item *ngIf="n.type == 'chat'" (click)="toChat(n.data.from)">
         <ion-avatar item-start>
-          <img [src]="n.data.from.loginFacebook.image" (error)="errorImage($event)">
+          <img [src]="getImage(n.data.from)" (error)="errorImage($event)">
         </ion-avatar>
         <h2>{{n.title}}</h2>
         <p text-wrap>{{n.body}}</p>
@@ -53,5 +53,9 @@
 
 
   </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="getNotifications($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>
