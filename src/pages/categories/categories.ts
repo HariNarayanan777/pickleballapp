@@ -18,6 +18,7 @@ export class CategoriesPage {
   notifications: any = [];
   disable: boolean = false;
   public skip = 0;
+  public buscar = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage, private toastCtrl: ToastController) {
@@ -33,6 +34,20 @@ export class CategoriesPage {
   }
 
   ionViewDidLoad() {
+  }
+
+  public buscarNotfications() { }
+
+  public coincido(n) {
+    if (this.buscar === "")
+      return true;
+    if (n.type === 'requestFriend' || n.type === 'acceptFriend') {
+      return n.title.toLowerCase().includes(this.buscar.toLowerCase());
+    }
+
+    if(n.type === 'chat'){
+      return n.title.toLowerCase().includes(this.buscar.toLowerCase()) || n.body.toLowerCase().includes(this.buscar.toLowerCase());
+    }
   }
 
   getNotifications(infiniteScroll?) {
