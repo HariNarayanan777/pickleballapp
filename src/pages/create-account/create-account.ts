@@ -15,6 +15,7 @@ export class CreateAccountPage {
   public fullName = "";
   public email = "";
   public password = "";
+  public confirmPassword = "";
   public birthDay = "";
   public genere = "";
 
@@ -37,6 +38,7 @@ export class CreateAccountPage {
       if (
         this.email === "" ||
         this.password === "" ||
+        this.confirmPassword === "" ||
         this.fullName === ""
       ) {
         this.alertCtrl.create({
@@ -50,6 +52,15 @@ export class CreateAccountPage {
       if (this.validEmail(this.email) === false) {
         this.alertCtrl.create({
           title: "Email with invalid format",
+          buttons: ["OK"]
+        })
+          .present();
+        return;
+      }
+
+      if (this.confirmPassword !== this.password) {
+        this.alertCtrl.create({
+          title: "Passwords do not match",
           buttons: ["OK"]
         })
           .present();
