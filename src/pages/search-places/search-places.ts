@@ -12,6 +12,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { ViewCourtPage } from '../view-court/view-court';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
+import * as moment from 'moment';
 
 declare var google: any;
 
@@ -103,7 +104,13 @@ export class SearchPlacesPage {
       return;
     }
     try {
-      this.tournaments = await this.http.get(`/tournaments-search?name=${this.torneoName}`).toPromise() as any[];
+      this.tournaments = await this.http.get(`/tournaments-search-date?name=${this.torneoName}&date=${new Date().toISOString()}`).toPromise() as any[];
+      this.tournaments = this.tournaments.map(it=>{
+        if(it.registrationStart){
+          it.registrationStart = new Date(it.registrationStart);
+        }
+        return it;
+      });
     }
     catch (e) {
       console.error(e);
