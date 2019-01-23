@@ -16,6 +16,7 @@ import { NearCourtsAndTournamentsPage } from '../near-courts-and-tournaments/nea
 import { ListChatPage } from '../list-chat/list-chat';
 import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
+import { CreateEventPage } from '../create-event/create-event';
 
 
 @IonicPage()
@@ -208,6 +209,10 @@ export class AccountPage {
 
   public toViewFriends() {
     this.navCtrl.push(ListFriendPage);
+  }
+
+  public createEvent(){
+    this.navCtrl.push(CreateEventPage);
   }
 
 }

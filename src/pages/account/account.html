@@ -25,7 +25,7 @@
     </ion-buttons>
     <ion-title>Account</ion-title>
     <ion-buttons end>
-      <button icon-only (click)="logout()" ion-button >
+      <button icon-only (click)="logout()" ion-button>
         <ion-icon name="ios-log-out"></ion-icon>
       </button>
     </ion-buttons>
@@ -97,8 +97,14 @@
     <ion-row>
       <ion-col col-12 id="buttons-actions">
         <ion-item>
-          <button  full ion-button (click)="toViewFriends()">
+          <button full ion-button (click)="toViewFriends()">
             View Friends
+          </button>
+        </ion-item>
+
+        <ion-item>
+          <button full ion-button (click)="createEvent()">
+            Create Event
           </button>
         </ion-item>
 

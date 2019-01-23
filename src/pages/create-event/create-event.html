@@ -1,0 +1,57 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Create Event</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Type</ion-label>
+      <ion-select [(ngModel)]="type">
+        <ion-option value="clinics">Clinics</ion-option>
+        <ion-option value="coaches">Coaches</ion-option>
+        <ion-option value="vacations">Vacations</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Description" [(ngModel)]="description"></ion-textarea>
+    </ion-item>
+    <ion-item (click)="setDate()">
+      Date: {{date | date:'dd/MM/yyyy'}}
+    </ion-item>
+    <ion-item (click)="setTime()">
+      Time: {{time | date:'hh:mm a'}}
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Partner</ion-label>
+      <ion-input type="text" [(ngModel)]="partner"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Player" [(ngModel)]="player"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Courts" [(ngModel)]="courts"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Match Times" [(ngModel)]="matchTimes"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Travel Info" [(ngModel)]="travelInfo"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-textarea placeholder="Event Stats" [(ngModel)]="eventStats"></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <button ion-button (click)="save()">Save</button>
+
+</ion-content>

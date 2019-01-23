@@ -2,10 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
 import { InterceptorProvider } from '../interceptor/interceptor';
-import { Platform } from 'ionic-angular';
+import { Platform, ModalController, ToastController, AlertController } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AuthProvider } from '../auth/auth';
+import { CalendarModal, CalendarResult } from 'ion2-calendar';
+import { AmazingTimePickerService } from 'amazing-time-picker';
+import * as moment from 'moment';
 
 @Injectable()
 export class HelpersProvider {
@@ -15,7 +18,9 @@ export class HelpersProvider {
   constructor(
     public http: HttpClient, public backgroundGeolocation: BackgroundGeolocation,
     public platform: Platform, public geolocation: Geolocation,
-    public diagnostic: Diagnostic
+    public diagnostic: Diagnostic, public modalCtrl: ModalController,
+    public atps: AmazingTimePickerService, public toastCtrl: ToastController,
+    public alertCtrl: AlertController
   ) {
     HelpersProvider.me = this;
   }
@@ -95,5 +100,45 @@ export class HelpersProvider {
     }
 
     return position;
+  }
+
+  public nativeDatePicker(): Promise<Date> {
+
+    let options = {
+    };
+
+    let myCalendar = this.modalCtrl.create(CalendarModal, {
+      options: options
+    });
+
+    myCalendar.present();
+
+    return new Promise(function (resolve, reject) {
+
+      myCalendar.onDidDismiss((date: CalendarResult, type: string) => {
+        if (date === null) {
+          return resolve(null);
+        }
+        resolve(date.dateObj);
+      })
+
+    })
+  }
+
+  public nativeTimePicker(): Promise<Date> {
+    let amazingTimePicker = this.atps.open();
+
+    return new Promise(function (resolve, reject) {
+      amazingTimePicker.afterClose().subscribe(time => {
+        let date = moment(time, "HH:mm").toDate();
+        resolve(date);
+      });
+    })
+
+  }
+
+  public presentToast(message) {
+    return this.toastCtrl.create({ message, duration: 3000 })
+      .present();
   }
 }

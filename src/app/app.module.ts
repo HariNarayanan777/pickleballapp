@@ -53,6 +53,11 @@ import { ListFriendPageModule } from '../pages/list-friend/list-friend.module';
 import { ListFriendPage } from '../pages/list-friend/list-friend';
 import { ViewCourtPage } from '../pages/view-court/view-court';
 import { ViewCourtPageModule } from '../pages/view-court/view-court.module';
+import { CalendarModule } from "ion2-calendar";
+import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { CreateEventPageModule } from '../pages/create-event/create-event.module';
+import { CreateEventPage } from '../pages/create-event/create-event';
+
 
 @NgModule({
   declarations: [
@@ -84,7 +89,10 @@ import { ViewCourtPageModule } from '../pages/view-court/view-court.module';
     CourtsSavedPageModule,
     NearCourtsAndTournamentsPageModule,
     ListFriendPageModule,
-    ViewCourtPageModule
+    ViewCourtPageModule,
+    CalendarModule,
+    AmazingTimePickerModule,
+    CreateEventPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -104,7 +112,8 @@ import { ViewCourtPageModule } from '../pages/view-court/view-court.module';
     CourtsSavedPage,
     NearCourtsAndTournamentsPage,
     ListFriendPage,
-    ViewCourtPage
+    ViewCourtPage,
+    CreateEventPage
   ],
   providers: [
     StatusBar,
