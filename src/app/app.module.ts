@@ -57,6 +57,7 @@ import { CalendarModule } from "ion2-calendar";
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { CreateEventPageModule } from '../pages/create-event/create-event.module';
 import { CreateEventPage } from '../pages/create-event/create-event';
+import { PublicProfilePageModule } from '../pages/public-profile/public-profile.module';
 
 
 @NgModule({
@@ -92,7 +93,8 @@ import { CreateEventPage } from '../pages/create-event/create-event';
     ViewCourtPageModule,
     CalendarModule,
     AmazingTimePickerModule,
-    CreateEventPageModule
+    CreateEventPageModule,
+    PublicProfilePageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

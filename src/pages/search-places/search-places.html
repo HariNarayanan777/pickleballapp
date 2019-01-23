@@ -76,7 +76,7 @@
           <p class="list-title">Results for {{searchTerm}} in Players</p>
         </ion-item>
 
-        <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
+        <ion-item *ngFor="let p of players" [hidden]="p._id===userID" (click)="goToFriendProfile(p._id)">
           <ion-avatar item-start>
             <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
           </ion-avatar>

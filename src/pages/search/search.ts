@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, ToastController, ActionSheetContro
 import { FormControl } from '@angular/forms';
 import { RestProvider } from '../../providers/rest/rest';
 import { Storage } from '@ionic/storage';
+import { Push } from '@ionic-native/push';
+import { PublicProfilePage } from '../public-profile/public-profile';
 
 
 @IonicPage()
@@ -161,6 +163,10 @@ export class SearchPage {
       this.presentToast("Friendship Request cancelled!");
       this.onSearchInput();
     })
+  }
+
+  goToFriendProfile(userID){
+    this.navCtrl.push(PublicProfilePage, {'userID': userID});
   }
 
 }

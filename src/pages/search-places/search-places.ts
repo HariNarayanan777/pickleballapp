@@ -12,6 +12,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { ViewCourtPage } from '../view-court/view-court';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
+import { PublicProfilePage } from '../public-profile/public-profile';
 
 declare var google: any;
 
@@ -652,5 +653,9 @@ export class SearchPlacesPage {
   }
 
   //#endregion
+
+  goToFriendProfile(userID){
+    this.navCtrl.push(PublicProfilePage, {'userID': userID});
+  }
 
 }
