@@ -92,7 +92,7 @@ export class SearchPlacesPage {
 
     let position = await HelpersProvider.me.getMyPosition();
     // console.log("MyPosition", position);
-    this.setPosition(position);
+    this.setPosition(position, false);
 
   }
 
@@ -315,10 +315,10 @@ export class SearchPlacesPage {
       this.getTournaments(this.lat, this.lng);
     }.bind(this));
 
-    this.getCourts();
+    // this.getCourts();
   }
 
-  private async setPosition(position) {
+  private async setPosition(position, getCourts: boolean) {
     console.log(position);
     this.lat = position.coords.latitude;
     this.lng = position.coords.longitude;
@@ -326,11 +326,13 @@ export class SearchPlacesPage {
       lat: this.lat,
       lng: this.lng
     });
-    console.log("after set position!!");
-    this.map.setCenter({ lat: this.lat, lng: this.lng });
-    await this.getCourts();
-    await this.getTournaments(this.lat, this.lng);
-    console.log("set position!!");
+    if (getCourts === true) {
+      console.log("after set position!!");
+      this.map.setCenter({ lat: this.lat, lng: this.lng });
+      await this.getCourts();
+      await this.getTournaments(this.lat, this.lng);
+      console.log("set position!!");
+    }
   }
 
   private setLocationOfSearch(address: string) {
