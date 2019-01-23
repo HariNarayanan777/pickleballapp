@@ -51,7 +51,7 @@
           </ion-avatar>
           <button style="background: none;" (click)="toTournamen(tour)">
             <h2 text-wrap>{{tour.title}}</h2>
-            <p>{{tour.registrationStart | date:'dd/MM/yyyy'}}</p>
+            <!-- <p>{{tour.registrationStart | date:'dd/MM/yyyy'}}</p> -->
           </button>
           <button ion-button item-end class="button-save-tournament" (click)="addOrRemove(tour, saved(tour))">{{saved(tour)===true?'Remove':'Save'}}</button>
           <!-- <button [disabled]="disable" *ngIf="p._id != userID" ion-button item-end [innerHtml]="p.requests != '' ? 'Cancel Request' : 'Add Friend' "
@@ -75,7 +75,7 @@
           <p class="list-title">Results for {{searchTerm}} in Players</p>
         </ion-item>
 
-        <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
+        <ion-item *ngFor="let p of players" [hidden]="p._id===userID" (click)="goToFriendProfile(p._id)">
           <ion-avatar item-start>
             <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
           </ion-avatar>

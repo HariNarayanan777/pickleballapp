@@ -1,0 +1,39 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Account</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-grid>
+      <ion-row padding>
+          <ion-col col-12>
+            <div class="image-holder">
+              <img [src]="profileImg" alt="">
+            </div>
+            <p class="title-name">{{fullName}}</p>
+            <p class="location">
+              <ion-icon name="ios-pin"></ion-icon> Your location
+            </p>
+            <p class="location">
+              <ion-icon name="ios-at"></ion-icon>{{email}}
+            </p>
+            <p class="location">
+                <ion-icon name="ios-star"></ion-icon>{{rank}}
+              </p>
+              <p>
+                <button ion-button full icon-start (click)="toChatView()">
+                 <ion-icon name="ios-chatboxes-outline"></ion-icon> Send message
+                </button>
+              </p>
+    
+          </ion-col>
+    
+        </ion-row>
+  </ion-grid>
+
+</ion-content>
