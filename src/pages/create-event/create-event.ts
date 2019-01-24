@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { HttpClient } from '@angular/common/http';
+import { SelectUsersPage } from '../select-users/select-users';
+import { SelectPointMapPage } from '../select-point-map/select-point-map';
 
 
 @IonicPage()
@@ -16,8 +18,8 @@ export class CreateEventPage {
   public date = new Date();
   public time = new Date();
   public partner = "";
-  public player = "";
-  public courts = "";
+  public players = [];
+  public courts = [];
   public matchTimes = "";
   public travelInfo = "";
   public eventStats = "";
@@ -25,7 +27,7 @@ export class CreateEventPage {
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    public http: HttpClient
+    public http: HttpClient, public modalCtrl: ModalController
   ) {
   }
 
@@ -47,6 +49,22 @@ export class CreateEventPage {
     });
   }
 
+  public getPlayers() {
+    let mdl = this.modalCtrl.create(SelectUsersPage, { users: this.players });
+    mdl.onDidDismiss(users => {
+      if (users) this.players = users;
+    });
+    mdl.present();
+  }
+
+  public selectCourts() {
+    let mdl = this.modalCtrl.create(SelectPointMapPage, { users: this.courts });
+    mdl.onDidDismiss(courts => {
+      if (courts) this.courts = courts;
+    });
+    mdl.present();
+  }
+
   public async save() {
     if (this.name === "") {
       return HelpersProvider.me.alertCtrl.create({
@@ -59,10 +77,10 @@ export class CreateEventPage {
       let event = {
         name: this.name,
         description: this.description,
-        date: this.date.toISOString(),
-        time: this.time.toISOString(),
+        date: this.date.getTime(),
+        time: this.time.getTime(),
         partner: this.partner,
-        player: this.player,
+        players: this.players.map(it => { return it.id; }),
         courts: this.courts,
         matchTimes: this.matchTimes,
         travelInfo: this.travelInfo,

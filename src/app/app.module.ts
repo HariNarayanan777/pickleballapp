@@ -58,6 +58,10 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { CreateEventPageModule } from '../pages/create-event/create-event.module';
 import { CreateEventPage } from '../pages/create-event/create-event';
 import { PublicProfilePageModule } from '../pages/public-profile/public-profile.module';
+import { SelectUsersPage } from '../pages/select-users/select-users';
+import { SelectUsersPageModule } from '../pages/select-users/select-users.module';
+import { SelectPointMapPage } from '../pages/select-point-map/select-point-map';
+import { SelectPointMapPageModule } from '../pages/select-point-map/select-point-map.module';
 
 
 @NgModule({
@@ -94,7 +98,9 @@ import { PublicProfilePageModule } from '../pages/public-profile/public-profile.
     CalendarModule,
     AmazingTimePickerModule,
     CreateEventPageModule,
-    PublicProfilePageModule
+    PublicProfilePageModule,
+    SelectUsersPageModule,
+    SelectPointMapPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -115,7 +121,9 @@ import { PublicProfilePageModule } from '../pages/public-profile/public-profile.
     NearCourtsAndTournamentsPage,
     ListFriendPage,
     ViewCourtPage,
-    CreateEventPage
+    CreateEventPage,
+    SelectUsersPage,
+    SelectPointMapPage
   ],
   providers: [
     StatusBar,

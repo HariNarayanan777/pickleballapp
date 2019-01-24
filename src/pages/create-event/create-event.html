@@ -35,11 +35,11 @@
       <ion-label floating>Partner</ion-label>
       <ion-input type="text" [(ngModel)]="partner"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-textarea placeholder="Player" [(ngModel)]="player"></ion-textarea>
+    <ion-item class="buttons">
+      <button ion-button (click)="getPlayers()">Players: {{players.length}}</button>
     </ion-item>
-    <ion-item>
-      <ion-textarea placeholder="Courts" [(ngModel)]="courts"></ion-textarea>
+    <ion-item class="buttons">
+      <button ion-button (click)="selectCourts()">Courts: {{courts.length}}</button>
     </ion-item>
     <ion-item>
       <ion-textarea placeholder="Match Times" [(ngModel)]="matchTimes"></ion-textarea>

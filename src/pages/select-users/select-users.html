@@ -1,0 +1,58 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="viewCtrl.dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Select Users</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-segment [(ngModel)]="selectType" ion-fixed>
+    <ion-segment-button value="search">
+      <ion-label>Search</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="select">
+      <ion-label>Selected</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- PARA BUSCAR USUARIOS -->
+  <ion-searchbar [hidden]="selectType==='select'" (input)="onSearchInput(1)" placeholder="Search all players" [(ngModel)]="searchTerm" [showCancelButton]="true"
+    (ionCancel)="cancel(1)"></ion-searchbar>
+
+  <ion-list [hidden]="selectType==='select'">
+    <ion-item *ngFor="let user of users">
+      <h2>{{user.fullName}}</h2>
+      <p>{{user.email}}</p>
+      <ion-icon item-end *ngIf="!isSave(user)" (click)="add(user)" name="checkbox-outline"></ion-icon>
+      <ion-icon item-end *ngIf="isSave(user)" (click)="remove(user)" name="checkbox"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <!-- PARA MOSTRAR LOS USUARIOS SELECIONADOS -->
+  <ion-searchbar [hidden]="selectType==='search'" (input)="onSearchInput(2)" placeholder="Search all players" [(ngModel)]="searchTerm1" [showCancelButton]="true"
+    (ionCancel)="cancel(2)"></ion-searchbar>
+
+  <ion-list [hidden]="selectType==='search'">
+    <ion-item [hidden]="!isInSearch(user)" *ngFor="let user of selectUsers">
+      <h2>{{user.fullName}}</h2>
+      <p>{{user.email}}</p>
+      <ion-icon item-end *ngIf="!isSave(user)" (click)="add(user)" name="checkbox-outline"></ion-icon>
+      <ion-icon item-end *ngIf="isSave(user)" (click)="remove(user)" name="checkbox"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab bottom right>
+    <button ion-fab icon-only (click)="finish()">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>
