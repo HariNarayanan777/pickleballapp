@@ -17,6 +17,7 @@ import { ListChatPage } from '../list-chat/list-chat';
 import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CreateEventPage } from '../create-event/create-event';
+import { ShareEventFriendsPage } from '../share-event-friends/share-event-friends';
 
 
 @IonicPage()
@@ -61,9 +62,10 @@ export class AccountPage {
         this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
         await this.getFriends();
         let user = await AuthProvider.me.getIdUser(),
-          query = { user };
+          query: any = { user };
         this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}`).toPromise() as any[];
-        this.listEvents = await this.http.get(`/tournaments?limit=10`).toPromise() as any[];
+        query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
+        this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=10`).toPromise() as any[];
       }
     }
     catch (e) {
@@ -211,8 +213,12 @@ export class AccountPage {
     this.navCtrl.push(ListFriendPage);
   }
 
-  public createEvent(){
+  public createEvent() {
     this.navCtrl.push(CreateEventPage);
+  }
+
+  public toShareEvent(event) {
+    this.navCtrl.push(ShareEventFriendsPage, { event });
   }
 
 }

@@ -62,6 +62,8 @@ import { SelectUsersPage } from '../pages/select-users/select-users';
 import { SelectUsersPageModule } from '../pages/select-users/select-users.module';
 import { SelectPointMapPage } from '../pages/select-point-map/select-point-map';
 import { SelectPointMapPageModule } from '../pages/select-point-map/select-point-map.module';
+import { ShareEventFriendsPage } from '../pages/share-event-friends/share-event-friends';
+import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-event-friends.module';
 
 
 @NgModule({
@@ -100,7 +102,8 @@ import { SelectPointMapPageModule } from '../pages/select-point-map/select-point
     CreateEventPageModule,
     PublicProfilePageModule,
     SelectUsersPageModule,
-    SelectPointMapPageModule
+    SelectPointMapPageModule,
+    ShareEventFriendsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -123,7 +126,8 @@ import { SelectPointMapPageModule } from '../pages/select-point-map/select-point
     ViewCourtPage,
     CreateEventPage,
     SelectUsersPage,
-    SelectPointMapPage
+    SelectPointMapPage,
+    ShareEventFriendsPage
   ],
   providers: [
     StatusBar,

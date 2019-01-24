@@ -1,0 +1,19 @@
+page-share-event-friends {
+    .toolbar-background {
+        background-color: black !important;
+    }
+    ion-header {
+        .toolbar-title,
+        button {
+            color: #bea805 !important;
+        }
+    }
+    ion-fab {
+        button {
+            background-color: black !important;
+            ion-icon {
+                color: #bea805 !important;
+            }
+        }
+    }
+}

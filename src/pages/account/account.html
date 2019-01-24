@@ -73,9 +73,10 @@
       <div [ngSwitch]="segment" class="segments">
         <div col-12 *ngSwitchCase="'events'">
           <h3 class="segment-title">Upcoming events</h3>
-          <ion-item class="friend-item" *ngFor="let tour of listEvents">
-            <h2>{{tour.title}}</h2>
-            <p>{{tour.address}}</p>
+          <ion-item class="friend-item" *ngFor="let event of listEvents">
+            <h2>{{event.name}}</h2>
+            <p>{{event.description}}</p>
+            <ion-icon item-end name="share" (click)="toShareEvent(event)"></ion-icon>
           </ion-item>
         </div>
         <div col-12 *ngSwitchCase="'places'">
