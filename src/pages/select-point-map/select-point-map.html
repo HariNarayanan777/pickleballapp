@@ -12,16 +12,25 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
-  <ion-searchbar id="search-courts-input" placeholder="Change your location" type="text" [(ngModel)]="search"
+  <ion-searchbar id="search-select-point-input" placeholder="Change your location" type="text" [(ngModel)]="search"
     showCancelButton="true"></ion-searchbar>
 
-    <div id="map_places" style="width: 100%; height: 300px"></div>
-    <ion-list>
-      <ion-item *ngFor="let cour of courts">
-        <p>{{court.address}}</p>
-      </ion-item>
-    </ion-list>
+  <div id="map_select_point" style="width: 100%; height: 300px"></div>
+  <ion-list style="padding-bottom: 60px;">
+    <ion-list-header>Courts</ion-list-header>
+    <ion-item *ngFor="let cour of courts; let i=index;">
+      <p>{{i+1}}. {{cour.address}}</p>
+      <ion-icon item-end name="share-alt" (click)="toCourt(cour)"></ion-icon>
+      <ion-icon item-end name="trash" style="color:#bea805 !important;" (click)="removeCourt(cour)"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab bottom right>
+    <button ion-fab icon-only (click)="finish()">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+  </ion-fab>
 
 </ion-content>

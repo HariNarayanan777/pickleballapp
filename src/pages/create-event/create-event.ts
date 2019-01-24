@@ -4,6 +4,7 @@ import { HelpersProvider } from '../../providers/helpers/helpers';
 import { HttpClient } from '@angular/common/http';
 import { SelectUsersPage } from '../select-users/select-users';
 import { SelectPointMapPage } from '../select-point-map/select-point-map';
+import { AuthProvider } from '../../providers/auth/auth';
 
 
 @IonicPage()
@@ -24,6 +25,7 @@ export class CreateEventPage {
   public travelInfo = "";
   public eventStats = "";
   public type = "clinics";
+  public userID = "";
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -32,7 +34,7 @@ export class CreateEventPage {
   }
 
   async ionViewDidLoad() {
-
+    this.userID = await AuthProvider.me.getIdUser();
   }
 
   public setDate() {
@@ -58,7 +60,7 @@ export class CreateEventPage {
   }
 
   public selectCourts() {
-    let mdl = this.modalCtrl.create(SelectPointMapPage, { users: this.courts });
+    let mdl = this.modalCtrl.create(SelectPointMapPage, { courts: this.courts });
     mdl.onDidDismiss(courts => {
       if (courts) this.courts = courts;
     });
@@ -74,7 +76,7 @@ export class CreateEventPage {
         .present();
     }
     try {
-      let event = {
+      let event: any = {
         name: this.name,
         description: this.description,
         date: this.date.getTime(),
@@ -85,9 +87,11 @@ export class CreateEventPage {
         matchTimes: this.matchTimes,
         travelInfo: this.travelInfo,
         eventStats: this.eventStats,
-        type: this.type
+        type: this.type,
+        user: this.userID
       };
-      await this.http.post("/event", event).toPromise();
+      await this.http.post("/event-courts", { event }).toPromise();
+
       HelpersProvider.me.presentToast("Event Saved!");
       this.navCtrl.pop();
     }

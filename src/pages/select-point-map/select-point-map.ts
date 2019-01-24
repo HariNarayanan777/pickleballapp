@@ -34,12 +34,13 @@ export class SelectPointMapPage {
   async initService() {
     await LiveComunicationProvider.reloadGoogleplaces();
     this.userId = await AuthProvider.me.getIdUser();
-    let autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
+    let autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-select-point-input .searchbar-input"));
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
+      var address = (document.querySelector("#search-select-point-input .searchbar-input") as any).value;
       this.setLocationOfSearch(address);
     });
     await this.initMap();
+    await this.setCourts();
   }
 
   private async initMap() {
@@ -51,7 +52,7 @@ export class SelectPointMapPage {
       },
       zoom: 12
     };
-    this.map = new google.maps.Map(document.getElementById("map_places"), mapOptions);
+    this.map = new google.maps.Map(document.getElementById("map_select_point"), mapOptions);
     this.marker = new google.maps.Marker({
       animation: 'DROP',
       position: {
@@ -95,6 +96,34 @@ export class SelectPointMapPage {
 
   }
 
+  private async setCourts() {
+    for (let court of this.courts) {
+      let lat = court.coordinates[1];
+      let lng = court.coordinates[0];
+
+      let image = {
+        url: './assets/imgs/pickleball-icon.png',
+        // This marker is 20 pixels wide by 32 pixels high.
+        size: new google.maps.Size(20, 20),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is the base of the flagpole at (0, 32).
+        anchor: new google.maps.Point(10, 10)
+      };
+
+      let marker = new google.maps.Marker({
+        animation: 'DROP',
+        position: {
+          lat,
+          lng
+        },
+        map: this.map,
+        icon: image
+      });
+      this.markers.push(marker);
+    }
+  }
+
   private setLocationOfSearch(address: string) {
     let geocoder = new google.maps.Geocoder();
     geocoder.geocode({ address }, function (res, status) {
@@ -125,7 +154,7 @@ export class SelectPointMapPage {
       if (status === 'OK') {
         if (results[0]) {
           let court = {
-            coordinates: latlng,
+            coordinates: [latlng.lng, latlng.lat],
             address: results[0].formatted_address,
             user: this.userId
           };
@@ -133,6 +162,34 @@ export class SelectPointMapPage {
         }
       }
     });
+  }
+
+  public removeCourt(court) {
+    //Quitamos el marker
+    let index = this.markers.findIndex(it => {
+      return it.position.lat() === court.coordinates[1] && it.position.lng() === court.coordinates[0];
+    });
+    if (index !== -1) {
+      this.markers[index].setMap(null);
+      if (this.markers.length === 1)
+        this.markers = [];
+      else
+        this.markers.splice(index, 1);
+    }
+    //Quitamos el court
+    index = this.courts.findIndex(it => {
+      return it.coordinates[1] === court.coordinates[1] && it.coordinates[0] === court.coordinates[0];
+    });
+    if (index !== -1) {
+      if (this.courts.length === 1)
+        this.courts = [];
+      else
+        this.courts.splice(index, 1);
+    }
+  }
+
+  public toCourt(court) {
+    this.map.setCenter({ lat: court.coordinates[1], lng: court.coordinates[0] });
   }
 
   public finish() {
