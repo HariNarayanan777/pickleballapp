@@ -64,7 +64,8 @@ import { SelectPointMapPage } from '../pages/select-point-map/select-point-map';
 import { SelectPointMapPageModule } from '../pages/select-point-map/select-point-map.module';
 import { ShareEventFriendsPage } from '../pages/share-event-friends/share-event-friends';
 import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-event-friends.module';
-
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
 
 @NgModule({
   declarations: [
@@ -133,7 +134,7 @@ import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-
     StatusBar,
     SplashScreen,
     Facebook,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true },
     RestProvider,
     Push,
@@ -143,7 +144,9 @@ import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-
     BackgroundGeolocation,
     Geolocation,
     AuthProvider,
-    HelpersProvider
+    HelpersProvider,
+    SocialSharing,
+    Camera
   ]
 })
-export class AppModule {}
+export class AppModule { }

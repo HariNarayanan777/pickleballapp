@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
 import { HelpersProvider } from '../../providers/helpers/helpers';
-
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @IonicPage()
 @Component({
@@ -21,7 +21,7 @@ export class ShareEventFriendsPage {
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    public http: HttpClient
+    public http: HttpClient, public share: SocialSharing
   ) {
     this.event = this.navParams.get("event");
   }
@@ -96,6 +96,22 @@ export class ShareEventFriendsPage {
         else
           this.friendSelect.splice(index, 1);
       }
+    }
+  }
+
+  public async shareNative() { console.log(this.share);
+    try {
+      var options = {
+        message: 'share this', // not supported on some apps (Facebook, Instagram)
+        subject: 'the subject', // fi. for email
+        files: ['', ''], // an array of filenames either locally or remotely
+        url: 'https://www.website.com/foo/#bar?a=b',
+        chooserTitle: 'Pick an app', // Android only, you can override the default share sheet title,
+        appPackageName: 'com.apple.social.facebook' // Android only, you can provide id of the App you want to share with
+      };
+      this.share.shareWithOptions(options)
+    } catch (error) {
+      console.error(error);
     }
   }
 

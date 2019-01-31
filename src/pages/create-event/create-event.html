@@ -25,6 +25,10 @@
     <ion-item>
       <ion-textarea placeholder="Description" [(ngModel)]="description"></ion-textarea>
     </ion-item>
+    <ion-item>
+      <ion-label floating>Location</ion-label>
+      <ion-input type="text" id="location-event"></ion-input>
+    </ion-item>
     <ion-item (click)="setDate()">
       Date: {{date | date:'dd/MM/yyyy'}}
     </ion-item>
@@ -41,6 +45,17 @@
     <ion-item class="buttons">
       <button ion-button (click)="selectCourts()">Courts: {{courts.length}}</button>
     </ion-item>
+    <ion-slides slidesPerView="3" pager="true">
+      <ion-slide>
+        <img [src]="imgs[0]" (click)="changePhoto(0)">
+      </ion-slide>
+      <ion-slide>
+        <img [src]="imgs[1]" (click)="changePhoto(1)">
+      </ion-slide>
+      <ion-slide>
+        <img [src]="imgs[2]" (click)="changePhoto(2)">
+      </ion-slide>
+    </ion-slides>
     <ion-item>
       <ion-textarea placeholder="Match Times" [(ngModel)]="matchTimes"></ion-textarea>
     </ion-item>

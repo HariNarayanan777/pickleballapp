@@ -6,8 +6,8 @@
 
 </ion-header>
 
-
 <ion-content padding>
+  <button ion-button (click)="shareNative()">Other Application</button>
   <ion-item>
     <ion-icon item-start *ngIf="!allFriend" (click)="selectAll(true)" name="checkbox-outline"></ion-icon>
     <ion-icon item-start *ngIf="allFriend" (click)="selectAll(false)" name="checkbox"></ion-icon>
@@ -36,7 +36,7 @@
 
   <ion-fab bottom right>
     <button ion-fab icon-only (click)="send()">
-        <ion-icon name="send"></ion-icon>
+      <ion-icon name="send"></ion-icon>
     </button>
   </ion-fab>
 

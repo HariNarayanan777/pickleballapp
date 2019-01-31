@@ -6,6 +6,7 @@ import { SelectUsersPage } from '../select-users/select-users';
 import { SelectPointMapPage } from '../select-point-map/select-point-map';
 import { AuthProvider } from '../../providers/auth/auth';
 
+declare var google: any;
 
 @IonicPage()
 @Component({
@@ -18,6 +19,8 @@ export class CreateEventPage {
   public description = "";
   public date = new Date();
   public time = new Date();
+  public locationText = "";
+  public locationCoords = [];
   public partner = "";
   public players = [];
   public courts = [];
@@ -26,6 +29,7 @@ export class CreateEventPage {
   public eventStats = "";
   public type = "clinics";
   public userID = "";
+  public imgs = ["./assets/imgs/camera-default.png", "./assets/imgs/camera-default.png", "./assets/imgs/camera-default.png"];
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -35,6 +39,28 @@ export class CreateEventPage {
 
   async ionViewDidLoad() {
     this.userID = await AuthProvider.me.getIdUser();
+    let input = function () { return document.querySelector("#location-event input"); };
+    let autocomplete = new google.maps.places.Autocomplete(input());
+    google.maps.event.addListener(autocomplete, 'place_changed', () => {
+      var address = (input() as any).value;
+      this.getCoords(address);
+    });
+  }
+
+  private getCoords(address: string) {
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address }, (res, status) => {
+
+      if (Object.prototype.toString.call(res) === "[object Array]") {
+        if (res.length === 0) return;
+        res = res[0];
+      }
+
+      if (res.geometry) {
+        this.locationText = address;
+        this.locationCoords = [res.geometry.location.lng(), res.geometry.location.lat()]
+      }
+    });
   }
 
   public setDate() {
@@ -75,6 +101,13 @@ export class CreateEventPage {
       })
         .present();
     }
+    if (this.locationText === "") {
+      return HelpersProvider.me.alertCtrl.create({
+        message: "Required Field Location",
+        buttons: ["Ok"]
+      })
+        .present();
+    }
     try {
       let event: any = {
         name: this.name,
@@ -87,6 +120,8 @@ export class CreateEventPage {
         matchTimes: this.matchTimes,
         travelInfo: this.travelInfo,
         eventStats: this.eventStats,
+        locationCoords: this.locationCoords,
+        locationText: this.locationText,
         type: this.type,
         user: this.userID
       };

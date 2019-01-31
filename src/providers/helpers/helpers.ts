@@ -9,6 +9,7 @@ import { AuthProvider } from '../auth/auth';
 import { CalendarModal, CalendarResult } from 'ion2-calendar';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 import * as moment from 'moment';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Injectable()
 export class HelpersProvider {
@@ -20,7 +21,7 @@ export class HelpersProvider {
     public platform: Platform, public geolocation: Geolocation,
     public diagnostic: Diagnostic, public modalCtrl: ModalController,
     public atps: AmazingTimePickerService, public toastCtrl: ToastController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController, public camera: Camera
   ) {
     HelpersProvider.me = this;
   }
@@ -140,5 +141,115 @@ export class HelpersProvider {
   public presentToast(message) {
     return this.toastCtrl.create({ message, duration: 3000 })
       .present();
+  }
+
+  private pickFileBrowserDataUrl(resolve, reject) {
+
+    try {
+
+      let pick = document.createElement("input");
+      pick.setAttribute("type", "file");
+
+      document.body.appendChild(pick);
+
+      let handleFile = function (e: any) {
+
+        var files = e.target.files, f = files[0];
+        console.log(files);
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+
+          let target: any = e.target;
+          let data = target.result;
+          resolve(data);
+          document.body.removeChild(pick);
+        };
+
+        reader.readAsDataURL(f);
+      }
+
+      pick.addEventListener('change', handleFile, false);
+
+      pick.click();
+    }
+    catch (e) {
+      reject(e);
+    }
+
+  }
+
+  public Camera(parameters: { width?, height?, quality?, resolve?, reject?}, resize?: boolean): Promise<File> {
+    var t = this;
+    let params: any = {};
+    params.width = parameters.width || 300;
+    params.height = parameters.height || 300;
+    params.quality = 100;
+    params.resize = resize || null;
+
+    return new Promise(async function (resolve, reject) {
+
+      params.resolve = resolve;
+      params.reject = reject;
+
+      if (!t.platform.is("cordova")) {
+        return t.pickFileBrowserDataUrl(async function (dataUrl) {
+          params.image = dataUrl;
+          params.navigator = true;
+          // await t.app.getActiveNavs()[0].push(ImageViewPage, params);
+        }, reject);
+      }
+
+      t.diagnostic.isCameraAuthorized().then(async (authorized) => {
+        if (authorized) {
+          // await t.app.getActiveNavs()[0].push(CameraPage, params);
+        } else {
+          t.diagnostic.requestCameraAuthorization().then(async (status) => {
+            if (status == t.diagnostic.permissionStatus.GRANTED) {
+              // await t.app.getActiveNavs()[0].push(CameraPage, params);
+            } else {
+              reject({ message: "permiss denied" });
+            }
+          });
+        }
+      })
+    });
+  }
+
+  public getPhotoNative(params) {
+    return this.camera.
+  }
+
+  public blobToFile = (theBlob: Blob, fileName: string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+
+    //Cast to a File() type
+    return <File>theBlob;
+  }
+
+  public b64toBlob(b64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 512;
+    var byteCharacters = atob(b64Data.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''));
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
   }
 }
