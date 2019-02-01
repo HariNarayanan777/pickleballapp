@@ -1,0 +1,37 @@
+<ion-content padding>
+
+  <div *ngIf="selectedLibraryItem" style="height: 100%; width: 100%;">
+    <img *ngIf="!resize" [ngStyle]="{'-webkit-transform': 'rotate('+degrees+'deg)','transform': 'rotate('+degrees+'deg)' }" id="imageSelect"
+      style="height: 100%; width: 100%; object-fit: contain;" [src]="selectedLibraryItem.photoURL | cdvphotolibrary">
+
+    <angular-cropper *ngIf="resize" [ngStyle]="{'-webkit-transform': 'rotate('+degrees+'deg)','transform': 'rotate('+degrees+'deg)' }" #angularCropper
+      [cropperOptions]="cropperOptions" [imageUrl]="selectedLibraryItem.photoURL | cdvphotolibrary"></angular-cropper>
+  </div>
+
+  <div *ngIf="!selectedLibraryItem" style="height: 100%; width: 100%;">
+    <img *ngIf="!resize" [ngStyle]="{'-webkit-transform': 'rotate('+degrees+'deg)','transform': 'rotate('+degrees+'deg)' }" id="imageSelect"
+      style="height: 100%; width: 100%; object-fit: contain;" [src]="domSanitizationService.bypassSecurityTrustUrl(image)">
+
+    <angular-cropper *ngIf="resize" [ngStyle]="{'-webkit-transform': 'rotate('+degrees+'deg)','transform': 'rotate('+degrees+'deg)' }" #angularCropper
+      [cropperOptions]="cropperOptions" [imageUrl]="domSanitizationService.bypassSecurityTrustUrl(image)"></angular-cropper>
+  </div>
+
+  <ion-fab top right [hidden]="resize">
+    <button color="base" ion-fab icon-only (click)="addDegrees()">
+      <ion-icon name="md-refresh"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab left bottom>
+    <button ion-fab color="secondary" (click)="cancel()">
+      <ion-icon name="md-close"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="selectd()">
+      <ion-icon name="md-checkmark-circle"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

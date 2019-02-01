@@ -2,14 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation';
 import { InterceptorProvider } from '../interceptor/interceptor';
-import { Platform, ModalController, ToastController, AlertController } from 'ionic-angular';
+import { Platform, ModalController, ToastController, AlertController, App } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AuthProvider } from '../auth/auth';
 import { CalendarModal, CalendarResult } from 'ion2-calendar';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 import * as moment from 'moment';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { ImageViewPage } from '../../pages/image-view/image-view';
+import { CameraPage } from '../../pages/camera/camera';
 
 @Injectable()
 export class HelpersProvider {
@@ -21,7 +23,7 @@ export class HelpersProvider {
     public platform: Platform, public geolocation: Geolocation,
     public diagnostic: Diagnostic, public modalCtrl: ModalController,
     public atps: AmazingTimePickerService, public toastCtrl: ToastController,
-    public alertCtrl: AlertController, public camera: Camera
+    public alertCtrl: AlertController, public camera: Camera, public app:App
   ) {
     HelpersProvider.me = this;
   }
@@ -192,22 +194,30 @@ export class HelpersProvider {
       params.resolve = resolve;
       params.reject = reject;
 
-      if (!t.platform.is("cordova")) {
+      if (t.platform.is("cordova") === false) {
         return t.pickFileBrowserDataUrl(async function (dataUrl) {
           params.image = dataUrl;
           params.navigator = true;
-          // await t.app.getActiveNavs()[0].push(ImageViewPage, params);
+          // let blob = t.b64toBlob(dataUrl, "image/jpeg");
+          // let file = t.blobToFile(blob, "image");
+          // resolve(file);
+          await t.app.getActiveNavs()[0].push(ImageViewPage, params);
         }, reject);
       }
 
+      // await t.getPhotoNative(params);
       t.diagnostic.isCameraAuthorized().then(async (authorized) => {
+        console.log(authorized);
         if (authorized) {
-          // await t.app.getActiveNavs()[0].push(CameraPage, params);
+          // await t.getPhotoNative(params);
+          await t.app.getActiveNavs()[0].push(CameraPage, params);
         } else {
-          t.diagnostic.requestCameraAuthorization().then(async (status) => {
+          t.diagnostic.requestCameraAuthorization(true).then(async (status) => { console.log(status, t.diagnostic.permissionStatus.GRANTED);
             if (status == t.diagnostic.permissionStatus.GRANTED) {
-              // await t.app.getActiveNavs()[0].push(CameraPage, params);
+              // await t.getPhotoNative(params);
+              await t.app.getActiveNavs()[0].push(CameraPage, params);
             } else {
+              console.log("not permiss");
               reject({ message: "permiss denied" });
             }
           });
@@ -217,7 +227,26 @@ export class HelpersProvider {
   }
 
   public getPhotoNative(params) {
-    return this.camera.
+    try {
+      let options: CameraOptions = {
+        quality: 100,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      }
+      // console.log(this.camera, options);
+      this.camera.getPicture(options).then(b64 => {
+        // console.log(b64);
+        b64 = 'data:image/jpeg;base64,'+ b64;
+        // console.log(b64);
+        let blob = this.b64toBlob(b64, "image/jpeg");
+        let file = this.blobToFile(blob, "image");
+        params.resolve(file);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   public blobToFile = (theBlob: Blob, fileName: string): File => {

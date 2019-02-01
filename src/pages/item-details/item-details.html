@@ -1,0 +1,31 @@
+<ion-header hidden>
+  <ion-navbar>
+    <ion-title>
+      Photo
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="selectedLibraryItem" style="height: 100%; width: 100%;">
+    <img [ngStyle]="{'-webkit-transform': 'rotate('+degrees+'deg)','transform': 'rotate('+degrees+'deg)' }" id="imageSelect" style="height: 100%; width: 100%; object-fit: contain;" [src]="selectedLibraryItem.photoURL | cdvphotolibrary">
+  </div>
+
+  <ion-fab top right>
+      <button color="base" ion-fab icon-only (click)="addDegrees()">
+        <ion-icon name="md-refresh"></ion-icon>
+      </button>
+    </ion-fab>
+
+  <ion-fab left bottom>
+    <button ion-fab color="secondary" (click)="cancel()">
+      <ion-icon name="md-close"></ion-icon>
+    </button>
+  </ion-fab>
+    
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="selectd()">
+      <ion-icon name="md-checkmark-circle"></ion-icon>
+      </button>
+  </ion-fab>
+</ion-content>

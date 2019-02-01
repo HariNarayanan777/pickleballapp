@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { SelectUsersPage } from '../select-users/select-users';
 import { SelectPointMapPage } from '../select-point-map/select-point-map';
 import { AuthProvider } from '../../providers/auth/auth';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var google: any;
 
@@ -29,11 +30,16 @@ export class CreateEventPage {
   public eventStats = "";
   public type = "clinics";
   public userID = "";
-  public imgs = ["./assets/imgs/camera-default.png", "./assets/imgs/camera-default.png", "./assets/imgs/camera-default.png"];
+  public imgs = [
+    { url: "./assets/imgs/camera-default.png", file: new File([], "") },
+    { url: "./assets/imgs/camera-default.png", file: new File([], "") },
+    { url: "./assets/imgs/camera-default.png", file: new File([], "") }
+  ];
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    public http: HttpClient, public modalCtrl: ModalController
+    public http: HttpClient, public modalCtrl: ModalController,
+    public domSanitizationService: DomSanitizer
   ) {
   }
 
@@ -93,6 +99,14 @@ export class CreateEventPage {
     mdl.present();
   }
 
+  public async changePhoto(ind) {
+    let b64 = await HelpersProvider.me.Camera({}, false);
+    let blob = HelpersProvider.me.b64toBlob(b64, "image/jpeg");
+    let file = HelpersProvider.me.blobToFile(blob, "image");
+    let url = URL.createObjectURL(file);
+    this.imgs[ind] = { url, file };
+  }
+
   public async save() {
     if (this.name === "") {
       return HelpersProvider.me.alertCtrl.create({
@@ -125,13 +139,26 @@ export class CreateEventPage {
         type: this.type,
         user: this.userID
       };
-      await this.http.post("/event-courts", { event }).toPromise();
-
+      let e = await this.http.post("/event-courts", { event }).toPromise();
+      this.sendImages(e);
       HelpersProvider.me.presentToast("Event Saved!");
       this.navCtrl.pop();
     }
     catch (e) {
 
+    }
+  }
+
+  public async sendImages(event) {
+    try {
+      let data = new FormData();
+      for (let img of this.imgs) {
+        data.append("images", img.file);
+      }
+      let t = await this.http.post("/event-images/" + event.id, data).toPromise();
+    }
+    catch (e) {
+      console.error(e);
     }
   }
 

@@ -1,0 +1,36 @@
+<ion-header [hidden]="!multiples">
+  <ion-navbar>
+    <ion-title>
+      Photo Library
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <!-- virtualScroll is still problematic -->
+  <!--ion-list [virtualScroll]="library" [approxItemWidth]="thumbnailWidth" [approxItemHeight]="thumbnailHeight" [virtualTrackBy]="trackById" >
+      <button ion-item *virtualItem="let libraryItem" (click)="itemTapped($event, libraryItem)">
+        <ion-img [src]="libraryItem.thumbnailURL" [width]="thumbnailWidth" [height]="thumbnailHeight" cache="true"></ion-img>
+      </button>
+    </ion-list-->
+    <!-- (mousedown)="initPress(libraryItem)" (mouseup)="finishPress()" (touchstart)="initPress(libraryItem)" (touchend)="finishPress()" -->
+  <ion-grid>
+    <ion-row>
+      <button col-6 [ngClass]="select(libraryItem)===true?'select':''" *ngFor="let libraryItem of library;trackBy:trackById" (click)="itemTapped($event, libraryItem)" style="background: white;">
+        <img [src]="libraryItem.thumbnailURL | cdvphotolibrary" style="width: 100%; height: 100%; object-fit: cover;" />
+      </button>
+    </ion-row>
+  </ion-grid>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab bottom right (click)="toUpload()">
+    <button color="primary" ion-fab icon-only>
+      <ion-icon name="md-arrow-round-forward"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

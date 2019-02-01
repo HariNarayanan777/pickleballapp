@@ -65,7 +65,18 @@ import { SelectPointMapPageModule } from '../pages/select-point-map/select-point
 import { ShareEventFriendsPage } from '../pages/share-event-friends/share-event-friends';
 import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-event-friends.module';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { Camera } from '@ionic-native/camera/ngx';
+import { Camera } from '@ionic-native/camera';
+import { CameraPageModule } from '../pages/camera/camera.module';
+import { CameraPage } from '../pages/camera/camera';
+import { LibraryImagesPage } from '../pages/library-images/library-images';
+import { LibraryImagesPageModule } from '../pages/library-images/library-images.module';
+import { ImageViewPageModule } from '../pages/image-view/image-view.module';
+import { ImageViewPage } from '../pages/image-view/image-view';
+import { ItemDetailsPageModule } from '../pages/item-details/item-details.module';
+import { ItemDetailsPage } from '../pages/item-details/item-details';
+import { PhotoLibrary } from '@ionic-native/photo-library';
+import { File } from '@ionic-native/file';
+import { CameraPreview } from '@ionic-native/camera-preview';
 
 @NgModule({
   declarations: [
@@ -104,7 +115,11 @@ import { Camera } from '@ionic-native/camera/ngx';
     PublicProfilePageModule,
     SelectUsersPageModule,
     SelectPointMapPageModule,
-    ShareEventFriendsPageModule
+    ShareEventFriendsPageModule,
+    CameraPageModule,
+    LibraryImagesPageModule,
+    ImageViewPageModule,
+    ItemDetailsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -128,7 +143,11 @@ import { Camera } from '@ionic-native/camera/ngx';
     CreateEventPage,
     SelectUsersPage,
     SelectPointMapPage,
-    ShareEventFriendsPage
+    ShareEventFriendsPage,
+    CameraPage,
+    LibraryImagesPage,
+    ImageViewPage,
+    ItemDetailsPage
   ],
   providers: [
     StatusBar,
@@ -146,7 +165,10 @@ import { Camera } from '@ionic-native/camera/ngx';
     AuthProvider,
     HelpersProvider,
     SocialSharing,
-    Camera
+    Camera,
+    CameraPreview,
+    PhotoLibrary,
+    File
   ]
 })
 export class AppModule { }

@@ -45,15 +45,15 @@
     <ion-item class="buttons">
       <button ion-button (click)="selectCourts()">Courts: {{courts.length}}</button>
     </ion-item>
-    <ion-slides slidesPerView="3" pager="true">
+    <ion-slides slidesPerView="1.5" pager="true">
       <ion-slide>
-        <img [src]="imgs[0]" (click)="changePhoto(0)">
+        <img [src]="domSanitizationService.bypassSecurityTrustUrl(imgs[0].url)" (click)="changePhoto(0)">
       </ion-slide>
       <ion-slide>
-        <img [src]="imgs[1]" (click)="changePhoto(1)">
+        <img [src]="domSanitizationService.bypassSecurityTrustUrl(imgs[1].url)" (click)="changePhoto(1)">
       </ion-slide>
       <ion-slide>
-        <img [src]="imgs[2]" (click)="changePhoto(2)">
+        <img [src]="domSanitizationService.bypassSecurityTrustUrl(imgs[2].url)" (click)="changePhoto(2)">
       </ion-slide>
     </ion-slides>
     <ion-item>
