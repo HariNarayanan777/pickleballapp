@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { MapPage } from '../map/map';
+import { ViewEventPage } from '../view-event/view-event';
 
 @Component({
   selector: 'page-home',
@@ -13,9 +14,12 @@ export class HomePage {
 
   }
 
-  goToMap(){
-    this.navCtrl.push(MapPage);
+  public toView(type) {
+    this.navCtrl.push(ViewEventPage, { type });
+  }
 
+  goToMap() {
+    this.navCtrl.push(MapPage);
   }
 
 }

@@ -17,8 +17,8 @@ export class TabsPage {
 
   @ViewChild('myTabs') tabRef: Tabs;
 
-  tab1Root = SearchPlacesPage;
-  // tab1Root = HomePage;
+  // tab1Root = SearchPlacesPage;
+  tab1Root = HomePage;
   tab2Root = CategoriesPage;
   tab3Root = ListChatPage;
   tab4Root = SearchPage;

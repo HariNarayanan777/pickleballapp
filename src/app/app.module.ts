@@ -77,6 +77,8 @@ import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { PhotoLibrary } from '@ionic-native/photo-library';
 import { File } from '@ionic-native/file';
 import { CameraPreview } from '@ionic-native/camera-preview';
+import { ViewEventPage } from '../pages/view-event/view-event';
+import { ViewEventPageModule } from '../pages/view-event/view-event.module';
 
 @NgModule({
   declarations: [
@@ -119,7 +121,8 @@ import { CameraPreview } from '@ionic-native/camera-preview';
     CameraPageModule,
     LibraryImagesPageModule,
     ImageViewPageModule,
-    ItemDetailsPageModule
+    ItemDetailsPageModule,
+    ViewEventPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -147,7 +150,8 @@ import { CameraPreview } from '@ionic-native/camera-preview';
     CameraPage,
     LibraryImagesPage,
     ImageViewPage,
-    ItemDetailsPage
+    ItemDetailsPage,
+    ViewEventPage
   ],
   providers: [
     StatusBar,

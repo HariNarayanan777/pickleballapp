@@ -1,278 +1,41 @@
 <ion-content>
-  <div class="home-hero" style="background-image: url(assets/imgs/hero.jpg)"></div>
-  <ion-row>
-    <ion-col class="col-12">
-        <button ion-button full icon-start class="browse-btn" (click)="goToMap()">
-          <ion-icon name="ios-pin-outline"></ion-icon>
-          Browse More Places
-        </button>
-    </ion-col>
-  </ion-row>
-
-  <ion-row padding class="row-title">
-      <ion-col class="col-12">
-          <h1>Cafe & Bar</h1>
-        </ion-col>
-  </ion-row>
-
-  <ion-slides class="first-section" slidesPerView="2" spaceBetween="10px">
-    <ion-slide>
-      <ion-card>
-        <div class="card-img-holder" style="background-image: url(assets/imgs/a2.jpg)">
-          <ion-icon name="ios-heart-outline"></ion-icon>
-        </div>
-        <ion-card-content>
-          <ion-card-title>
-            Nine Inch Nails Live
-            </ion-card-title>
-          <p>
-            The most popular industrial group ever.
-          </p>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide> 
-    <ion-slide>
-      <ion-card>
-        <div class="card-img-holder" style="background-image: url(assets/imgs/a1.jpg)">
-          <ion-icon name="ios-heart-outline"></ion-icon>
-        </div>
-        <ion-card-content>
-          <ion-card-title>
-            Nine Inch Nails Live
-            </ion-card-title>
-          <p>
-              The most popular industrial group ever.
-          </p>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-    <ion-slide>
-      <ion-card>
-        <div class="card-img-holder" style="background-image: url(assets/imgs/a2.jpg)">
-          <ion-icon name="ios-heart-outline"></ion-icon>
-        </div>
-        <ion-card-content>
-          <ion-card-title>
-            Nine Inch Nails Live
-            </ion-card-title>
-          <p>
-            The most popular industrial group ever.
-          </p>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide> 
-    <ion-slide>
-      <ion-card>
-        <div class="card-img-holder" style="background-image: url(assets/imgs/a1.jpg)">
-          <ion-icon name="ios-heart-outline"></ion-icon>
-        </div>
-        <ion-card-content>
-          <ion-card-title>
-            Nine Inch Nails Live
-            </ion-card-title>
-          <p>
-              The most popular industrial group ever.
-          </p>
-        </ion-card-content>
-      </ion-card>
-    </ion-slide>
-  </ion-slides>
-  
-
-  <ion-row padding class="row-title">
-    <ion-col class="col-12">
-        <h1>Nightlife</h1>
-      </ion-col>
-</ion-row>
-
-<ion-row class="list-image-left">
-    <ion-col col-4>
-      <div class="list-bg" style="background-image: url(assets/imgs/list1.jpg);">
-        <ion-icon name="ios-heart-outline"></ion-icon>
+  <div class="home">
+    <img src="./assets/imgs/logo-pickle.png">
+  </div>
+  <div class="home-hero main" style="background-image: url(assets/imgs/pickleball-doubles.jpg)">
+    <div class="overlay">
+      <div class="actions">
+        <h1>Where to Play?</h1>
+        <button ion-button (click)="toView('courts')">FIND A COURT</button>
       </div>
-    </ion-col>
-    <ion-col col-8>
-        <h2>Blade Runner 1999</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-    </ion-col>
-</ion-row>
-<ion-row class="list-image-left">
-  <ion-col col-4>
-    <div class="list-bg" style="background-image: url(assets/imgs/a1.jpg);">
-      <ion-icon name="ios-heart-outline"></ion-icon>
     </div>
-  </ion-col>
-  <ion-col col-8>
-      <h2>Blade Runner 1999</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-  </ion-col>
-</ion-row>
-<ion-row class="list-image-left">
-  <ion-col col-4>
-    <div class="list-bg" style="background-image: url(assets/imgs/a2.jpg);">
-      <ion-icon name="ios-heart-outline"></ion-icon>
+  </div>
+
+  <div class="home-hero" style="background-image: url(assets/imgs/men-women-1.jpg)">
+    <div class="overlay">
+      <div class="actions">
+        <h1>TOURNAMENTS</h1>
+        <!-- <button ion-button>FIND A COURT</button> -->
+      </div>
     </div>
-  </ion-col>
-  <ion-col col-8>
-      <h2>Blade Runner 1999</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-  </ion-col>
-</ion-row>
+  </div>
 
-<ion-row padding class="row-title">
-  <ion-col class="col-12">
-      <h1>Lodging</h1>
-    </ion-col>
-</ion-row>
-
-<ion-slides class="first-section" slidesPerView="3" spaceBetween="10px">
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/hero.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
+  <div class="home-hero" style="background-image: url(assets/imgs/find-players.jpg)">
+    <div class="overlay">
+      <div class="actions">
+        <h1>FIND PLAYERS</h1>
+        <!-- <button ion-button>FIND A COURT</button> -->
       </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-          The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/list1.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
-      </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-            The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/a1.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
-      </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-            The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/hero.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
-      </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-          The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/list1.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
-      </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-            The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-  <ion-slide>
-    <ion-card>
-      <div class="card-img-holder" style="background-image: url(assets/imgs/a1.jpg)">
-        <ion-icon name="ios-heart-outline"></ion-icon>
-      </div>
-      <ion-card-content>
-        <ion-card-title>
-          Nine Inch Nails Live
-          </ion-card-title>
-        <p>
-            The most popular industrial group ever.
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </ion-slide>
-</ion-slides>
-
-<ion-row padding class="row-title">
-  <ion-col class="col-12">
-      <h1>Hangout</h1>
-    </ion-col>
-</ion-row>
-
-<ion-row class="big-card">
-<div class="big-card-bg" style="background-image: url(assets/imgs/list1.jpg)">
-  <ion-icon name="ios-heart-outline"></ion-icon>
-</div>
-<h1>Blade Runner 1999</h1>
-
-</ion-row>
-
-<ion-row padding class="row-title">
-  <ion-col class="col-12">
-      <h1>Tips &amp; Articles</h1>
-    </ion-col>
-</ion-row>
-
-<ion-row class="list-image-left">
- 
-  <ion-col col-8>
-      <h2>Should startups care about profitability?</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-  </ion-col>
-  <ion-col col-4>
-    <div class="list-bg" style="background-image: url(assets/imgs/blog1.jpg);">
-      <ion-icon name="ios-heart-outline"></ion-icon>
     </div>
-  </ion-col>
-</ion-row>
-<ion-row class="list-image-left">
- 
-  <ion-col col-8>
-      <h2>Should startups care about profitability?</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-  </ion-col>
-  <ion-col col-4>
-    <div class="list-bg" style="background-image: url(assets/imgs/blog2.jpg);">
-      <ion-icon name="ios-heart-outline"></ion-icon>
+  </div>
+
+  <div class="home-hero" style="background-image: url(assets/imgs/racket-balls.png)">
+    <div class="overlay">
+      <div class="actions">
+        <h1>Clinics</h1>
+        <!-- <button ion-button>FIND A COURT</button> -->
+      </div>
     </div>
-  </ion-col>
-</ion-row>
-<ion-row class="list-image-left">
- 
-  <ion-col col-8>
-      <h2>Should startups care about profitability?</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-  </ion-col>
-  <ion-col col-4>
-    <div class="list-bg" style="background-image: url(assets/imgs/blog3.jpg);">
-      <ion-icon name="ios-heart-outline"></ion-icon>
-    </div>
-  </ion-col>
-</ion-row>
- 
+  </div>
+
 </ion-content>
