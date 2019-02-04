@@ -18,7 +18,9 @@
 <ion-content>
 
   <div id="banner" [style.backgroundImage]="getBanner()">
-
+    <div class="overlay">
+      <h1 style="color:white;">{{type}}</h1>
+    </div>
   </div>
 
   <div id="button-view">
@@ -26,29 +28,35 @@
       Map'}}</button>
   </div>
 
-  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
-  </div>
-
   <div id="location">
     <div class="details">
       <h2>Current Location</h2>
-      <p>Thu, Jan 24 - Fri, Feb 25</p>
+      <p><span (click)="changeDateStart()">{{dateStart | date:'EEE, MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
+          | date:'EEE, MMM dd'}}</span></p>
     </div>
     <div class="action">
       <button ion-button style="background-color: white; color: black;" (click)="changeSearch()">Change Search</button>
     </div>
   </div>
 
+  <ion-searchbar id="search-courts-input-view-event" placeholder="Change your location" [hidden]="!isChangingLocation()"
+    type="text" showCancelButton="true"></ion-searchbar>
+
+  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
+  </div>
+
   <div class="item" *ngFor="let item of items">
-    <div class="details">
+    <div class="details" (click)="toItem(item.data)">
       <h2>{{item.name}}</h2>
       <div>
         <img src="./assets/imgs/pin-red.png">
         <p>{{item.location}}</p>
       </div>
     </div>
-    <!-- <div class="photo" [style.backgroundImage]="formaterUrl(item.photo)"> -->
-      <img class="photo" [src]="item.photo">
-    <!-- </div> -->
+    <div class="photo" [style.backgroundImage]="formaterUrl(item.photo)" [style.backgroundSize]="type==='courts'?'cover':'contain'">
+      <img *ngIf="isSaved(item.data)" (click)="remove(item.data)" src="assets/imgs/heart-active.png">
+      <img *ngIf="!isSaved(item.data)" (click)="save(item.data)" src="assets/imgs/heart-unactive.png">
+      <!-- <img class="photo" [src]="item.photo"> -->
+    </div>
   </div>
 </ion-content>

@@ -6,7 +6,7 @@ import { Platform, ModalController, ToastController, AlertController, App } from
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { AuthProvider } from '../auth/auth';
-import { CalendarModal, CalendarResult } from 'ion2-calendar';
+import { CalendarModal, CalendarResult, CalendarModalOptions } from 'ion2-calendar';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 import * as moment from 'moment';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -23,7 +23,7 @@ export class HelpersProvider {
     public platform: Platform, public geolocation: Geolocation,
     public diagnostic: Diagnostic, public modalCtrl: ModalController,
     public atps: AmazingTimePickerService, public toastCtrl: ToastController,
-    public alertCtrl: AlertController, public camera: Camera, public app:App
+    public alertCtrl: AlertController, public camera: Camera, public app: App
   ) {
     HelpersProvider.me = this;
   }
@@ -105,10 +105,8 @@ export class HelpersProvider {
     return position;
   }
 
-  public nativeDatePicker(): Promise<Date> {
-
-    let options = {
-    };
+  public nativeDatePicker(options?: CalendarModalOptions): Promise<Date> {
+    options = options || {};
 
     let myCalendar = this.modalCtrl.create(CalendarModal, {
       options: options
@@ -212,7 +210,8 @@ export class HelpersProvider {
           // await t.getPhotoNative(params);
           await t.app.getActiveNavs()[0].push(CameraPage, params);
         } else {
-          t.diagnostic.requestCameraAuthorization(true).then(async (status) => { console.log(status, t.diagnostic.permissionStatus.GRANTED);
+          t.diagnostic.requestCameraAuthorization(true).then(async (status) => {
+            console.log(status, t.diagnostic.permissionStatus.GRANTED);
             if (status == t.diagnostic.permissionStatus.GRANTED) {
               // await t.getPhotoNative(params);
               await t.app.getActiveNavs()[0].push(CameraPage, params);
@@ -237,7 +236,7 @@ export class HelpersProvider {
       // console.log(this.camera, options);
       this.camera.getPicture(options).then(b64 => {
         // console.log(b64);
-        b64 = 'data:image/jpeg;base64,'+ b64;
+        b64 = 'data:image/jpeg;base64,' + b64;
         // console.log(b64);
         let blob = this.b64toBlob(b64, "image/jpeg");
         let file = this.blobToFile(blob, "image");

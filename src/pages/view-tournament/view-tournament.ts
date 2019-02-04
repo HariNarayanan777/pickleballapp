@@ -12,17 +12,16 @@ declare var google;
 })
 export class ViewTournamentPage {
 
-  public tournament: any = {};
+  public tournament: any = { savedTournaments: [], coordinates: [] };
   private map: any;
   public save = false;
   public userID = "";
+  public tournaments = [];
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     public http: HttpClient
   ) {
-    this.tournament = this.navParams.get("tournament");
-    // console.log(this.tournament);
     if (this.navParams.get("save") !== undefined) {
       this.save = true;
     }
@@ -30,7 +29,9 @@ export class ViewTournamentPage {
 
   async ionViewDidLoad() {
     this.userID = await AuthProvider.me.getIdUser();
-
+    let tournament = this.navParams.get("tournament");
+    console.log(tournament);
+    this.tournament = await this.http.get("/tournaments/" + tournament.id).toPromise() as any;
     if (!this.tournament.latLng) return;
 
     let lat = this.tournament.latLng.lat;

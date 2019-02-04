@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
@@ -6,6 +6,7 @@ import { HelpersProvider } from '../../providers/helpers/helpers';
 import { HttpClient } from '@angular/common/http';
 import { ViewCourtPage } from '../view-court/view-court';
 import { AuthProvider } from '../../providers/auth/auth';
+import { ViewTournamentPage } from '../view-tournament/view-tournament';
 
 declare var google: any;
 
@@ -17,8 +18,12 @@ declare var google: any;
 export class ViewEventPage {
 
   public _viewMap = false;
+  public _isChangingLocation = false;
   public type = "";
   public items = [];
+
+  public dateStart = new Date();
+  public dateEnd = new Date();
 
   //Para busquedad de torneos
   public torneoName = "";
@@ -35,7 +40,6 @@ export class ViewEventPage {
 
   //Para busquedad de courts
   public search = "";
-  private autocomplete: any;
   public map: any;
   public lat = 36.778259;
   public lng = -119.417931;
@@ -48,13 +52,46 @@ export class ViewEventPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public viewCtrl: ViewController, public http: HttpClient
+    public viewCtrl: ViewController, public http: HttpClient,
+    private zone: NgZone
   ) {
     this.type = this.navParams.get("type");
   }
 
-  ionViewDidLoad() {
-    // document.querySelector(".back-button").setAttribute("hidden", "");
+  async ionViewWillEnter() {
+    if (this.type === "courts")
+      await this.getCourtsSaved();
+    if (this.type === "tournaments")
+      this.getTournamentsSaved();
+  }
+
+  public getBanner() {
+    if (this.type === "courts")
+      return `url(./assets/imgs/pickleball-doubles.jpg)`;
+    else if (this.type === "tournaments")
+      return `url(assets/imgs/men-women-1.jpg)`;
+  }
+
+  public async changeDateStart() {
+    let dateStart = await HelpersProvider.me.nativeDatePicker({
+      defaultDate: this.dateStart,
+      title: "Select the initial date"
+    });
+    if (dateStart !== null) {
+      this.dateStart = dateStart;
+      await this.getTournaments();
+    }
+  }
+
+  public async changeDateEnd() {
+    let dateEnd = await HelpersProvider.me.nativeDatePicker({
+      defaultDate: this.dateStart,
+      title: "Select the end date"
+    });
+    if (dateEnd !== null) {
+      this.dateEnd = dateEnd;
+      await this.getTournaments();
+    }
   }
 
   async ngAfterViewInit() {
@@ -62,13 +99,12 @@ export class ViewEventPage {
     await LiveComunicationProvider.reloadGoogleplaces();
     await this.initMap();
 
-    // this.autocomplete = new google.maps.places.Autocomplete(document.querySelector("#search-courts-input .searchbar-input"));
-    // google.maps.event.addListener(this.autocomplete, 'place_changed', function () {
-    //   var address = (document.querySelector("#search-courts-input .searchbar-input") as any).value;
-    //   this.setLocationOfSearch(address);
-    // }.bind(this));
-
-    await this.getCourtsSaved();
+    let input = () => { return document.querySelector("#search-courts-input-view-event .searchbar-input") };
+    let autocomplete = new google.maps.places.Autocomplete(input());
+    google.maps.event.addListener(autocomplete, 'place_changed', () => {
+      var address = (input() as any).value;
+      this.setLocationOfSearch(address);
+    });
 
     let position = await HelpersProvider.me.getMyPosition();
     // console.log("MyPosition", position);
@@ -76,20 +112,6 @@ export class ViewEventPage {
 
   }
 
-  public viewMap() {
-    this._viewMap = !this._viewMap;
-  }
-
-  public getBanner() {
-    if (this.type === "courts")
-      return `url(./assets/imgs/pickleball-doubles.jpg)`;
-  }
-
-  public changeSearch() {
-
-  }
-
-  //#region para obtener los courts
   private async initMap() {
 
     let mapOptions: any = {
@@ -123,11 +145,13 @@ export class ViewEventPage {
         lng: this.lng
       });
       this.map.setCenter({ lat: this.lat, lng: this.lng });
-      this.getCourts();
-      this.getTournaments(this.lat, this.lng);
+      if (this.type === "courts")
+        this.getCourts();
+      if (this.type === "tournaments")
+        this.getTournaments(this.lat, this.lng);
     });
-
-    this.getCourts();
+    if (this.type === "courts")
+      this.getCourts();
   }
 
   private async setPosition(position, getCourts: boolean) {
@@ -141,15 +165,17 @@ export class ViewEventPage {
     if (getCourts === true) {
       console.log("after set position!!");
       this.map.setCenter({ lat: this.lat, lng: this.lng });
-      await this.getCourts();
-      await this.getTournaments(this.lat, this.lng);
+      if (this.type === "courts")
+        await this.getCourts();
+      if (this.type === "tournaments")
+        await this.getTournaments(this.lat, this.lng);
       console.log("set position!!");
     }
   }
 
   private setLocationOfSearch(address: string) {
     let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address }, function (res, status) {
+    geocoder.geocode({ address }, (res, status) => {
 
       if (Object.prototype.toString.call(res) === "[object Array]") {
         if (res.length === 0) return;
@@ -165,12 +191,61 @@ export class ViewEventPage {
           lng: this.lng
         });
         this.map.setCenter({ lat: this.lat, lng: this.lng });
-        this.getCourts();
-        this.getTournaments(this.lat, this.lng);
+        if (this.type === "courts")
+          this.getCourts();
+        if (this.type === "tournaments")
+          this.getTournaments(this.lat, this.lng);
       }
 
-    }.bind(this));
+    });
 
+  }
+
+  public viewMap() {
+    this._viewMap = !this._viewMap;
+    if (this._viewMap === false) this._isChangingLocation = false;
+  }
+
+  public formaterUrl(url) {
+    return `url(${url})`;
+  }
+
+  public isSaved(data) {
+    if (this.type === "courts")
+      return this.isSavedCourt(data).saved;
+    if (this.type === "tournaments")
+      return this.isSavedTournament(data).saved;
+  }
+
+  public save(data) {
+    if (this.type === "courts")
+      return this.saveCourt(data);
+    if (this.type === "tournaments")
+      return this.saveTournament(data);
+  }
+
+  public remove(data) {
+    if (this.type === "courts")
+      return this.removeCourt(data);
+    if (this.type === "tournaments")
+      return this.removeTournament(data);
+  }
+
+  public toItem(data) {
+    if (this.type === "courts")
+      return this.toCourtSlide(data);
+    if (this.type === "tournaments")
+      return this.toTournament(data);
+  }
+
+  //#region para obtener los courts
+  public changeSearch() {
+    this._isChangingLocation = !this._isChangingLocation;
+    if (this._isChangingLocation === true) this._viewMap = true;
+  }
+
+  public isChangingLocation() {
+    return this._isChangingLocation === true && this._viewMap === true;
   }
 
   private cleanMarkers() {
@@ -248,10 +323,6 @@ export class ViewEventPage {
     this.setMarkersOfPlaces(results, results2);
   }
 
-  public formaterUrl(url) {
-    return `url(${url})`;
-  }
-
   public getUrlSmallImage(photos) {
     return photos.map(it => {
       return it.getUrl({ 'maxWidth': 200, 'maxHeight': 200 });
@@ -259,13 +330,17 @@ export class ViewEventPage {
   }
 
   private setMarkersOfPlaces(results_courts, results_rv) {
-    this.items = this.courst.map(it => {
-      return {
-        name: it.name,
-        location: it.location,
-        photo: it.photos !== undefined ? it.photos[0] : 'assets/imgs/court-sport-default.jpg'
-      };
-    });
+    if (this.type === "courts") {
+      this.items = this.courst.map(it => {
+        return {
+          name: it.name,
+          location: it.location,
+          photo: it.photos !== undefined ? it.photos[0] : 'assets/imgs/court-sport-default.jpg',
+          data: it
+        };
+      });
+    }
+
     for (let result of results_courts) {
       let lat = result.geometry.location.lat();
       let lng = result.geometry.location.lng();
@@ -316,6 +391,7 @@ export class ViewEventPage {
       this.markers.push(marker);
     }
     this.setEventToMarkers();
+    this.zone.run(function () { console.log("fetch courts"); });
   }
 
   private setEventToMarkers() {
@@ -370,6 +446,35 @@ export class ViewEventPage {
     return users;
   }
 
+  public async saveCourt(court) {
+    if (court.lng !== null && court.lng !== undefined &&
+      court.lat !== null && court.lat !== undefined) {
+      try {
+        let user = await AuthProvider.me.getIdUser();
+        let ite = JSON.parse(JSON.stringify(court));
+        ite.coordinates = [ite.lng, ite.lat];
+        delete ite.lng;
+        delete ite.lat;
+        ite.user = user;
+        await this.http.post("/court", ite).toPromise();
+        // this.presentToast("Saved Court");
+        await this.getCourtsSaved();
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
+  public async removeCourt(court) {
+    let pos = await this.isSavedCourt(court);
+    if (pos.saved === true) {
+      await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
+      // this.presentToast("Courst Removed");
+      await this.getCourtsSaved();
+    }
+  }
+
   public isSavedCourt(court) {
     let index = this.courstSaved.findIndex(it => {
       // console.log(it.coordinates.lng === court.lng && it.coordinates.lat === court.lat);
@@ -383,10 +488,17 @@ export class ViewEventPage {
     return { saved: true, index };
   }
 
+  public loadImage(court) {
+    court.loadImage = true;
+  }
+  //#endregion
 
-  private async getTournaments(lat, lng) {
+  //#region para los torneos
+  private async getTournaments(lat?, lng?) {
+    this.lat = lat || this.lat;
+    this.lng = lng || this.lng;
     try {
-      let tournamets = await this.http.get(`/tournaments-ubication?lat=${lat}&lng=${lng}`).toPromise() as any[];
+      let tournamets = await this.http.get(`/tournaments-ubication?lat=${this.lat}&lng=${this.lng}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}`).toPromise() as any[];
       for (let tour of tournamets) {
         let image = {
           url: './assets/imgs/medal.png',
@@ -405,14 +517,72 @@ export class ViewEventPage {
           icon: image
         });
       }
+      this.items = tournamets.map(it => {
+        return {
+          name: it.title,
+          location: it.address,
+          photo: it.imgs !== undefined && it.imgs.length > 0 ? it.imgs[0] : 'assets/imgs/court-sport-default.jpg',
+          data: it
+        };
+      });
+      this.zone.run(function () { console.log("fetch tournaments"); });
     }
     catch (e) {
       console.error(e);
     }
   }
 
-  public loadImage(court) {
-    court.loadImage = true;
+  public async getTournamentsSaved() {
+    let idUser = await AuthProvider.me.getIdUser();
+    let tournaments = await this.http.get(`/savedtournaments?where=${JSON.stringify({ user: idUser })}&limit=40000`).toPromise() as any;
+    tournaments = tournaments.filter(it => {
+      return it.tournament !== null && it.tournament !== undefined;
+    });
+    this.tournaments = tournaments.map(it => {
+      it.tournament.savedID = it.id;
+      return it.tournament;
+    });
+  }
+
+  public isSavedTournament(tour) {
+    let index = this.tournaments.findIndex(it => {
+      // console.log(it.coordinates.lng === court.lng && it.coordinates.lat === court.lat);
+      // console.log(it.coordinates.lng, court.lng, it.coordinates.lat, court.lat);
+      return it.coordinates[0] === tour.coordinates[0] && it.coordinates[1] === tour.coordinates[1];
+    });
+    if (index === -1) {
+      return { saved: false, index };
+    }
+
+    return { saved: true, index };
+  }
+
+  public async saveTournament(tournament) {
+    try {
+      let idUser = await AuthProvider.me.getIdUser();
+      await this.http.post('/savedtournaments', { user: idUser, tournament: tournament.id }).toPromise();
+      await this.getTournamentsSaved();
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  public async removeTournament(tournament) {
+    try {
+      let s = this.isSavedTournament(tournament);
+      if (s.saved === true) {
+        await this.http.delete('/savedtournaments/' + this.tournaments[s.index].savedID).toPromise();
+        await this.getTournamentsSaved();
+      }
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
+  public toTournament(tournament) {
+    this.navCtrl.push(ViewTournamentPage, { tournament, save: true });
   }
 
 }
