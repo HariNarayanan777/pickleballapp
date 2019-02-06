@@ -1,14 +1,38 @@
 <ion-header>
 
   <ion-navbar>
-    <!-- <img class="nav-avatar" [src]="photo" (error)="errorImage($event)"> -->
-    <ion-title>{{to.fullName}}</ion-title>
+    <ion-buttons left>
+      <button ion-button style="color: white;" (click)="toHome()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        &nbsp;&nbsp;
+        <!-- <ion-icon name="arrow-back"></ion-icon> -->
+        Home
+      </button>
+    </ion-buttons>
+    <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
+
+  <div class="back-banner">
+    <button ion-button style="color: #0099ff !important; font-size: 2.3rem;
+      font-weight: normal; background-color: #999999;" (click)="viewCtrl.dismiss()">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      &nbsp;&nbsp;
+      <!-- <ion-icon name="arrow-back"></ion-icon> -->
+    </button>
+    <ion-row>
+      <ion-col col-12 style="display: flex; justify-content: center;">
+        <img class="nav-avatar" [src]="photo" (error)="errorImage($event)">
+      </ion-col>
+      <ion-col>
+        <ion-title style="text-align: center;">{{to.fullName}}</ion-title>
+      </ion-col>
+    </ion-row>
+  </div>
 
   <div #content class="message-wrap">
     <div id="loadtoUp" *ngIf="loadingChats">
@@ -19,7 +43,8 @@
       <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
       <div class="msg-detail">
         <div class="msg-info">
-          <p>&nbsp;&nbsp;&nbsp;{{msg.dateTime | relativeTime}}</p>
+          <!-- <p>&nbsp;&nbsp;&nbsp;{{msg.dateTime | relativeTime}}</p> -->
+          <p>&nbsp;&nbsp;&nbsp;</p>
         </div>
         <div class="msg-content">
           <p class="line-breaker">{{msg.message}}</p>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 import * as moment from "moment";
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
@@ -20,7 +20,8 @@ export class ViewCourtPage {
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    public http: HttpClient, public toastCtrl: ToastController
+    public http: HttpClient, public toastCtrl: ToastController,
+    public viewCtrl: ViewController
   ) {
     this.court = this.navParams.get("court");
     // console.log(this.court);

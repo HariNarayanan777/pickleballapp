@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { HomePage } from '../home/home';
 import { CategoriesPage } from '../categories/categories';
 import { SearchPage } from '../search/search';
@@ -24,9 +24,19 @@ export class TabsPage {
   tab4Root = SearchPage;
   tab5Root = AccountPage;
 
-  constructor(public storage: Storage, public lc: LiveComunicationProvider) {
+  public static toTab = async (index: number) => { };
+  constructor(
+    public storage: Storage, public lc: LiveComunicationProvider,
+    public zone: NgZone
+  ) {
     MyApp.initNotifications();
     this.initSocketEvents();
+    TabsPage.toTab = this.toTab.bind(this);
+  }
+
+  private async toTab(index: number) {
+    await this.tabRef.select(index);
+    this.zone.run(function () { console.log("change tab"); });
   }
 
   private async initSocketEvents() {

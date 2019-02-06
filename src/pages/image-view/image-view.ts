@@ -65,20 +65,20 @@ export class ImageViewPage {
 
   public addDegrees() {
     this.degrees += 90;
-    console.log(this.degrees);
+    // console.log(this.degrees);
   }
 
-  async ngAfterViewInit() {
-    console.log("load");
-    if (this.resize === true) {
-      await this.angularCropper.ready.subscribe(od => {
-        console.log("ready", od)
-      }, err => {
-        console.error(err);
-      })
-      console.log("loaded");
-    }
-  }
+  // async ngAfterViewInit() {
+  //   console.log("load");
+  //   if (this.resize === true) {
+  //     await this.angularCropper.ready.subscribe(od => {
+  //       console.log("ready", od)
+  //     }, err => {
+  //       console.error(err);
+  //     })
+  //     console.log("loaded");
+  //   }
+  // }
 
   public drawRotated(context, canvas, image, degrees) {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -137,16 +137,16 @@ export class ImageViewPage {
         this.drawRotated(ctx, c, img, this.degrees);
 
       //Guardamos localmente la foto si es una que se tomo con la camara
-      try {
-        if (this.image !== "") {
-          await new Promise(async function (resolve, reject) {
-            await this.saveCanvasImage(c, resolve, reject);
-          }.bind(this));
-        }
-      }
-      catch (e) {
-        console.error(e);
-      }
+      // try {
+      //   if (this.image !== "") {
+      //     await new Promise(async function (resolve, reject) {
+      //       await this.saveCanvasImage(c, resolve, reject);
+      //     }.bind(this));
+      //   }
+      // }
+      // catch (e) {
+      //   console.error(e);
+      // }
 
       var dataURL = c.toDataURL('image/jpeg');
       console.log(this.width, this.height);

@@ -17,7 +17,13 @@
 
 <ion-content>
 
-  <div id="banner" [style.backgroundImage]="getBanner()">
+  <ion-searchbar [hidden]="type==='players'" id="search-courts-input-view-event" placeholder="Change your location"
+    [hidden]="!isChangingLocation()" type="text" showCancelButton="true"></ion-searchbar>
+
+  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
+  </div>
+
+  <div id="banner" [hidden]="_viewMap" [style.backgroundImage]="getBanner()">
     <div class="overlay">
       <h1 style="color:white;">{{type}}</h1>
     </div>
@@ -41,12 +47,6 @@
     </div>
   </div>
 
-  <ion-searchbar [hidden]="type==='players'" id="search-courts-input-view-event" placeholder="Change your location"
-    [hidden]="!isChangingLocation()" type="text" showCancelButton="true"></ion-searchbar>
-
-  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
-  </div>
-
   <div class="item" [hidden]="type==='players'" *ngFor="let item of items">
     <div class="details" (click)="toItem(item.data)">
       <h2>{{item.name}}</h2>
@@ -64,31 +64,29 @@
 
 
 
-  <ion-searchbar [hidden]="type!=='players'" (input)="onSearchInput()" [(ngModel)]="searchTerm"
-    [showCancelButton]="true" placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
+  <ion-searchbar [hidden]="type!=='players'" (input)="onSearchInput()" [(ngModel)]="searchTerm" [showCancelButton]="true"
+    placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
 
-  <ion-row [hidden]="type!=='players'" *ngIf="searching" padding>
-    <ion-list>
-      <div class="flex-center" *ngIf="players.length < 1">
-        <p>Sorry, no results matched your criteria</p>
-      </div>
-      <div *ngIf="players.length > 0">
-        <ion-item>
-          <p class="list-title">Results for {{searchTerm}} in Players</p>
-        </ion-item>
+  <ion-list [hidden]="type!=='players'">
+    <div class="flex-center" *ngIf="players.length < 1">
+      <p>Sorry, no results matched your criteria</p>
+    </div>
+    <div *ngIf="players.length > 0">
+      <ion-item>
+        <p class="list-title">Results for {{searchTerm}} in Players</p>
+      </ion-item>
 
-        <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
-          <ion-avatar item-start (click)="goToFriendProfile(p._id)">
-            <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
-          </ion-avatar>
-          <h2 text-wrap (click)="goToFriendProfile(p._id)">{{p.fullName}}</h2>
-          <p (click)="goToFriendProfile(p._id)">Skill Level: {{p.rank}}</p>
-          <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
-          <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
-            (click)="checkFriendRequest(p, $event)"></button>
-        </ion-item>
-      </div>
-    </ion-list>
-  </ion-row>
+      <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
+        <ion-avatar item-start (click)="goToFriendProfile(p._id)">
+          <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
+        </ion-avatar>
+        <h2 text-wrap (click)="goToFriendProfile(p._id)">{{p.fullName}}</h2>
+        <p (click)="goToFriendProfile(p._id)">Skill Level: {{p.rank}}</p>
+        <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
+        <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
+          (click)="checkFriendRequest(p, $event)"></button>
+      </ion-item>
+    </div>
+  </ion-list>
 
 </ion-content>

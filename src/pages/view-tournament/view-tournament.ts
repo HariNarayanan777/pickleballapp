@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as moment from 'moment';
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
+import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 
 declare var google;
 @IonicPage()
@@ -31,11 +32,15 @@ export class ViewTournamentPage {
     this.userID = await AuthProvider.me.getIdUser();
     let tournament = this.navParams.get("tournament");
     console.log(tournament);
-    this.tournament = await this.http.get("/tournaments/" + tournament.id).toPromise() as any;
-    if (!this.tournament.latLng) return;
+    if (tournament.type === "event")
+      this.tournament = tournament;
+    else
+      this.tournament = await this.http.get("/tournaments/" + tournament.id).toPromise() as any;
 
-    let lat = this.tournament.latLng.lat;
-    let lng = this.tournament.latLng.lng;
+    if (!this.tournament.coordinates) return;
+
+    let lat = this.tournament.coordinates[1];
+    let lng = this.tournament.coordinates[0];
     let mapOptions: any = {
       center: {
         lat,
@@ -73,6 +78,25 @@ export class ViewTournamentPage {
   }
 
   public async addOrRemove(tour, save) {
+    if (tour.type === "event")
+      await this.addOrRemoveEvent(tour);
+    else
+      await this.addOrRemoveTournament(tour, save);
+  }
+
+  private async addOrRemoveEvent(tour) {
+    let idUser = this.userID;
+    if (tour.isSave === true) {
+      await this.http.delete('/eventuser/' + tour.savedId).toPromise();
+      this.tournament.isSave = false;
+    } else {
+      let eventsaved = await this.http.post('/eventuser', { user: idUser, event: tour.id }).toPromise() as any;
+      this.tournament.isSave = true;
+      this.tournament.savedId = eventsaved.id;
+    }
+  }
+
+  private async addOrRemoveTournament(tour, save) {
     let idUser = this.userID;
     if (save === true) {
       let index = tour.savedTournaments.findIndex(it => {
@@ -93,10 +117,18 @@ export class ViewTournamentPage {
     }
   }
 
-  public saved(tournaments) {
+  public saved() {
     let idUser = this.userID;
-    return tournaments.savedTournaments.findIndex(it => {
-      return it.user === idUser;
-    }) !== -1;
+    if (this.tournament.type === "event") {
+      return this.tournament.isSave;
+    } else {
+      return this.tournament.savedTournaments.findIndex(it => {
+        return it.user === idUser;
+      }) !== -1;
+    }
+  }
+
+  public getUrl(url){
+    return url.includes("/" + this.tournament.id) === true ? InterceptorProvider.tranformUrl(url) : url;
   }
 }

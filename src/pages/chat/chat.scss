@@ -1,7 +1,31 @@
 page-chat {
-    $userBackgroundColor: #000000;
-    $toUserBackgroundColor: #bea805;
-    img.nav-avatar{ height: 35px; width: 35px; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; }
+    $userBackgroundColor: #99ff33;
+    $toUserBackgroundColor: #cccccc;
+    #logo-navbar {
+        width: 200px;
+        margin-left: calc(50% - 100px);
+    }
+    .toolbar-background {
+        background-color: black;
+    }
+    .back-button {
+        display: none !important;
+    }
+    .back-banner {
+        background-color: #999999;
+        display: flex;
+        align-items: center;
+        button{
+            box-shadow: 1px 1px transparent;
+        }
+    }
+    img.nav-avatar {
+        height: 35px;
+        width: 35px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+    }
     #loadtoUp {
         display: flex;
         justify-content: center;
@@ -13,12 +37,14 @@ page-chat {
         height: 45px;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.36);
     }
-    // ion-title div {
+    .toolbar-title {
+        color: black !important;
+    } // ion-title div {
     //     font-size: 1.7rem !important;
     //     padding-left: 15% !important;
     // }
     ion-content .scroll-content {
-        background-color: #eae5e5;
+        background-color: #fff;
     }
     ion-footer {
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.11);
@@ -74,11 +100,13 @@ page-chat {
                     position: relative;
                     margin-top: 5px;
                     border-radius: 5px;
-                    padding: 8px;
+                    padding: 10px;
                     border: 1px solid #ddd;
-                    color: #fff;
+                    color: black !important;
                     width: auto;
                     max-width: 80%;
+                    font-size: 1.7rem;
+                    // font-weight: bold;
                     span.triangle {
                         background-color: #fff;
                         border-radius: 2px;
@@ -110,7 +138,7 @@ page-chat {
             .msg-content {
                 color: white;
                 border-radius: 10px;
-                border-top-left-radius: 0;
+                // border-top-left-radius: 0;
                 span.triangle {
                     border-top-width: 0;
                     border-right-width: 0;
@@ -135,10 +163,9 @@ page-chat {
             }
             .msg-content {
                 background-color: $userBackgroundColor;
-                float: right;
-                color: #5d6d81;
+                float: right; // color: #5d6d81;
                 border-radius: 10px;
-                border-top-right-radius: 0;
+                // border-top-right-radius: 0;
                 span.triangle {
                     background-color: $userBackgroundColor;
                     border-bottom-width: 0;
@@ -150,43 +177,21 @@ page-chat {
                 justify-content: flex-end;
             }
         }
-        .message.success{
+        .message.success {
             .views ion-icon {
                 color: #fe324d !important;
                 font-weight: bold;
             }
         }
-    }
-
-    .toolbar-background {
-        background: #000000 !important;
-    }
+    } 
+    
     .toolbar-ios ion-title {
         padding: 0 50px 1px !important;
         padding-top: 30px !important;
     }
-
-    .toolbar-ios{
+    .toolbar-ios {
         padding-top: 20px !important;
         min-height: 60px !important;
         height: 60px !important;
-    }
-    ion-navbar {
-        
-        button {
-            color: #bea805 !important;
-            ion-icon{
-                color: #bea805 !important;
-            }
-           
-        }
-        ion-title {
-            text-align: left;
-            .toolbar-title-ios,
-            .toolbar-title-md {
-                color: #fff;
-            }
-        }
-       
     }
 }

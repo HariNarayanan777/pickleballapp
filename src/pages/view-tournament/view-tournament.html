@@ -15,12 +15,11 @@
       <h2>{{tournament.title}}</h2>
       <p>{{tournament.address}}</p>
       <a target="_blank" href="https://www.google.com/maps/@{{tournament.coordinates[1]}},{{tournament.coordinates[0]}},15z">Directions</a>
-
     </ion-item>
 
     <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!tournament.imgs">
       <ion-slide *ngFor="let img of tournament.imgs">
-        <img [src]="img">
+        <img [src]="getUrl(img)">
       </ion-slide>
     </ion-slides>
 
@@ -50,9 +49,9 @@
   </ion-card>
 
   <ion-fab bottom right *ngIf="save">
-    <button ion-fab icon-only [style.backgroundColor]="saved(tournament)===false?'#488aff':'#f53d3d'" (click)="addOrRemove(tournament, saved(tournament))">
+    <button ion-fab icon-only [style.backgroundColor]="saved()===false?'#488aff':'#f53d3d'" (click)="addOrRemove(tournament, saved())">
       <!-- <ion-icon name="md-add"></ion-icon> -->
-      {{saved(tournament)===true?'Remove':'Save'}}
+      {{saved()===true?'Remove':'Save'}}
     </button>
   </ion-fab>
 

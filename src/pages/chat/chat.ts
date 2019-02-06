@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
-import { IonicPage, NavParams, ModalController, Events, Content, TextInput } from 'ionic-angular';
+import { IonicPage, NavParams, ModalController, Events, Content, TextInput, ViewController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { MyApp } from '../../app/app.component';
 import * as moment from 'moment';
@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromEvent';
 import { Storage } from '@ionic/storage';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -35,7 +36,8 @@ export class ChatPage {
   constructor(private navParams: NavParams, private events: Events,
     private http: HttpClient, private ngZone: NgZone,
     public changeDectRef: ChangeDetectorRef, public modal: ModalController,
-    private storage: Storage, private lc: LiveComunicationProvider
+    private storage: Storage, private lc: LiveComunicationProvider,
+    private viewCtrl: ViewController
   ) {
     this.to = this.navParams.get("user");
     console.log(this.to);
@@ -55,6 +57,10 @@ export class ChatPage {
         this.ngZone.run(function () { console.log(data); });
       }
     })
+  }
+
+  public toHome(){
+    TabsPage.toTab(0);
   }
 
   async ionViewDidEnter() {

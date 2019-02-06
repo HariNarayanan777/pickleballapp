@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -28,7 +28,7 @@ export class MyApp {
     splashScreen: SplashScreen, public storage: Storage,
     public pusherNotification: Push, public http: HttpClient,
     public lc: LiveComunicationProvider, public auht: AuthProvider,
-    public helper: HelpersProvider
+    public helper: HelpersProvider, public zone: NgZone
   ) {
     MyApp.initNotifications = this.initNotifications.bind(this);
     MyApp.unregisterNotifications = this.unregisterNotifications.bind(this);
@@ -88,11 +88,11 @@ export class MyApp {
       });
 
 
-      this.pushObject.on('registration').subscribe(function (registration: any) {
+      this.pushObject.on('registration').subscribe((registration: any) => {
 
         this.updateTokens(registration.registrationId);
         console.log('Device registered', registration);
-      }.bind(this));
+      });
 
       this.pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
       //#endregion
