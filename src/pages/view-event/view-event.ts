@@ -294,10 +294,11 @@ export class ViewEventPage {
     this.courst = [];
     this.cleanMarkers();
     let defaultBounds = new google.maps.LatLng(this.lat, this.lng);
+    let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number']
     let options: any = {
       location: defaultBounds,
       radius: 50000,
-      fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
+      fields
     };
     options.name = 'pickleball courts';
 
@@ -306,7 +307,7 @@ export class ViewEventPage {
 
     let results = await new Promise((resolve, reject) => {
       service.nearbySearch(options, (results, status, pagination) => {
-        // console.log(results, status, pagination);
+        // console.log(results);
         pagination.nextPage();
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (let result of results) {
@@ -317,6 +318,7 @@ export class ViewEventPage {
               location: result.vicinity,
               photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
               rating: result.rating,
+              place_id: result.place_id
             })
 
           }
@@ -328,12 +330,12 @@ export class ViewEventPage {
     var options2: any = {
       location: defaultBounds,
       radius: 50000,
-      fields: ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level']
+      fields
     };
     options2.type = ['rv_park'];
     let results2 = await new Promise((resolve, reject) => {
       service.nearbySearch(options2, (results, status, pagination) => {
-        // console.log(results, status, pagination);
+        // console.log(results);
         pagination.nextPage();
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (let result of results) {
@@ -344,6 +346,7 @@ export class ViewEventPage {
               location: result.vicinity,
               photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
               rating: result.rating,
+              place_id: result.place_id
             })
 
           }
@@ -449,8 +452,23 @@ export class ViewEventPage {
     let court = this.courst.find(it => {
       return it.lat === lat && it.lng === lng;
     });
-    if (court !== null && court !== undefined)
-      this.navCtrl.push(ViewCourtPage, { court });
+    if (court !== null && court !== undefined) {
+      let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number', 'formatted_phone_number']
+      let service = new google.maps.places.PlacesService(this.map);
+      var request = {
+        placeId: court.place_id,
+        fields
+      };
+      service.getDetails(request, place => { console.log(place);
+        court.photos = place.photos ? place.photos.map(it => it.getUrl({ 'maxWidth': 600, 'maxHeight': 200 })) : court.photos;
+        court.website = place.website || undefined;
+        court.formatted_phone_number = place.formatted_phone_number || undefined;
+        court.opening_hours = place.opening_hours || undefined;
+        this.navCtrl.push(ViewCourtPage, { court });
+      });
+      
+    }
+
   }
 
   private async getCourtsSaved() {

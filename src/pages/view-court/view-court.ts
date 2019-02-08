@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
+import { Component, ViewChild, NgZone } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController, ViewController, Slides } from 'ionic-angular';
 import * as moment from "moment";
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
+import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 
 declare var google;
 
@@ -13,22 +14,35 @@ declare var google;
 })
 export class ViewCourtPage {
 
+  @ViewChild("mySlide") slides: Slides;
+
   public court: any = {};
   public map: any = {};
   public courstSaved = [];
   public orderXSkill: { skill: number, users: any[] }[] = [];
 
+  public _viewMap = false;
+
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     public http: HttpClient, public toastCtrl: ToastController,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController, public zone: NgZone
   ) {
     this.court = this.navParams.get("court");
-    // console.log(this.court);
+    console.log(this.court);
+  }
+
+  public nextSlide() {
+    this.slides.slideNext();
+  }
+
+  public backSlide() {
+    this.slides.slidePrev();
   }
 
   async ionViewDidLoad() {
-    this.getCourtsSaved();
+    await this.getCourtsSaved();
+    await LiveComunicationProvider.reloadGoogleplaces();
     let mapOptions: any = {
       center: {
         lat: this.court.lat,
@@ -59,6 +73,13 @@ export class ViewCourtPage {
       icon: image
     });
 
+  }
+
+  public viewMap() {
+    this._viewMap = !this._viewMap;
+    this.zone.run(function(){
+      console.log("change vista");
+    })
   }
 
   public dateToFormat(date) {
@@ -128,12 +149,22 @@ export class ViewCourtPage {
     return { saved: true, index };
   }
 
+  public getDay(open) {
+    let d = moment().local();
+    d.day(open.day);
+    return d.format("dddd");
+  }
+
+  public getPeriod(p) {
+    return `${moment(p.open.hours + "-" + p.open.minutes, "HH-mm").format("hh:mma")} - ${moment(p.close.hours + "-" + p.close.minutes, "HH-mm").format("hh:mma")}`
+  }
+
   public presentToast(message) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000
-    });
-    toast.present();
+    // let toast = this.toastCtrl.create({
+    //   message: message,
+    //   duration: 3000
+    // });
+    // toast.present();
   }
 
 }

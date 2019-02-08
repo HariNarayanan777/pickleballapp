@@ -15,71 +15,84 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
-  <ion-searchbar id="search-courts-input-view" placeholder="Change your location" [hidden]="!isChangingLocation()" type="text"
-    showCancelButton="true"></ion-searchbar>
+  <div [hidden]="!_viewMap" id="map_court" style="width: 100%; height: 300px;"></div>
 
-  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
-  </div>
-
-  <div id="banner" [hidden]="_viewMap" [style.backgroundImage]="getBanner()">
-    <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!court.photos">
+  <img class="img-active" [hidden]="_viewMap" *ngIf="isSavedCourt(court).saved" (click)="saveOrRemove()" src="assets/imgs/heart-active.png">
+  <img class="img-active" [hidden]="_viewMap" *ngIf="!isSavedCourt(court).saved" (click)="saveOrRemove()" src="assets/imgs/heart-unactive.png">
+  
+  <!-- BUTTONS NEXT Y BACK SLIDE -->
+  <img id="back-slide" [hidden]="_viewMap" (click)="backSlide()" class="buttons-slide" src="assets/imgs/back-slide.png">
+  <img id="next-slide" [hidden]="_viewMap" (click)="nextSlide()" class="buttons-slide" src="assets/imgs/next-slide.png">
+  <div id="banner" [hidden]="_viewMap">
+    <ion-slides slidesPerView="1" autoplay="true" #mySlide loop="3000" pager="false" [hidden]="!court.photos">
       <ion-slide *ngFor="let img of court.photos">
         <img [src]="img">
       </ion-slide>
     </ion-slides>
   </div>
 
-  <div id="button-view" [hidden]="type==='players'">
+  <div id="button-view">
     <button ion-button color="secondary" style="color:black;" (click)="viewMap()">{{_viewMap===true?'Hide Map':'View
       Map'}}</button>
   </div>
 
-  <div id="location" [hidden]="type==='players'">
+  <div id="location">
     <div class="details">
-      <h2>Current Location</h2>
-      <p><span (click)="changeDateStart()">{{dateStart | date:'EEE,
-          MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
-          | date:'EEE, MMM dd'}}</span></p>
+      <h2>{{court.name}}</h2>
+      <div>
+        <img src="./assets/imgs/pin-red.png">
+        <p>{{court.location}}</p>
+      </div>
     </div>
     <div class="action">
-      <button ion-button style="background-color: white; color: black;" (click)="changeSearch()">Change Search</button>
+      <button ion-button style="background-color: white; color: black;">
+        <a target="_blank" href="https://www.google.com/maps/@{{court.lat}},{{court.lng}},15z">Get Directions</a>
+      </button>
+    </div>
+  </div>
+  <div class="others">
+    <ion-row>
+      <ion-col *ngIf="court.website">
+        <a target="_black" [href]="court.website">Visit WebSite</a>
+      </ion-col>
+      <ion-col *ngIf="court.formatted_phone_number">
+        <a href="tel:{{court.formatted_phone_number}}">{{court.formatted_phone_number}}</a>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="players-chekend" *ngIf="orderXSkill.length>0">
+    <div class="th">
+      <h2>connected players</h2>
+      <h2>Levels</h2>
+    </div>
+    <div class="tr" *ngFor="let skill of orderXSkill">
+      <span>{{skill.users.length}} players checkend-in</span>
+      <span>{{skill.skill}}</span>
     </div>
   </div>
 
-  <ion-card>
+  <div id="hours" *ngIf="court.opening_hours">
+    <div class="th">
+      <h2>Hours of Operation</h2>
+      <div class="status" [ngClass]="court.opening_hours.open_now === true ? 'open' : 'close'">
+        {{court.opening_hours.open_now === true ? 'OPEN' : 'CLOSE'}}
+      </div>
+    </div>
+    <div class="periods" *ngFor="let p of court.opening_hours.periods">
+      <h2>{{getDay(p.open)}}</h2>
+      <span>{{getPeriod(p)}}</span>
+    </div>
+  </div>
 
-    <ion-item>
-      <h2>{{court.name}}</h2>
-      <p>{{court.location}}</p>
-      <a target="_blank" href="https://www.google.com/maps/@{{court.lat}},{{court.lng}},15z">Directions</a>
-    </ion-item>
 
-    <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!court.photos">
-      <ion-slide *ngFor="let img of court.photos">
-        <img [src]="img">
-      </ion-slide>
-    </ion-slides>
-
-    <ion-item>
-      <h4>Rating</h4>
-      <p>{{court.rating}}</p>
-    </ion-item>
-
-    <div id="map_court" style="width: 100%; height: 300px;"></div>
-
-  </ion-card>
-
-  <ion-list id="users-courts">
-    <ion-item *ngFor="let skill of orderXSkill">Skill Level: {{skill.skill}} - {{skill.users.length}} Players</ion-item>
-  </ion-list>
-
-  <ion-fab bottom right>
-    <button ion-fab icon-only [style.backgroundColor]="isSavedCourt(court).saved===false?'#488aff':'#f53d3d'" (click)="saveOrRemove()">
-      <!-- <ion-icon name="md-add"></ion-icon> -->
+  <!-- <ion-fab bottom right>
+    <button ion-fab icon-only [style.backgroundColor]="isSavedCourt(court).saved===false?'#488aff':'#f53d3d'"
+      (click)="saveOrRemove()">
       {{isSavedCourt(court).saved===true?'Remove':'Save'}}
     </button>
-  </ion-fab>
+  </ion-fab> -->
 
 </ion-content>
