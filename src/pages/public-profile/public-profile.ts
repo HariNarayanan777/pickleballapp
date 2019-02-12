@@ -36,7 +36,12 @@ export class PublicProfilePage {
       this.fullName = data['fullName'];
       this.email = data['email'];
       this.rank = data['rank'];
-      this.profileImg = `https://graph.facebook.com/${data['loginFacebook']['userID']}/picture?type=large&width=720&height=720` || data['image']['src'] || '../../assets/imgs/default-user.png';
+      if(data['loginFacebook'] !== null && data['loginFacebook'] !== undefined){
+        this.profileImg = `https://graph.facebook.com/${data['loginFacebook']['userID']}/picture?type=large&width=720&height=720`
+      }else if(data['image'] !== null && data['image'] !== undefined){
+        this.profileImg = data['image']['src'];
+      }else
+        this.profileImg = 'assets/imgs/default-user.png';
     });
 
   }

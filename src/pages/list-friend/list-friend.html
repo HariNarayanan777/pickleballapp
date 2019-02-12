@@ -8,17 +8,83 @@
 
 
 <ion-content padding>
-  <ion-searchbar (input)="onSearchInput()" [(ngModel)]="searchTerm" showCancelButton="true"
-    (ionCancel)="cancel()"></ion-searchbar>
 
-  <ion-list>
-    <ion-item [hidden]="!validFiltro(user)" *ngFor="let user of list" (click)="toChatView(user)">
-      <ion-avatar item-start>
-        <img [src]="user.photo" (error)="errorImage($event)">
-      </ion-avatar>
-      {{user.fullName}}
-      <ion-icon *ngIf="toChat===false" name="ios-trash-outline" item-end color="danger" (click)="deleteFriend(user)"></ion-icon>
+  <ion-grid>
+    <ion-row>
+      <input type="text" placeholder="Find New Friends" [(ngModel)]="searchTerm" (ngModelChange)="onSearchInput()">
+      <!-- <ion-searchbar (input)="onSearchInput()"  showCancelButton="true" (ionCancel)="cancel()">
+      </ion-searchbar> -->
+      <button ion-button>SEARCH</button>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <ion-list hidden>
+    <ion-item class="title">
+      My Friends
     </ion-item>
-  </ion-list>
+    <ion-item [hidden]="!validFiltro(user)" *ngFor="let user of list" (click)="toChatView(user)">
+      <img item-start [src]="user.photo" (error)="errorImage($event)">
+      <div>
+        <h2>{{user.fullName}}</h2>
+      </div>
+      <ion-icon *ngIf="toChat===false" name="ios-trash-outline" item-end color="danger" (click)="deleteFriend(user)">
+      </ion-icon>
+    </ion-item>
+  </ion-list> -->
+
+  <div class="sections" *ngIf="searchTerm===''">
+    <div class="title">
+      <h2>My Friends</h2>
+      <!-- <i class="fa fa-angle-right" aria-hidden="true"></i> -->
+    </div>
+
+    <div class="body">
+      <div class="item friend" [hidden]="!validFiltro(user)" *ngFor="let f of list">
+        <img [src]="f.photo" (click)="goToFriendProfile(f.id)" (error)="errorImage($event)">
+        <div class="datas">
+          <div (click)="goToFriendProfile(f.id)">
+            <h2>Player:</h2> <span>{{f.fullName}}</span>
+          </div>
+          <div (click)="goToFriendProfile(f.id)">
+            <h2>Location:</h2> <span>{{f.location}}</span>
+          </div>
+          <div (click)="goToFriendProfile(f.id)">
+            <h2>Level:</h2> <span>{{f.rank}}</span>
+          </div>
+        </div>
+        <div class="go" (click)="deleteFriend(f)">
+          REMOVE
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sections" *ngIf="searchTerm!==''">
+      <div class="title">
+        <h2>Peoples</h2>
+        <!-- <i class="fa fa-angle-right" aria-hidden="true"></i> -->
+      </div>
+  
+      <div class="body">
+        <div class="item friend" [hidden]="!isFriend(f)" *ngFor="let f of listPeople">
+          <img [src]="f.photo" (click)="goToFriendProfile(f.id)" (error)="errorImage($event)">
+          <div class="datas">
+            <div (click)="goToFriendProfile(f.id)">
+              <h2>Player:</h2> <span>{{f.fullName}}</span>
+            </div>
+            <div (click)="goToFriendProfile(f.id)">
+              <h2>Location:</h2> <span>{{f.location}}</span>
+            </div>
+            <div (click)="goToFriendProfile(f.id)">
+              <h2>Level:</h2> <span>{{f.rank}}</span>
+            </div>
+          </div>
+          <div class="go" (click)="checkFriendRequest(f, $event)" *ngIf="isFriend(f)" [innerHtml]="sendRequestAllow(f) === true ? 'Add': 'Cancel' ">
+          </div>
+        </div>
+      </div>
+  
+    </div>
 
 </ion-content>

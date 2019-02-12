@@ -4,7 +4,6 @@ import * as moment from "moment";
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
-import { HelpersProvider } from '../../providers/helpers/helpers';
 
 declare var google;
 
@@ -155,7 +154,6 @@ export class ViewCourtPage {
 
   public isSavedCourt() {
     let index = this.court.users.findIndex(it => {
-      if (it.id === this.idUser) console.log(it.id, this.idUser);
       return it.id === this.idUser;
     });
     return index !== -1;

@@ -46,14 +46,13 @@ export class AccountPage {
   segment: any = 'events';
 
   public address = "";
+  public map: any = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    private fb: Facebook,
-    private storage: Storage,
-    private app: App,
-    private rest: RestProvider,
-    public modalCtrl: ModalController,
-    public http: HttpClient,
+  constructor(
+    public navCtrl: NavController, public navParams: NavParams,
+    private fb: Facebook, private storage: Storage,
+    private app: App, private rest: RestProvider,
+    public modalCtrl: ModalController, public http: HttpClient,
     private platform: Platform
   ) {
     this.init();
@@ -61,6 +60,16 @@ export class AccountPage {
 
   async ionViewWillEnter() {
     try {
+      try {
+        await this.getFriends();
+        let user = await AuthProvider.me.getIdUser(),
+          query: any = { user };
+        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
+        query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
+        this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
+      } catch (error) {
+        console.error(error);
+      }
       await LiveComunicationProvider.reloadGoogleplaces();
       try {
         let miPosition = await HelpersProvider.me.getMyPosition();
@@ -74,20 +83,22 @@ export class AccountPage {
       } catch (error) {
         console.error(error);
       }
-      try {
-        await this.getFriends();
-        let user = await AuthProvider.me.getIdUser(),
-          query: any = { user };
-        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
-        query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
-        this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
-      } catch (error) {
-        console.error(error);
-      }
     }
     catch (e) {
       console.error(e);
     }
+  }
+
+  async ionViewDidLoad() {
+    await LiveComunicationProvider.reloadGoogleplaces();
+    let mapOptions: any = {
+      center: {
+        lat: 36.778259,
+        lng: -119.417931
+      },
+      zoom: 12
+    };
+    this.map = new google.maps.Map(document.getElementById("map_tls_account"), mapOptions);
   }
 
   public transformUrl(img) {
@@ -96,7 +107,7 @@ export class AccountPage {
 
   private getAddress(lat, lng) {
     let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'location': { lat, lng } }, (res, status) => {
+    geocoder.geocode({ 'location': { lat, lng } }, async (res, status) => {
 
       if (Object.prototype.toString.call(res) === "[object Array]") {
         if (res.length === 0) return;
@@ -105,6 +116,10 @@ export class AccountPage {
 
       if (res.geometry) {
         this.address = res.formatted_address;
+        await this.http.put(`/user-location`,{
+          location: this.address,
+          idUser: this.userID
+        }).toPromise();
       }
 
     });
@@ -120,14 +135,10 @@ export class AccountPage {
         user = it.to;
       else
         user = it.from;
-      user.photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+      user.photo = HelpersProvider.me.getPhotoUrl(user);
       user.requestID = it.id;
       return user;
     });
-  }
-
-  private validProperty(prop) {
-    return prop !== undefined && prop !== null;
   }
 
   public validNear() {
@@ -149,23 +160,12 @@ export class AccountPage {
   }
 
   init() {
-    this.getProfileImage();
     this.storage.get('USER_ID').then(res => {
       this.userID = res;
       this.getProfile();
-
     });
   }
 
-  getProfileImage() {
-    this.fb.api('me?fields=picture.width(720).height(720).as(picture_large)', []).then(picture => {
-      this.profileImg = picture['picture_large']['data']['url'];
-      console.log("imafe", this.profileImg);
-    }, err => {
-      console.log("error", err);
-      this.profileImg = '../../assets/imgs/default-user-2.png'
-    })
-  }
 
   public errorUserImage(e) {
     e.target.src = "assets/imgs/default-user-2.png";
@@ -216,11 +216,13 @@ export class AccountPage {
       this.email = data['email'];
       this.zipcode = data['zipCode'];
       this.rank = data['rank'];
+      this.address = data["location"];
+      this.profileImg = HelpersProvider.me.getPhotoUrl(data);
     });
 
   }
 
-  presentModal() {
+  public presentModal() {
     const modal = this.modalCtrl.create(UpdateAccountPage);
     modal.onDidDismiss(data => {
       if (data['updated'] == true) {
@@ -274,8 +276,12 @@ export class AccountPage {
       registrationStart: it.date,
       endRegistration: it.date,
       note: it.travelInfo
-    }
+    };
     this.navCtrl.push(ViewTournamentPage, { tournament: ev, isEvent: true });
+  }
+
+  public toCourt(court) {
+    CourtsSavedPage.toCourtDetails(this, court);
   }
 
   public toHome() {

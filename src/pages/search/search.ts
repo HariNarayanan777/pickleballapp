@@ -5,6 +5,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { Storage } from '@ionic/storage';
 import { Push } from '@ionic-native/push';
 import { PublicProfilePage } from '../public-profile/public-profile';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 
 @IonicPage()
@@ -42,10 +43,7 @@ export class SearchPage {
   }
 
   public getUrlImage(player){
-    if(player.loginFacebook){
-      return player.loginFacebook.image;
-    }
-    return "";
+    return HelpersProvider.me.getPhotoUrl(player);
   }
 
   onSearchInput() {
@@ -64,7 +62,6 @@ export class SearchPage {
   getdata() {
     this.rest.getData(`/users/finds/${this.userID}?name=${this.searchTerm}`).subscribe(
       result => {
-        console.log("Result", result);
         this.players = result;
       },
       err => {
@@ -135,17 +132,17 @@ export class SearchPage {
 
   cancelRequestActionSheet($event, request) {
     const actionSheet = this.actionSheetCtrl.create({
-      title: 'Modify your album',
+      title: 'Cancel Request?',
       buttons: [
         {
-          text: 'Cancel Request',
+          text: 'Yes',
           role: 'destructive',
           handler: () => {
             console.log('Destructive clicked');
             this.cancelRequest($event, request);
           }
         }, {
-          text: 'Cancel',
+          text: 'No',
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');

@@ -280,4 +280,20 @@ export class HelpersProvider {
     var blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+
+  public getPhotoUrl(user, indexImage?:number) {
+    let profileImg = "";
+
+    if (user['loginFacebook'] !== null && user['loginFacebook'] !== undefined) {
+      profileImg = `https://graph.facebook.com/${user['loginFacebook']['userID']}/picture?type=large&width=720&height=720`
+    } else if (user['image'] !== null && user['image'] !== undefined) {
+      profileImg = user['image']['src'];
+    } else if(indexImage === 1){
+      profileImg = 'assets/imgs/default-user.png';
+    }else
+      profileImg = 'assets/imgs/default-user-2.png';
+
+    return profileImg;
+  }
+
 }

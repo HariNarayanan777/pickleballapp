@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 import { ChatPage } from '../chat/chat';
 import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 @IonicPage()
 @Component({
@@ -25,17 +26,13 @@ export class ListChatPage {
     let userID: any = await AuthProvider.me.getIdUser();
     let users = await this.http.get(`/list-chat/${userID}`).toPromise() as any[];
     this.users = users.map(user => {
-      user.photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+      user.photo = HelpersProvider.me.getPhotoUrl(user, 1);
       return user;
     });
   }
 
   public errorImage(e) {
     e.target.src = "./assets/imgs/default-user.png";
-  }
-
-  private validProperty(prop) {
-    return prop !== undefined && prop !== null;
   }
 
   public toChat(user) {

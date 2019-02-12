@@ -9,6 +9,7 @@ import 'rxjs/add/observable/fromEvent';
 import { Storage } from '@ionic/storage';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { TabsPage } from '../tabs/tabs';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 @IonicPage()
 @Component({
@@ -40,10 +41,7 @@ export class ChatPage {
     private viewCtrl: ViewController
   ) {
     this.to = this.navParams.get("user");
-    console.log(this.to);
-    if (this.to.loginFacebook) {
-      this.photo = this.to.loginFacebook.image || "";
-    }
+    this.photo = HelpersProvider.me.getPhotoUrl(this.to);
   }
 
   ngAfterViewInit() {

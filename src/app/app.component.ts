@@ -35,7 +35,7 @@ export class MyApp {
     platform.ready().then(() => {
       splashScreen.hide();
       statusBar.overlaysWebView(false);
-      statusBar.backgroundColorByHexString('#bea805');
+      statusBar.backgroundColorByHexString('#7dff2f');
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
           this.rootPage = TabsPage;
