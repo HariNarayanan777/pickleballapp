@@ -18,6 +18,7 @@ export class ViewTournamentPage {
   public save = false;
   public userID = "";
   public tournaments = [];
+  public isEvent = false;
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -25,6 +26,9 @@ export class ViewTournamentPage {
   ) {
     if (this.navParams.get("save") !== undefined) {
       this.save = true;
+    }
+    if (this.navParams.get("isEvent") === true) {
+      this.isEvent = true;
     }
   }
 
@@ -128,7 +132,7 @@ export class ViewTournamentPage {
     }
   }
 
-  public getUrl(url){
+  public getUrl(url) {
     return url.includes("/" + this.tournament.id) === true ? InterceptorProvider.tranformUrl(url) : url;
   }
 }

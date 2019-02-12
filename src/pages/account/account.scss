@@ -1,167 +1,137 @@
 page-account {
-    .toolbar-background {
+    .back-button {
+        display: none !important;
+    }
+    #logo-navbar {
+        width: 200px;
+        margin-left: calc(50% - 100px);
+    }
+    .toolbar-background,
+    .scroll-content {
         background: #000000 !important;
     }
-    .toolbar-ios ion-title {
-        padding: 0 50px 1px !important;
-        padding-top: 30px !important;
-    }
-    ion-navbar {
-        padding-top: 20px !important;
-        min-height: 60px !important;
-        height: 60px !important;
-        button {
-            color: #bea805 !important;
-        }
-        ion-title {
-            text-align: left;
-            .toolbar-title-ios,
-            .toolbar-title-md {
-                text-align: left;
-                color: #fff;
-            }
-        }
-        .text-btn {
-            border: none !important;
-            color: #fff !important;
-            text-transform: uppercase;
-            padding-right: 25px;
-            letter-spacing: 1px;
-        }
-    }
-    ion-content {
-        background-color: #eae5e5;
-        background-image: linear-gradient(#eae5e5, #222731);
-        .scroll-content {
-            padding-top: 40px !important;
-            .title-name {
-                color: #fff;
-                text-align: center;
-                font-weight: bold;
-                font-size: 18px;
-                margin-bottom: 5px;
-            }
-            .location {
-                color: #000;
-                text-align: center;
-                font-size: 15px;
-                margin: 0;
-                ion-icon {
-                    color: #bea805;
-                    margin-right: 5px;
-                }
-            }
-            .description {
-                color: #fff;
-                text-align: center;
-                font-size: 12px;
-                font-weight: 500;
-                width: 80%;
-                margin: 12px auto;
-            }
-            ion-segment {
-                margin-top: 30px;
-                margin-bottom: 0px;
-                justify-content: center;
-                align-items: center;
-                display: flex;
-                span {
-                    font-size: 16px;
-                    line-height: 2.8rem;
-                    margin-left: 5px;
-                    font-weight: 500;
-                }
-            }
-            .segment-button {
-                background: transparent !important;
-                border: none !important;
-                color: #fff !important;
-                border-radius: 0 !important;
-            }
-            .segment-button.segment-activated {
-                background: transparent !important;
-                border: none !important;
-                border-bottom: 2px solid #bea805 !important;
-                color: #fff;
-                border-radius: 0 !important;
-            }
-            .segments {
-                width: 100% !important;
-                .segment-title {
-                    margin: 0;
-                    color: #fff !important;
-                    font-size: 15px;
-                    text-transform: uppercase;
-                    font-weight: 400;
-                    letter-spacing: 1px;
-                    padding-left: 15px;
-                    margin-top: 10px;
-                }
-            }
-        }
-        .friend-item {
-            background-color: transparent !important;
-            color: white !important;
-            padding-left: 20px !important;
-            .item-inner {
-                border-width: 0 !important;
-            }
-        }
-        #buttons-actions {
-            ion-item {
-                background-color: transparent !important;
-                color: white !important;
-                button {
-                    padding: 20px 5px;
-                    font-weight: normal;
-                    border-radius: 20px;
-                    color: #898a8b !important;
-                    border: none;
-                    background: #222731;
-                    font-weight: 600; 
-                    text-transform: uppercase;
-                }
-                .item-inner {
-                    border-width: 0 !important;
-                }
-            }
-        }
-    }
-    ion-header {
-        ion-toolbar {
-            min-height: 40px !important;
-            box-shadow: none !important;
-            .toolbar-content {
-                text-align: center;
-                order: 2;
-            }
-            .start-btn {
-                order: 1;
-            }
-            .end-btn {
-                order: 2;
-            }
-        }
-    }
-    ion-header:after {
-        background: none !important;
-    }
-    .image-holder {
-        text-align: center;
+    #profile-datas {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        flex-wrap: wrap;
         img {
-            height: 120px;
-            width: 120px;
-            border-radius: 50%;
+            width: 80px;
+            flex-basis: 80px;
+            height: 80px;
+            border-radius: 1px;
+        }
+        #datas {
+            padding-left: 10px;
+            div {
+                width: 100%;
+                flex-basis: 100%;
+                display: flex;
+                height: 1.4rem;
+                margin-bottom: 4px;
+            }
+            div h2,
+            div span {
+                color: white;
+                line-height: 1.4rem;
+                height: 1.3rem;
+            }
+            div h2 {
+                font-size: 1.4rem;
+                margin: 0;
+                text-transform: uppercase;
+                width: 72px;
+                flex-basis: 72px;
+            }
+            div span {
+                padding-left: 10px;
+                font-size: 1.3rem;
+            }
+        }
+        h3 {
+            width: 100%;
+            flex-basis: 100%;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: normal;
+            font-size: 1.2rem;
             text-align: center;
         }
     }
-    .star-rank {
-        text-align: center;
-        ion-icon {
-            font-size: 20px;
-            color: gold;
+    .sections {
+        padding: 20px;
+        background-color: #292929;
+        margin-bottom: 3px;
+        .title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            h2,
+            i {
+                color: #cccccc;
+                font-size: 1.6rem;
+                margin: 0;
+            }
+            i {
+                font-size: 1.7rem;
+            }
+        }
+        .body {
+            .item {
+                display: flex;
+                margin-bottom: 15px;
+                padding-left: 10px;
+                img {
+                    width: 80px;
+                    flex-basis: 80px;
+                    height: 80px;
+                    margin-right: 20px;
+                }
+                h2 {
+                    font-size: 1.6rem;
+                    flex-basis: 72px;
+                    margin: 0;
+                }
+                h2,
+                span {
+                    color: #cccccc;
+                }
+            }
+            .item.friend .datas div {
+                display: flex;
+                margin-bottom: 3px;
+                h2 {
+                    width: 72px;
+                }
+            }
+            .item.court{
+                align-items: center;
+            }
+            .item.court .datas{
+                width: calc(100% - 160px);
+                flex-basis: calc(100% - 160px);
+            }
+            .item.court .datas h2:first-child {
+                text-decoration: underline;
+            }
+            .item.court .datas h2 {
+                font-size: 1.5rem;
+                padding-right: 5px;
+            }
+            .item.court .go {
+                padding: 0 8px;
+                color: #cccccc;
+                font-size: 1.5rem;
+                border: 1px solid #cccccc;
+                width: 60px;
+                text-align: center;
+                height: 30px;
+                line-height: 30px;
+            }
+            .item.event img{
+                object-fit: cover;
+            }
         }
     }
-
-
 }

@@ -10,7 +10,7 @@
 <ion-content padding>
 
   <ion-card *ngFor="let court of courts">
-    <ion-item>
+    <ion-item (click)="toCourtDetails(court)">
       <h2>{{court.name}}</h2>
       <p>Rating: {{court.rating}}</p>
     </ion-item>
@@ -22,5 +22,7 @@
       </p>
     </ion-card-content>
   </ion-card>
+
+  <div id="map_tls"></div>
 
 </ion-content>

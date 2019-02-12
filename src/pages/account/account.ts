@@ -18,7 +18,12 @@ import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CreateEventPage } from '../create-event/create-event';
 import { ShareEventFriendsPage } from '../share-event-friends/share-event-friends';
+import { TabsPage } from '../tabs/tabs';
+import { InterceptorProvider } from '../../providers/interceptor/interceptor';
+import { ViewTournamentPage } from '../view-tournament/view-tournament';
+import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 
+declare var google: any;
 
 @IonicPage()
 @Component({
@@ -40,6 +45,8 @@ export class AccountPage {
   public resultsTournaments = [];
   segment: any = 'events';
 
+  public address = "";
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private fb: Facebook,
     private storage: Storage,
@@ -54,23 +61,53 @@ export class AccountPage {
 
   async ionViewWillEnter() {
     try {
-      let miPosition = await HelpersProvider.me.getMyPosition();
-      if (miPosition) {
-        let lng = miPosition.coords.longitude;
-        let lat = miPosition.coords.latitude;
-        this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
-        this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
+      await LiveComunicationProvider.reloadGoogleplaces();
+      try {
+        let miPosition = await HelpersProvider.me.getMyPosition();
+        if (miPosition) {
+          let lng = miPosition.coords.longitude;
+          let lat = miPosition.coords.latitude;
+          this.getAddress(lat, lng);
+          this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
+          this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      try {
         await this.getFriends();
         let user = await AuthProvider.me.getIdUser(),
           query: any = { user };
-        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}`).toPromise() as any[];
+        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
         query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
-        this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=10`).toPromise() as any[];
+        this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
+      } catch (error) {
+        console.error(error);
       }
     }
     catch (e) {
       console.error(e);
     }
+  }
+
+  public transformUrl(img) {
+    return InterceptorProvider.tranformUrl(img)
+  }
+
+  private getAddress(lat, lng) {
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'location': { lat, lng } }, (res, status) => {
+
+      if (Object.prototype.toString.call(res) === "[object Array]") {
+        if (res.length === 0) return;
+        res = res[0];
+      }
+
+      if (res.geometry) {
+        this.address = res.formatted_address;
+      }
+
+    });
   }
 
   async getFriends() {
@@ -126,8 +163,12 @@ export class AccountPage {
       console.log("imafe", this.profileImg);
     }, err => {
       console.log("error", err);
-      this.profileImg = '../../assets/imgs/default-user.png'
+      this.profileImg = '../../assets/imgs/default-user-2.png'
     })
+  }
+
+  public errorUserImage(e) {
+    e.target.src = "assets/imgs/default-user-2.png";
   }
 
   async logout() {
@@ -197,8 +238,8 @@ export class AccountPage {
     this.navCtrl.push(FutureTournamentsPage);
   }
 
-  public toSavedTournments() {
-    this.navCtrl.push(SavedTournamentsPage);
+  public toSavedTournments(isEvents) {
+    this.navCtrl.push(SavedTournamentsPage, { isEvents });
   }
 
   public toSavedCourts() {
@@ -219,6 +260,26 @@ export class AccountPage {
 
   public toShareEvent(event) {
     this.navCtrl.push(ShareEventFriendsPage, { event });
+  }
+
+  public toEvent(it) {
+    let ev = {
+      title: it.name,
+      address: it.locationText,
+      imgs: it.images !== undefined && it.images.length > 0 ? it.images : ['assets/imgs/court-sport-default.jpg'],
+      id: it.id,
+      coordinates: it.locationCoords,
+      type: "event",
+      dates: it.matchTimes,
+      registrationStart: it.date,
+      endRegistration: it.date,
+      note: it.travelInfo
+    }
+    this.navCtrl.push(ViewTournamentPage, { tournament: ev, isEvent: true });
+  }
+
+  public toHome() {
+    TabsPage.toTab(0);
   }
 
 }

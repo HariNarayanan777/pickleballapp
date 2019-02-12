@@ -64,7 +64,7 @@ import { SelectPointMapPage } from '../pages/select-point-map/select-point-map';
 import { SelectPointMapPageModule } from '../pages/select-point-map/select-point-map.module';
 import { ShareEventFriendsPage } from '../pages/share-event-friends/share-event-friends';
 import { ShareEventFriendsPageModule } from '../pages/share-event-friends/share-event-friends.module';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing';
 import { Camera } from '@ionic-native/camera';
 import { CameraPageModule } from '../pages/camera/camera.module';
 import { CameraPage } from '../pages/camera/camera';

@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Tournament</ion-title>
+    <ion-title>{{isEvent===false?'Tournament':'Event'}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -14,45 +14,47 @@
     <ion-item>
       <h2>{{tournament.title}}</h2>
       <p>{{tournament.address}}</p>
-      <a target="_blank" href="https://www.google.com/maps/@{{tournament.coordinates[1]}},{{tournament.coordinates[0]}},15z">Directions</a>
-    </ion-item>
+      <a target="_blank"
+        href="https://www.google.com/maps/@{{tournament.coordinates[1]}},{{tournament.coordinates[0]}},15z">Directions</a>
+      </ion-item>
 
-    <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!tournament.imgs">
-      <ion-slide *ngFor="let img of tournament.imgs">
-        <img [src]="getUrl(img)">
-      </ion-slide>
-    </ion-slides>
+      <ion-slides slidesPerView="1" autoplay="true" loop="3000" pager="true" [hidden]="!tournament.imgs">
+        <ion-slide *ngFor="let img of tournament.imgs">
+          <img [src]="getUrl(img)">
+        </ion-slide>
+      </ion-slides>
 
-    <ion-item *ngIf="tournament.dates">
-      <h4>Dates</h4>
-      <p>{{tournament.dates}}</p>
-    </ion-item>
+      <ion-item *ngIf="tournament.dates">
+        <h4>Dates</h4>
+        <p>{{tournament.dates}}</p>
+      </ion-item>
 
-    <!-- <ion-card-content>
+      <!-- <ion-card-content>
       <h4>Address</h4>
       <p>{{tournament.address}}</p>
     </ion-card-content> -->
 
-    <ion-row>
-      <ion-col col-6 *ngIf="tournament.registrationStart">
-        <h4>Registration Start</h4>
-        <p>{{dateToFormat(tournament.registrationStart)}}</p>
-      </ion-col>
-      <ion-col col-6 *ngIf="tournament.endRegistration">
-        <h4>Registration End</h4>
-        <p>{{dateToFormat(tournament.endRegistration)}}</p>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col col-6 *ngIf="tournament.registrationStart">
+          <h4>Registration Start</h4>
+          <p>{{dateToFormat(tournament.registrationStart)}}</p>
+        </ion-col>
+        <ion-col col-6 *ngIf="tournament.endRegistration">
+          <h4>Registration End</h4>
+          <p>{{dateToFormat(tournament.endRegistration)}}</p>
+        </ion-col>
+      </ion-row>
 
-    <div id="map_tournament" style="width: 100%; height: 300px;"></div>
+      <div id="map_tournament" style="width: 100%; height: 300px;"></div>
 
-  </ion-card>
+      </ion-card>
 
-  <ion-fab bottom right *ngIf="save">
-    <button ion-fab icon-only [style.backgroundColor]="saved()===false?'#488aff':'#f53d3d'" (click)="addOrRemove(tournament, saved())">
-      <!-- <ion-icon name="md-add"></ion-icon> -->
-      {{saved()===true?'Remove':'Save'}}
-    </button>
-  </ion-fab>
+      <ion-fab bottom right *ngIf="save">
+        <button ion-fab icon-only [style.backgroundColor]="saved()===false?'#488aff':'#f53d3d'"
+          (click)="addOrRemove(tournament, saved())">
+          <!-- <ion-icon name="md-add"></ion-icon> -->
+          {{saved()===true?'Remove':'Save'}}
+        </button>
+      </ion-fab>
 
-</ion-content>
+      </ion-content>

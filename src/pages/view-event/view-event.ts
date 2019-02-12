@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ToastController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController, ActionSheetController, Loading, LoadingController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { HelpersProvider } from '../../providers/helpers/helpers';
@@ -50,16 +50,18 @@ export class ViewEventPage {
 
   public courst = [];
   public courstSaved = [];
-  public courstSaveds = [];
+  // public courstSaveds = [];
   public markers = [];
 
   //Para la busquedad de event
   public events = [];
 
+  public load: Loading;
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public viewCtrl: ViewController, public http: HttpClient,
     private zone: NgZone, private rest: RestProvider, public toastCtrl: ToastController,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController
   ) {
     this.type = this.navParams.get("type");
   }
@@ -291,6 +293,8 @@ export class ViewEventPage {
   }
 
   private async getCourts() {
+    this.load = this.loadingCtrl.create();
+    this.load.present({ disableApp: true });
     this.courst = [];
     this.cleanMarkers();
     let defaultBounds = new google.maps.LatLng(this.lat, this.lng);
@@ -429,6 +433,7 @@ export class ViewEventPage {
       this.markers.push(marker);
     }
     this.setEventToMarkers();
+    this.load.dismiss();
     this.zone.run(function () { console.log("fetch courts"); });
   }
 
@@ -452,6 +457,11 @@ export class ViewEventPage {
     let court = this.courst.find(it => {
       return it.lat === lat && it.lng === lng;
     });
+    let save = this.isSavedCourt(court);
+    if (save.saved === true) {
+      court.id = this.courstSaved[save.index].id;
+    } else
+      delete court.id;
     if (court !== null && court !== undefined) {
       let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number', 'formatted_phone_number']
       let service = new google.maps.places.PlacesService(this.map);
@@ -459,14 +469,15 @@ export class ViewEventPage {
         placeId: court.place_id,
         fields
       };
-      service.getDetails(request, place => { console.log(place);
+      service.getDetails(request, place => {
+        console.log(place);
         court.photos = place.photos ? place.photos.map(it => it.getUrl({ 'maxWidth': 600, 'maxHeight': 200 })) : court.photos;
         court.website = place.website || undefined;
         court.formatted_phone_number = place.formatted_phone_number || undefined;
         court.opening_hours = place.opening_hours || undefined;
         this.navCtrl.push(ViewCourtPage, { court });
       });
-      
+
     }
 
   }
@@ -474,29 +485,16 @@ export class ViewEventPage {
   private async getCourtsSaved() {
     let user = await AuthProvider.me.getIdUser();
     let query = { user };
-    this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
-    this.courstSaveds = await this.http.get(`/court?limit=400`).toPromise() as any[];
+    this.courstSaved = await this.http.get(`/court-find?where=${JSON.stringify(query)}`).toPromise() as any[];
+    // this.courstSaveds = await this.http.get(`/court?limit=400`).toPromise() as any[];
   }
 
   public getUsersCourt(court) {
-    let users = [];
-    if (court.lng !== null && court.lng !== undefined &&
-      court.lat !== null && court.lat !== undefined) {
-      try {
-        let _courts = this.courstSaveds.filter(it => {
-          return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
-        });
-        // console.log(_courts);
-        users = _courts.map(it => {
-          return it.user;
-        });
-        users = users.filter(it => { return it !== undefined && it !== null && it.id !== this.userID; })
-      }
-      catch (e) {
-        console.error(e);
-      }
-    }
-    return users;
+    let index = this.courstSaved.findIndex(it => {
+      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+    });
+    if (index !== -1) return court.users;
+    return [];
   }
 
   public async saveCourt(court) {
@@ -530,8 +528,6 @@ export class ViewEventPage {
 
   public isSavedCourt(court) {
     let index = this.courstSaved.findIndex(it => {
-      // console.log(it.coordinates.lng === court.lng && it.coordinates.lat === court.lat);
-      // console.log(it.coordinates.lng, court.lng, it.coordinates.lat, court.lat);
       return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
     });
     if (index === -1) {

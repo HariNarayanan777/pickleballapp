@@ -1,22 +1,4 @@
 <!-- <ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons start class="start-btn">
-      <button ion-button icon-only (click)="presentModal()">
-        <ion-icon name="ios-create-outline"></ion-icon>
-      </button>
-    </ion-buttons>
-
-    <ion-title>Account</ion-title>
-
-    <ion-buttons end class="end-btn">
-      <button ion-button icon-only (click)="logout()">
-        <ion-icon name="ios-log-out"></ion-icon>
-      </button>
-    </ion-buttons>
-
-  </ion-toolbar>
-</ion-header> -->
-<ion-header>
   <ion-navbar>
     <ion-buttons start style="order: 1">
       <button ion-button icon-only (click)="presentModal()">
@@ -31,29 +13,113 @@
     </ion-buttons>
   </ion-navbar>
 
+</ion-header> -->
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button style="color: white;" (click)="toHome()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        &nbsp;&nbsp;
+        <!-- <ion-icon name="arrow-back"></ion-icon> -->
+        Home
+      </button>
+    </ion-buttons>
+    <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
+  </ion-navbar>
+
 </ion-header>
 
 <ion-content>
 
-  <ion-grid>
-    <ion-row padding>
-      <ion-col col-12>
-        <div class="image-holder">
-          <img [src]="profileImg" alt="">
+  <div id="profile-datas">
+    <img [src]="profileImg">
+    <div id="datas">
+      <div>
+        <h2>PLAYER:</h2> <span>{{fullName}}</span>
+      </div>
+      <div>
+        <h2>location:</h2> <span>{{address}}</span>
+      </div>
+      <div>
+        <h2>level:</h2> <span>{{rank}}</span>
+      </div>
+      <div>
+        <h2>email:</h2> <span>{{email}}</span>
+      </div>
+    </div>
+    <h3 (click)="presentModal()">
+      <ion-icon name="create"></ion-icon> Manage Profile
+    </h3>
+  </div>
+
+  <div class="sections">
+    <div class="title" (click)="toViewFriends()">
+      <h2>Friends</h2>
+      <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </div>
+
+    <div class="body">
+      <div class="item friend" *ngFor="let f of listFriend">
+        <img [src]="f.photo" (error)="errorUserImage($event)">
+        <div class="datas">
+          <div>
+            <h2>Player:</h2> <span>{{f.fullName}}</span>
+          </div>
+          <div>
+            <h2>Location:</h2> <span>Ni. sa. venram treir.</span>
+          </div>
+          <div>
+            <h2>Level:</h2> <span>{{f.rank}}</span>
+          </div>
         </div>
-        <p class="title-name">{{fullName}}</p>
-        <p class="location">
-          <ion-icon name="ios-pin"></ion-icon> Your location
-        </p>
-        <p class="location">
-          <ion-icon name="ios-at"></ion-icon>{{email}}
-        </p>
-        <p class="description"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure ut eveniet ea </p>
+      </div>
+    </div>
 
-      </ion-col>
+  </div>
 
-    </ion-row>
+  <div class="sections">
+    <div class="title" (click)="toSavedCourts()">
+      <h2>Saved Courts</h2>
+      <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </div>
 
+    <div class="body">
+      <div class="item court" *ngFor="let c of listCourts">
+        <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)">
+        <div class="datas">
+          <h2>{{c.name}}</h2>
+          <h2>{{c.location}}</h2>
+        </div>
+        <div class="go">
+          GO
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sections">
+    <div class="title" (click)="toSavedTournments(true)">
+      <h2>My Events</h2>
+      <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </div>
+
+    <div class="body">
+      <div class="item event court" *ngFor="let c of listEvents">
+        <img [src]="c.images ? transformUrl(c.images[0]) : ''" (click)="toEvent(c)" (error)="errorUserImage($event)">
+        <div class="datas">
+          <h2 (click)="toEvent(c)">{{c.name}}</h2>
+          <h2>{{c.locationText}}</h2>
+        </div>
+        <div class="go" (click)="toEvent(c)">
+          GO
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <ion-grid>
     <ion-row>
       <ion-col col-12>
 

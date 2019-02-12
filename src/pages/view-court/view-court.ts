@@ -4,6 +4,7 @@ import * as moment from "moment";
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 declare var google;
 
@@ -20,7 +21,7 @@ export class ViewCourtPage {
   public map: any = {};
   public courstSaved = [];
   public orderXSkill: { skill: number, users: any[] }[] = [];
-
+  private idUser = "";
   public _viewMap = false;
 
   constructor(
@@ -28,7 +29,10 @@ export class ViewCourtPage {
     public http: HttpClient, public toastCtrl: ToastController,
     public viewCtrl: ViewController, public zone: NgZone
   ) {
-    this.court = this.navParams.get("court");
+    let court = this.navParams.get("court");
+    if (!court.users)
+      court.users = [];
+    this.court = court;
     console.log(this.court);
   }
 
@@ -41,16 +45,20 @@ export class ViewCourtPage {
   }
 
   async ionViewDidLoad() {
-    await this.getCourtsSaved();
+    this.idUser = await AuthProvider.me.getIdUser();
+    await this.getCourtUsers();
     await LiveComunicationProvider.reloadGoogleplaces();
+    this.court.lat = this.court.lat || this.court.coordinates[1];
+    this.court.lng = this.court.lng || this.court.coordinates[0];
+    let center = {
+      lat: this.court.lat,
+      lng: this.court.lng
+    };
+    console.log(center);
     let mapOptions: any = {
-      center: {
-        lat: this.court.lat,
-        lng: this.court.lng
-      },
+      center,
       zoom: 12
     };
-
     this.map = new google.maps.Map(document.getElementById("map_court"), mapOptions);
 
     let image = {
@@ -65,19 +73,35 @@ export class ViewCourtPage {
 
     new google.maps.Marker({
       animation: 'DROP',
-      position: {
-        lat: this.court.lat,
-        lng: this.court.lng
-      },
+      position: center,
       map: this.map,
       icon: image
     });
 
   }
 
+  public async getCourtUsers() {
+    if (this.court.id !== undefined && this.court.id !== null) {
+      let court = await this.http.get(`/court-find?where=${JSON.stringify({ id: this.court.id })}`).toPromise() as any;
+      if (court[0]) this.court.users = court[0].users;
+      else this.court.users = [];
+    }
+    else this.court.users = [];
+
+    for (let user of this.court.users) {
+      let index = this.orderXSkill.findIndex(it => {
+        return it.skill = user.rank;
+      });
+      if (index !== -1)
+        this.orderXSkill[index].users.push(user);
+      else
+        this.orderXSkill.push({ skill: user.rank, users: [user] });
+    }
+  }
+
   public viewMap() {
     this._viewMap = !this._viewMap;
-    this.zone.run(function(){
+    this.zone.run(function () {
       console.log("change vista");
     })
   }
@@ -87,8 +111,8 @@ export class ViewCourtPage {
   }
 
   public saveOrRemove() {
-    if (this.isSavedCourt(this.court).saved === true) {
-      this.removeCourt(this.court);
+    if (this.isSavedCourt() === true) {
+      this.removeCourt();
     } else {
       this.save(this.court);
     }
@@ -104,9 +128,11 @@ export class ViewCourtPage {
         delete ite.lng;
         delete ite.lat;
         ite.user = user;
-        await this.http.post("/court", ite).toPromise();
+        let _court = await this.http.post("/court", ite).toPromise() as any;
+        this.court.id = _court.id;
         this.presentToast("Saved Court");
-        await this.getCourtsSaved();
+        await this.getCourtUsers();
+        this.zone.run(function () { console.log("action court"); });
       }
       catch (e) {
         console.error(e);
@@ -114,39 +140,25 @@ export class ViewCourtPage {
     }
   }
 
-  public async removeCourt(court) {
-    let pos = await this.isSavedCourt(court);
-    if (pos.saved === true) {
-      await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
-      this.presentToast("Courst Removed");
-      await this.getCourtsSaved();
+  public async removeCourt() {
+    let pos = await this.isSavedCourt();
+    if (pos === true && this.court.id !== undefined && this.court.id !== null) {
+      await this.http.delete(`/court/${this.court.id}`).toPromise();
+      delete this.court.id;
+      this.presentToast("Court Removed");
+      await this.getCourtUsers();
+      console.log("remove court");
+      this.zone.run(function () { console.log("action court"); });
     }
   }
 
-  private async getCourtsSaved() {
-    let user = await AuthProvider.me.getIdUser();
-    let query = { user };
-    this.courstSaved = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=40000`).toPromise() as any[];
-    for (let user of this.court.users) {
-      let index = this.orderXSkill.findIndex(it => {
-        return it.skill = user.rank;
-      });
-      if (index !== -1)
-        this.orderXSkill[index].users.push(user);
-      else
-        this.orderXSkill.push({ skill: user.rank, users: [user] });
-    }
-  }
 
-  public isSavedCourt(court) {
-    let index = this.courstSaved.findIndex(it => {
-      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+  public isSavedCourt() {
+    let index = this.court.users.findIndex(it => {
+      if (it.id === this.idUser) console.log(it.id, this.idUser);
+      return it.id === this.idUser;
     });
-    if (index === -1) {
-      return { saved: false, index };
-    }
-
-    return { saved: true, index };
+    return index !== -1;
   }
 
   public getDay(open) {

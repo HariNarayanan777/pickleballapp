@@ -32,6 +32,9 @@ page-saved-tournaments {
     ion-content{
         .scroll-content{
             background: #eae5e5 !important;
+            ion-thumbnail img{
+                object-fit: cover;
+            }
             ion-list{
                 ion-item{
                     background: transparent !important;
