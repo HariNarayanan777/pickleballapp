@@ -10,6 +10,11 @@
       </button>
     </ion-buttons>
     <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
+    <ion-buttons end [hidden]="type==='players'">
+      <button ion-button (click)="filter()">
+        Filter
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

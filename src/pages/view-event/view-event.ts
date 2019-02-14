@@ -10,6 +10,7 @@ import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { RestProvider } from '../../providers/rest/rest';
 import { PublicProfilePage } from '../public-profile/public-profile';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
+import { FilterPage } from '../filter/filter';
 
 declare var google: any;
 
@@ -56,6 +57,7 @@ export class ViewEventPage {
   //Para la busquedad de event
   public events = [];
 
+  public maxDistance = 5000;
   public load: Loading;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -76,45 +78,6 @@ export class ViewEventPage {
       this.getEvents();
   }
 
-  public getBanner() {
-    if (this.type === "courts")
-      return `url(./assets/imgs/pickleball-doubles.jpg)`;
-    else if (this.type === "tournaments")
-      return `url(assets/imgs/men-women-1.jpg)`;
-    else if (this.type === 'players')
-      return `url(assets/imgs/find-players.jpg)`;
-    else if (this.type === 'clinics')
-      return `url(assets/imgs/racket-balls.png)`;
-  }
-
-  public async changeDateStart() {
-    let dateStart = await HelpersProvider.me.nativeDatePicker({
-      defaultDate: this.dateStart,
-      title: "Select the initial date"
-    });
-    if (dateStart !== null) {
-      this.dateStart = dateStart;
-      if (this.type === "tournaments")
-        this.getTournaments();
-      if (this.type === "clinics")
-        this.getEvents();
-    }
-  }
-
-  public async changeDateEnd() {
-    let dateEnd = await HelpersProvider.me.nativeDatePicker({
-      defaultDate: this.dateStart,
-      title: "Select the end date"
-    });
-    if (dateEnd !== null) {
-      this.dateEnd = dateEnd;
-      if (this.type === "tournaments")
-        this.getTournaments();
-      if (this.type === "clinics")
-        this.getEvents();
-    }
-  }
-
   async ngAfterViewInit() {
     document.querySelector(".back-button").setAttribute("hidden", "");
     await LiveComunicationProvider.reloadGoogleplaces();
@@ -131,6 +94,45 @@ export class ViewEventPage {
     // console.log("MyPosition", position);
     this.setPosition(position, false);
 
+  }
+
+  public getBanner() {
+    if (this.type === "courts")
+      return `url(./assets/imgs/pickleball-doubles.jpg)`;
+    else if (this.type === "tournaments")
+      return `url(assets/imgs/men-women-1.jpg)`;
+    else if (this.type === 'players')
+      return `url(assets/imgs/find-players.jpg)`;
+    else if (this.type === 'clinics')
+      return `url(assets/imgs/racket-balls.png)`;
+  }
+
+  public async changeDateStart() {
+    // let dateStart = await HelpersProvider.me.nativeDatePicker({
+    //   defaultDate: this.dateStart,
+    //   title: "Select the initial date"
+    // });
+    // if (dateStart !== null) {
+    //   this.dateStart = dateStart;
+    //   if (this.type === "tournaments")
+    //     this.getTournaments();
+    //   if (this.type === "clinics")
+    //     this.getEvents();
+    // }
+  }
+
+  public async changeDateEnd() {
+    // let dateEnd = await HelpersProvider.me.nativeDatePicker({
+    //   defaultDate: this.dateStart,
+    //   title: "Select the end date"
+    // });
+    // if (dateEnd !== null) {
+    //   this.dateEnd = dateEnd;
+    //   if (this.type === "tournaments")
+    //     this.getTournaments();
+    //   if (this.type === "clinics")
+    //     this.getEvents();
+    // }
   }
 
   private async initMap() {
@@ -275,6 +277,70 @@ export class ViewEventPage {
       return this.toTournament(data);
   }
 
+  public filter() {
+    let milla = 0.000621371;
+    let inputValue = () => { return (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value; };
+    let maxDistance = this.maxDistance * milla;
+    let appyFilter = async data => {
+      if (!data) {
+        if (document.querySelector("ion-buttons[end] button .button-inner .active-filter") !== null) {
+          document.querySelector("ion-buttons[end] button .button-inner .active-filter").parentElement
+            .removeChild(document.querySelector("ion-buttons[end] button .button-inner .active-filter"));
+        }
+        return;
+      }
+      if (document.querySelector("ion-buttons[end] button .button-inner .active-filter") === null) {
+        document.querySelector("ion-buttons[end] button .button-inner").innerHTML = `
+        <div class="active-filter"></div>
+        Filter`;
+      }
+
+      this.dateStart = data.dateStart;
+      this.dateEnd = data.dateEnd;
+      this.maxDistance = parseInt((data.maxDistance / milla).toString(), 10);
+      let input = () => { return document.querySelector("#search-courts-input-view-event .searchbar-input") };
+      if (data.address !== "") {
+        (input() as any).value = data.address;
+        this.setLocationOfSearch(data.address);
+      } else {
+        let position = await HelpersProvider.me.getMyPosition();
+        this.setPosition(position, true);
+      }
+
+      if (this.type === "tournaments") {
+        await this.getTournaments();
+      }
+
+      if (this.type === "clinics")
+        this.getEvents();
+
+    };
+
+    if (this.type === "courts") {
+      let f = HelpersProvider.me.modalCtrl.create(FilterPage, {
+        type: "court",
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd,
+        myCurrentLocation: inputValue() === "",
+        address: inputValue() !== "" ? inputValue() : "",
+        maxDistance
+      });
+      f.onDidDismiss(appyFilter);
+      f.present();
+    } else if (this.type === "tournaments" || this.type === "clinics") {
+      let f = HelpersProvider.me.modalCtrl.create(FilterPage, {
+        type: "tournament",
+        dateStart: this.dateStart,
+        dateEnd: this.dateEnd,
+        myCurrentLocation: inputValue() === "",
+        address: inputValue() !== "" ? inputValue() : "",
+        maxDistance
+      })
+      f.onDidDismiss(appyFilter);
+      f.present();
+    }
+  }
+
   //#region para obtener los courts
   public changeSearch() {
     this._isChangingLocation = !this._isChangingLocation;
@@ -301,7 +367,7 @@ export class ViewEventPage {
     let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number']
     let options: any = {
       location: defaultBounds,
-      radius: 50000,
+      radius: this.maxDistance,
       fields
     };
     options.name = 'pickleball courts';
@@ -326,14 +392,14 @@ export class ViewEventPage {
             })
 
           }
-          resolve(results);
         }
+        resolve(results);
       });
     }) as any[];
 
     var options2: any = {
       location: defaultBounds,
-      radius: 50000,
+      radius: this.maxDistance,
       fields
     };
     options2.type = ['rv_park'];
@@ -354,8 +420,8 @@ export class ViewEventPage {
             })
 
           }
-          resolve(results);
         }
+        resolve(results);
       });
     }) as any[];
     this.courst = this.courst.map(it => {
@@ -547,7 +613,7 @@ export class ViewEventPage {
     this.lat = lat || this.lat;
     this.lng = lng || this.lng;
     try {
-      let tournamets = await this.http.get(`/tournaments-ubication?lat=${this.lat}&lng=${this.lng}&user=${this.userID}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}`).toPromise() as any[];
+      let tournamets = await this.http.get(`/tournaments-ubication?lat=${this.lat}&lng=${this.lng}&user=${this.userID}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}&maxDistance=${this.maxDistance}`).toPromise() as any[];
       for (let tour of tournamets) {
         let image = {
           url: './assets/imgs/medal.png',
@@ -773,7 +839,7 @@ export class ViewEventPage {
 
   //#region para busquedad de clinics
   public async getEvents() {
-    this.events = await this.http.get(`/event-coordinates?user=${this.userID}&lat=${this.lat}&lng=${this.lng}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}`).toPromise() as any;
+    this.events = await this.http.get(`/event-coordinates?user=${this.userID}&lat=${this.lat}&lng=${this.lng}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}&maxDistance=${this.maxDistance}`).toPromise() as any;
     this.items = this.events.map(it => {
       return {
         name: it.name,

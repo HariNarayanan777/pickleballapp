@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
 import { AuthProvider } from '../providers/auth/auth';
 import { HelpersProvider } from '../providers/helpers/helpers';
+import { FilterPage } from '../pages/filter/filter';
 
 @Component({
   templateUrl: 'app.html'
@@ -38,6 +39,7 @@ export class MyApp {
       statusBar.backgroundColorByHexString('#7dff2f');
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
+          // this.rootPage = FilterPage;
           this.rootPage = TabsPage;
         } else {
           this.rootPage = LoginPage;

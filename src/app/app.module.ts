@@ -79,6 +79,8 @@ import { File } from '@ionic-native/file';
 import { CameraPreview } from '@ionic-native/camera-preview';
 import { ViewEventPage } from '../pages/view-event/view-event';
 import { ViewEventPageModule } from '../pages/view-event/view-event.module';
+import { FilterPageModule } from '../pages/filter/filter.module';
+import { FilterPage } from '../pages/filter/filter';
 
 @NgModule({
   declarations: [
@@ -122,7 +124,8 @@ import { ViewEventPageModule } from '../pages/view-event/view-event.module';
     LibraryImagesPageModule,
     ImageViewPageModule,
     ItemDetailsPageModule,
-    ViewEventPageModule
+    ViewEventPageModule,
+    FilterPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -151,7 +154,8 @@ import { ViewEventPageModule } from '../pages/view-event/view-event.module';
     LibraryImagesPage,
     ImageViewPage,
     ItemDetailsPage,
-    ViewEventPage
+    ViewEventPage,
+    FilterPage
   ],
   providers: [
     StatusBar,
