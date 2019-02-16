@@ -109,10 +109,10 @@
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.4" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-camera-preview" spec="^0.10.0" />
     <plugin name="cordova-plugin-photo-library" spec="2.2.1" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="5.1.8" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.0" />
 </widget>

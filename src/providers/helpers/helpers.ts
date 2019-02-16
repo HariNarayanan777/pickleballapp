@@ -281,19 +281,43 @@ export class HelpersProvider {
     return blob;
   }
 
-  public getPhotoUrl(user, indexImage?:number) {
-    let profileImg = "";
+  public getPhotoUrl(user, indexImage?: number) {
+    let profileImg = 'assets/imgs/default-user.png';
 
     if (user['loginFacebook'] !== null && user['loginFacebook'] !== undefined) {
       profileImg = `https://graph.facebook.com/${user['loginFacebook']['userID']}/picture?type=large&width=720&height=720`
-    } else if (user['image'] !== null && user['image'] !== undefined) {
+    } else if (user['image'] !== null && user['image'] !== undefined &&
+      user['image']['src'] !== null && user['image']['src'] !== undefined
+    ) {
       profileImg = user['image']['src'];
-    } else if(indexImage === 1){
+    } else if (indexImage === 1) {
       profileImg = 'assets/imgs/default-user.png';
-    }else
+    } else
       profileImg = 'assets/imgs/default-user-2.png';
 
     return profileImg;
+  }
+
+  public urlImageToBase64(url) {
+    return new Promise((resolve, reject) => {
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          var reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result);
+          }
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+      }
+      catch (e) {
+        console.error(e);
+        resolve(null);
+      }
+    });
   }
 
 }

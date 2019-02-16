@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { AuthProvider } from '../../providers/auth/auth';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
+import { ShareEventFriendsPage } from '../share-event-friends/share-event-friends';
 
 
 @IonicPage()
@@ -69,6 +70,10 @@ export class SavedTournamentsPage {
 
   public toView(tournament) {
     this.navCtrl.push(ViewTournamentPage, { tournament, isEvent: this.isEvents });
+  }
+
+  public shareE(event){
+    this.navCtrl.push(ShareEventFriendsPage, { event });
   }
 
 }

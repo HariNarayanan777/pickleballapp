@@ -4,6 +4,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 
 @IonicPage()
 @Component({
@@ -24,6 +25,7 @@ export class ShareEventFriendsPage {
     public http: HttpClient, public share: SocialSharing
   ) {
     this.event = this.navParams.get("event");
+    console.log(this.event);
   }
 
   async ionViewDidLoad() {
@@ -40,7 +42,7 @@ export class ShareEventFriendsPage {
         user = it.to;
       else
         user = it.from;
-      user.photo = this.validProperty(user.loginFacebook) === true ? user.loginFacebook.image : this.validProperty(user.image) === true ? user.image.src : "";
+      user.photo = HelpersProvider.me.getPhotoUrl(user);
       user.requestID = it.id;
       return user;
     });
@@ -99,17 +101,20 @@ export class ShareEventFriendsPage {
     }
   }
 
-  public async shareNative() { console.log(this.share);
+  public async shareNative() {
+    console.log(this.share);
     try {
-      var options = {
-        message: 'share this', // not supported on some apps (Facebook, Instagram)
-        subject: 'the subject', // fi. for email
-        files: ['', ''], // an array of filenames either locally or remotely
-        url: 'https://www.website.com/foo/#bar?a=b',
-        chooserTitle: 'Pick an app', // Android only, you can override the default share sheet title,
-        appPackageName: 'com.apple.social.facebook' // Android only, you can provide id of the App you want to share with
-      };
-      this.share.shareWithOptions(options)
+      //Para compartir con image
+      let title = this.event.title;
+      title += this.comment !== "" ? "; "+ this.comment : '';
+      if (this.event.imgs && this.event.imgs.length > 0) {
+        HelpersProvider.me.urlImageToBase64(InterceptorProvider.tranformUrl(this.event.imgs[0])).then(base64Image => {
+          // console.log(this.event.title + "; " + this.comment, null, base64Image, "http://www.pickleconnect.com/");
+          this.share.share(title, null, base64Image as any, "http://www.pickleconnect.com/").then(console.log, console.error);
+        });
+      } else {
+        this.share.share(title, null, null, "http://www.pickleconnect.com/").then(console.log, console.error);
+      }
     } catch (error) {
       console.error(error);
     }
