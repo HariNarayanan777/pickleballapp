@@ -28,8 +28,10 @@ export class AuthProvider {
   public async saveLoginUser(user, withEmailAndPassword?) {
     withEmailAndPassword = withEmailAndPassword || false;
     await this.storage.set('USER_ID', user['id']);
-    if (user.token) {
+    console.log(user.token);
+    if (user.token !== undefined && user.token !== null) {
       await this.storage.set('USER_TOKEN', user['token']);
+      this.USER_TOKEN = user.token
     }
     await this.storage.set('LOGGED_IN', true);
     if (withEmailAndPassword === true) {

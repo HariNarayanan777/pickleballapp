@@ -57,7 +57,7 @@ export class ViewEventPage {
   //Para la busquedad de event
   public events = [];
 
-  public maxDistance = 16093;
+  public maxDistance = 33000;
   public load: Loading;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
