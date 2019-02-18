@@ -39,9 +39,12 @@ ion-tabs{
          
     }
     .tab-button[aria-selected=true] .tab-button-icon{
-        color: #bea805 !important;
+        color: #7dff2f !important;
      }
-     .tab-button[aria-selected=false] .tab-button-icon{
-        color: #898a8b !important;
+     .tab-button[aria-selected=false] .tab-button-icon, .tab-button[aria-selected=false] .tab-button-text{
+        color: white !important;
+     }
+     .tab-button[aria-selected=true]{
+         border-bottom: 5px solid;
      }
 }
