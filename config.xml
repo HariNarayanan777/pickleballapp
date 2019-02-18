@@ -113,6 +113,7 @@
     <plugin name="cordova-plugin-camera-preview" spec="^0.10.0" />
     <plugin name="cordova-plugin-photo-library" spec="2.2.1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="5.1.8" />
+    <plugin name="cordova-plugin-request-location-accuracy" spec="2.2.3" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.0" />
 </widget>

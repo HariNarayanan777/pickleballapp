@@ -92,7 +92,8 @@ export class ViewEventPage {
 
     let position = await HelpersProvider.me.getMyPosition();
     // console.log("MyPosition", position);
-    this.setPosition(position, false);
+    if (position)
+      this.setPosition(position, true);
 
   }
 
@@ -176,11 +177,11 @@ export class ViewEventPage {
         this.getEvents();
     });
     if (this.type === "courts")
-      this.getCourts();
+      await this.getCourts();
     if (this.type === "tournaments")
-      this.getTournaments(this.lat, this.lng);
+      await this.getTournaments(this.lat, this.lng);
     if (this.type === "clinics")
-      this.getEvents();
+      await this.getEvents();
   }
 
   private async setPosition(position, getCourts: boolean) {
@@ -191,9 +192,8 @@ export class ViewEventPage {
       lat: this.lat,
       lng: this.lng
     });
+    this.map.setCenter({ lat: this.lat, lng: this.lng });
     if (getCourts === true) {
-      console.log("after set position!!");
-      this.map.setCenter({ lat: this.lat, lng: this.lng });
       if (this.type === "courts")
         await this.getCourts();
       if (this.type === "tournaments")

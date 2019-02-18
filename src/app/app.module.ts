@@ -8,6 +8,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -176,7 +177,8 @@ import { FilterPage } from '../pages/filter/filter';
     Camera,
     CameraPreview,
     PhotoLibrary,
-    File
+    File,
+    LocationAccuracy
   ]
 })
 export class AppModule { }

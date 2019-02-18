@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ImageViewPage } from '../../pages/image-view/image-view';
 import { CameraPage } from '../../pages/camera/camera';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
 
 @Injectable()
 export class HelpersProvider {
@@ -23,7 +24,8 @@ export class HelpersProvider {
     public platform: Platform, public geolocation: Geolocation,
     public diagnostic: Diagnostic, public modalCtrl: ModalController,
     public atps: AmazingTimePickerService, public toastCtrl: ToastController,
-    public alertCtrl: AlertController, public camera: Camera, public app: App
+    public alertCtrl: AlertController, public camera: Camera, public app: App,
+    public locationAccuracy:LocationAccuracy
   ) {
     HelpersProvider.me = this;
   }
@@ -90,19 +92,34 @@ export class HelpersProvider {
       timeout: 20000 //sorry I use this much milliseconds
     }
     if (this.platform.is("cordova") === true) {
+      //Para comprobar si tiene los permisos
       if (await this.diagnostic.isLocationAuthorized() === false) {
         await this.diagnostic.requestLocationAuthorization();
-        if (await this.diagnostic.isLocationAuthorized() === true) {
-          position = await this.geolocation.getCurrentPosition(options);
+        if (await this.diagnostic.isLocationAuthorized() === false) {
+          await this.diagnostic.requestLocationAuthorization();
         }
-      } else {
-        position = await this.geolocation.getCurrentPosition(options);
       }
-    } else {
-      position = await this.geolocation.getCurrentPosition(options);
-    }
+      //Para comprobar si tiene habilitado el gps
+      if (await this.diagnostic.isGpsLocationAvailable() === false ||
+        await this.diagnostic.isGpsLocationEnabled() === false
+      ) {
+        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
-    return position;
+          if(canRequest) {
+            // the accuracy option will be ignored by iOS
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+              () => console.log('Request successful'),
+              error => console.log('Error requesting location permissions', error)
+            );
+          }
+        
+        });
+        return null;
+      }
+      position = await this.geolocation.getCurrentPosition(options);
+      return position;
+    }
+    return await this.geolocation.getCurrentPosition(options);
   }
 
   public nativeDatePicker(options?: CalendarModalOptions): Promise<Date> {
