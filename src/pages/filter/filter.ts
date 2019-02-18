@@ -29,6 +29,7 @@ export class FilterPage {
     this.dateEnd = this.navParams.get("dateEnd");
     this.address = this.navParams.get("address");
     this.maxDistance = parseInt(this.navParams.get("maxDistance"));
+    console.log(this.maxDistance);
   }
 
   async ionViewDidLoad() {

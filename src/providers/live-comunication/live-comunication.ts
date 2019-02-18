@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { InterceptorProvider } from '../interceptor/interceptor';
+import { AuthProvider } from '../auth/auth';
 
 declare var io;
 @Injectable()
@@ -62,7 +63,7 @@ export class LiveComunicationProvider {
   public async subscribeRoom(roomName: string) {
     try {
       await this.connectWithSockets();
-      LiveComunicationProvider.conexion.put("/suscribe-room", { roomName }, function (data) {
+      LiveComunicationProvider.conexion.put(`/suscribe-room?token=${AuthProvider.me !== undefined ? AuthProvider.me.getToken() : ''}`, { roomName }, function (data) {
         console.log(data);
         //Para recibir las notificaciones para el area de notificaciones
         LiveComunicationProvider.conexion.on('message', async function (data) {
