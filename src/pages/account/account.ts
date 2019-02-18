@@ -116,7 +116,7 @@ export class AccountPage {
 
       if (res.geometry) {
         this.address = res.formatted_address;
-        await this.http.put(`/user-location`,{
+        await this.http.put(`/user-location`, {
           location: this.address,
           idUser: this.userID
         }).toPromise();
@@ -172,27 +172,24 @@ export class AccountPage {
   }
 
   async logout() {
+    await this.storage.remove("USER_TOKEN");
+    await this.storage.set('LOGGED_IN', false);
+    let finish = () => {
+      MyApp.setNotifications = false;
+      this.app.getRootNav().setRoot(LoginPage);
+    };
     if (this.platform.is("cordova")) {
       await this.removeToken();
       await MyApp.unregisterNotifications();
       await HelpersProvider.me.stopBackgroundLocation();
       let withEmail = await this.storage.get('SESIONEMAIL');
       if (withEmail === true) {
-        this.storage.set('LOGGED_IN', false);
-        MyApp.setNotifications = false;
-        this.app.getRootNav().setRoot(LoginPage);
+        finish();
       } else {
-        this.fb.logout().then(res => {
-          console.log(res);
-          this.storage.set('LOGGED_IN', false);
-          MyApp.setNotifications = false;
-          this.app.getRootNav().setRoot(LoginPage);
-        });
+        this.fb.logout().then(finish);
       }
     } else {
-      this.storage.set('LOGGED_IN', false);
-      MyApp.setNotifications = false;
-      this.app.getRootNav().setRoot(LoginPage);
+      finish();
     }
   }
 
@@ -217,6 +214,7 @@ export class AccountPage {
       this.zipcode = data['zipCode'];
       this.rank = data['rank'];
       this.address = data["location"];
+      console.log(data);
       this.profileImg = HelpersProvider.me.getPhotoUrl(data);
     });
 

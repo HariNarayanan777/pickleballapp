@@ -8,9 +8,21 @@ import { TabsPage } from '../../pages/tabs/tabs';
 export class AuthProvider {
 
   public static me: AuthProvider;
+  public USER_TOKEN = "";
 
   constructor(public http: HttpClient, public app: App, private storage: Storage) {
+    this.storage.get("USER_TOKEN").then(token => {
+      if (token)
+        this.USER_TOKEN = token;
+    });
     AuthProvider.me = this;
+  }
+
+  public getToken() {
+    if (this.USER_TOKEN !== "") {
+      return this.USER_TOKEN;
+    }
+    return null;
   }
 
   public async saveLoginUser(user, withEmailAndPassword?) {
@@ -20,7 +32,7 @@ export class AuthProvider {
       await this.storage.set('USER_TOKEN', user['token']);
     }
     await this.storage.set('LOGGED_IN', true);
-    if(withEmailAndPassword===true){
+    if (withEmailAndPassword === true) {
       await this.storage.set('SESIONEMAIL', true);
     }
     this.app.getRootNavs()[0].setRoot(TabsPage);
