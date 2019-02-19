@@ -74,7 +74,7 @@ export class ViewEventPage {
       await this.getCourtsSaved();
     if (this.type === "tournaments")
       this.getTournaments();
-    if (this.type === "clinics")
+    if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
       this.getEvents();
   }
 
@@ -104,8 +104,12 @@ export class ViewEventPage {
       return `url(assets/imgs/men-women-1.jpg)`;
     else if (this.type === 'players')
       return `url(assets/imgs/find-players.jpg)`;
-    else if (this.type === 'clinics')
+    else if (this.type === "clinics")
       return `url(assets/imgs/racket-balls.png)`;
+    else if (this.type === "coaches")
+      return `url(assets/imgs/pickleballs-player.jpg)`
+    else if (this.type === "vacations")
+      return `url(assets/imgs/court-sport-default.jpg)`
   }
 
   public async changeDateStart() {
@@ -173,14 +177,14 @@ export class ViewEventPage {
         this.getCourts();
       if (this.type === "tournaments")
         this.getTournaments(this.lat, this.lng);
-      if (this.type === "clinics")
+      if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
         this.getEvents();
     });
     if (this.type === "courts")
       await this.getCourts();
     if (this.type === "tournaments")
       await this.getTournaments(this.lat, this.lng);
-    if (this.type === "clinics")
+    if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
       await this.getEvents();
   }
 
@@ -198,10 +202,23 @@ export class ViewEventPage {
         await this.getCourts();
       if (this.type === "tournaments")
         await this.getTournaments(this.lat, this.lng);
-      if (this.type === "clinics")
+      if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
         this.getEvents();
-      console.log("set position!!");
     }
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, async (res, status) => {
+
+      if (Object.prototype.toString.call(res) === "[object Array]") {
+        if (res.length === 0) return;
+        res = res[0];
+      }
+
+      if (res.geometry) {
+        let address = res.formatted_address;
+        (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value = address;
+      }
+
+    });
   }
 
   private setLocationOfSearch(address: string) {
@@ -226,7 +243,7 @@ export class ViewEventPage {
           this.getCourts();
         if (this.type === "tournaments")
           this.getTournaments(this.lat, this.lng);
-        if (this.type === "clinics")
+        if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
           this.getEvents();
       }
 
@@ -311,7 +328,7 @@ export class ViewEventPage {
         await this.getTournaments();
       }
 
-      if (this.type === "clinics")
+      if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
         this.getEvents();
 
     };
@@ -327,7 +344,7 @@ export class ViewEventPage {
       });
       f.onDidDismiss(appyFilter);
       f.present();
-    } else if (this.type === "tournaments" || this.type === "clinics") {
+    } else if (this.type === "tournaments" || this.type === "clinics"|| this.type === "coaches" || this.type === "vacations") {
       let f = HelpersProvider.me.modalCtrl.create(FilterPage, {
         type: "tournament",
         dateStart: this.dateStart,
@@ -506,7 +523,7 @@ export class ViewEventPage {
   private setEventToMarkers() {
     for (let marker of this.markers) {
       google.maps.event.addListener(marker, 'click', e => {
-        console.log(e.latLng.lat(), e.latLng.lng());
+        // console.log(e.latLng.lat(), e.latLng.lng());
         this.toCourt(e.latLng.lat(), e.latLng.lng());
       });
     }
@@ -837,9 +854,10 @@ export class ViewEventPage {
   }
   //#endregion
 
-  //#region para busquedad de clinics
+  //#region para busquedad de eventos
   public async getEvents() {
-    this.events = await this.http.get(`/event-coordinates?user=${this.userID}&lat=${this.lat}&lng=${this.lng}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}&maxDistance=${this.maxDistance}`).toPromise() as any;
+    if (this.userID === undefined) this.userID = await AuthProvider.me.getIdUser();
+    this.events = await this.http.get(`/event-coordinates?user=${this.userID}&lat=${this.lat}&lng=${this.lng}&filterDate=true&startDate=${this.dateStart.getTime()}&endDate=${this.dateEnd.getTime()}&maxDistance=${this.maxDistance}&type=${this.type}`).toPromise() as any;
     this.items = this.events.map(it => {
       return {
         name: it.name,

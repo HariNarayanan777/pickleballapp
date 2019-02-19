@@ -172,9 +172,11 @@ export class AccountPage {
   }
 
   async logout() {
-    await this.storage.remove("USER_TOKEN");
     await this.storage.set('LOGGED_IN', false);
-    let finish = () => {
+    let finish = async () => {
+      await this.storage.remove("USER_TOKEN");
+      await this.storage.remove("SESIONEMAIL");
+      await this.storage.remove("USER_ID");
       MyApp.setNotifications = false;
       this.app.getRootNav().setRoot(LoginPage);
     };

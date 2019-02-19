@@ -30,14 +30,9 @@ export class InterceptorProvider implements HttpInterceptor {
     }
 
     public static tranformUrl(url: string) {
-        let data = localStorage.getItem('login');
-        if (data) {
-            let json = JSON.parse(data);
-            let token = json['token'];
-
-            return InterceptorProvider.url + url + "?token=" + token;
+        if (AuthProvider.me !== undefined && AuthProvider.me.getToken() !== null) {
+            return InterceptorProvider.url + url + "?token=" + AuthProvider.me.getToken();
         } else {
-
             return InterceptorProvider.url + url;
         }
     }
