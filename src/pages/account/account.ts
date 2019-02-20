@@ -181,7 +181,6 @@ export class AccountPage {
       this.app.getRootNav().setRoot(LoginPage);
     };
 
-    await HelpersProvider.me.stopBackgroundLocation();
     let withEmail = await this.storage.get('SESIONEMAIL');
     if (withEmail === true) {
       finish();
