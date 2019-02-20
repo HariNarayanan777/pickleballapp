@@ -10,7 +10,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import * as moment from 'moment';
 
 
-
+declare var FB: any;
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -23,8 +23,8 @@ export class LoginPage {
   public password = "";
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams,
-    private fb: Facebook, private storage: Storage,
+    public navCtrl: NavController, public navParams: NavParams, 
+    private storage: Storage,
     private rest: RestProvider, private platform: Platform,
     public alertCltr: AlertController, private http: HttpClient
   ) {
@@ -34,12 +34,13 @@ export class LoginPage {
   }
 
   login() {
-    if (this.platform.is("cordova")) {
-      this.fb.login(['public_profile', 'email'])
-        .then((res: FacebookLoginResponse) => this.handleLogin(res))
-        .catch(e => console.log('Error logging into Facebook', e));
-    } else
-      this.loginInDebugNavigator();
+    FB.getLoginStatus(response => {
+      if (response.status === 'connected') {
+        this.handleLogin(response);
+      } else {
+        FB.login(this.handleLogin.bind(this));
+      }
+    });
 
   }
 
@@ -57,8 +58,9 @@ export class LoginPage {
   }
 
   handleLogin(res) {
+    console.log(res);
     if (res.hasOwnProperty('status') && res.status == 'connected') {
-      this.fb.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
+      FB.api('me?fields=id,name,email,first_name,last_name,picture.width(720).height(720).as(picture_large)', profile => {
         let user = {
           "facebook": {
             "userID": res['authResponse']['userID'],
@@ -67,7 +69,7 @@ export class LoginPage {
           "user": {
             "fullName": profile['first_name'] + ' ' + profile['last_name'],
             "zipCode": "",
-            "rank": 0,
+            "rank": 1.0,
             "email": profile['email']
           }
         }
@@ -82,24 +84,6 @@ export class LoginPage {
     this.rest.putData(this.fbLoginEndpoint, res).subscribe(result => {
       AuthProvider.me.saveLoginUser(result);
     })
-  }
-
-  private loginInDebugNavigator() {
-    let panel = this.alertCltr.create({
-      message: "id", inputs: [{ type: "text", name: "id" }],
-      buttons: [{ text: "Ok", handler: this.loginDebug.bind(this) }]
-    });
-    panel.present();
-  }
-
-  private async loginDebug(data) {
-    let id = data.id || "";
-    let user = await this.http.get("/user/" + id).toPromise();
-    await AuthProvider.me.saveLoginUser(user);
-  }
-
-  logout() {
-    this.fb.logout().then(res => console.log(res))
   }
 
   public createAccount() {

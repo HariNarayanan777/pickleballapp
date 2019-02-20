@@ -166,6 +166,7 @@ export class HelpersProvider {
 
       let pick = document.createElement("input");
       pick.setAttribute("type", "file");
+      pick.setAttribute("accept", "image/*");
 
       document.body.appendChild(pick);
 

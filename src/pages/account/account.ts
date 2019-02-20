@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, ModalController, Platform } from 'ionic-angular';
-import { Facebook } from '@ionic-native/facebook';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
 import { RestProvider } from '../../providers/rest/rest';
@@ -24,6 +23,7 @@ import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 
 declare var google: any;
+declare var FB:any;
 
 @IonicPage()
 @Component({
@@ -49,8 +49,8 @@ export class AccountPage {
   public map: any = {};
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams,
-    private fb: Facebook, private storage: Storage,
+    public navCtrl: NavController, public navParams: NavParams, 
+    private storage: Storage,
     private app: App, private rest: RestProvider,
     public modalCtrl: ModalController, public http: HttpClient,
     private platform: Platform
@@ -180,32 +180,15 @@ export class AccountPage {
       MyApp.setNotifications = false;
       this.app.getRootNav().setRoot(LoginPage);
     };
-    if (this.platform.is("cordova")) {
-      await this.removeToken();
-      await MyApp.unregisterNotifications();
-      await HelpersProvider.me.stopBackgroundLocation();
-      let withEmail = await this.storage.get('SESIONEMAIL');
-      if (withEmail === true) {
-        finish();
-      } else {
-        this.fb.logout().then(finish);
-      }
-    } else {
-      finish();
-    }
-  }
 
-  private async removeToken() {
-    try {
-      let token = await this.storage.get("tokenNotification");
-      let userID: any = await this.storage.get("USER_ID");
-      await this.http.put("/logout", { token, id: userID }, { responseType: "text" }).toPromise();
-      await this.storage.remove("tokenNotification");
-      await this.storage.remove("USER_ID");
+    await HelpersProvider.me.stopBackgroundLocation();
+    let withEmail = await this.storage.get('SESIONEMAIL');
+    if (withEmail === true) {
+      finish();
+    } else {
+      FB.logout(finish.bind(this));;
     }
-    catch (e) {
-      console.error(e);
-    }
+
   }
 
   getProfile() {

@@ -4,11 +4,15 @@
     <img src="../../assets/imgs/logo-pickle.png" alt="" class="logo-login">
     <ion-list>
       <ion-item class="input-styled">
-        <ion-label> <ion-icon name="ios-mail-outline"></ion-icon></ion-label>
+        <ion-label>
+          <ion-icon name="ios-mail-outline"></ion-icon>
+        </ion-label>
         <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
       </ion-item>
       <ion-item class="input-styled">
-          <ion-label> <ion-icon name="ios-lock-outline"></ion-icon></ion-label>
+        <ion-label>
+          <ion-icon name="ios-lock-outline"></ion-icon>
+        </ion-label>
         <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
       </ion-item>
     </ion-list>
@@ -16,21 +20,20 @@
     <div class="clear-btn-row">
       <button ion-button clear (click)="createAccount()">Create Account</button>
       <button ion-button clear (click)="getEmailForchangePassword()">Forget your password?</button>
-
     </div>
 
     <ion-item>
-        <button full ion-button class="white-btn" (click)="LoginWithEmail()">Login</button>
+      <button full ion-button class="white-btn" (click)="LoginWithEmail()">Login</button>
     </ion-item>
 
     <ion-item>
-        <button class="white-btn" ion-button full icon-start (click)="login()">
-            <ion-icon name="logo-facebook"></ion-icon>
-             Facebook
-          </button>
+      <button class="white-btn" ion-button full icon-start (click)="login()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        Facebook
+      </button>
     </ion-item>
 
   </div>
 
-  
+
 </ion-content>

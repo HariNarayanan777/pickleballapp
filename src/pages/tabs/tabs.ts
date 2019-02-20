@@ -29,7 +29,6 @@ export class TabsPage {
     public storage: Storage, public lc: LiveComunicationProvider,
     public zone: NgZone
   ) {
-    MyApp.initNotifications();
     this.initSocketEvents();
     TabsPage.toTab = this.toTab.bind(this);
   }
