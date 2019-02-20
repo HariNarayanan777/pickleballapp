@@ -42,7 +42,7 @@
 
   <div id="location" [hidden]="type==='players'">
     <div class="details">
-      <h2>Current Location</h2>
+      <h2>{{currentLocation==="" ? 'Current Location' : currentLocation}}</h2>
       <p *ngIf="type==='tournaments'||type==='clinics'"><span (click)="changeDateStart()">{{dateStart | date:'EEE,
           MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
           | date:'EEE, MMM dd'}}</span></p>

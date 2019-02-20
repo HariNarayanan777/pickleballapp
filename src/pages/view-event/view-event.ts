@@ -60,6 +60,8 @@ export class ViewEventPage {
   public maxDistance = 33000;
   public load: Loading;
 
+  public currentLocation = "";
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public viewCtrl: ViewController, public http: HttpClient,
     private zone: NgZone, private rest: RestProvider, public toastCtrl: ToastController,
@@ -205,20 +207,20 @@ export class ViewEventPage {
       if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
         this.getEvents();
     }
-    let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, async (res, status) => {
+    // let geocoder = new google.maps.Geocoder();
+    // geocoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, async (res, status) => {
 
-      if (Object.prototype.toString.call(res) === "[object Array]") {
-        if (res.length === 0) return;
-        res = res[0];
-      }
+    //   if (Object.prototype.toString.call(res) === "[object Array]") {
+    //     if (res.length === 0) return;
+    //     res = res[0];
+    //   }
 
-      if (res.geometry) {
-        let address = res.formatted_address;
-        (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value = address;
-      }
+    //   if (res.geometry) {
+    //     let address = res.formatted_address;
+    //     (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value = address;
+    //   }
 
-    });
+    // });
   }
 
   private setLocationOfSearch(address: string) {
@@ -231,6 +233,17 @@ export class ViewEventPage {
       }
 
       if (res.geometry) {
+        let estado = "", i = 0;
+        for (let des of res.address_components) {
+          if (i === 0) {
+            estado += " "+ des.short_name;
+          }
+          estado += " "+ des.long_name;
+          i += 1;
+        }
+        this.currentLocation = estado;
+        // console.log(this.currentLocation);
+        // console.log(res);
         this.lat = res.geometry.location.lat();
         this.lng = res.geometry.location.lng();
 
@@ -344,7 +357,7 @@ export class ViewEventPage {
       });
       f.onDidDismiss(appyFilter);
       f.present();
-    } else if (this.type === "tournaments" || this.type === "clinics"|| this.type === "coaches" || this.type === "vacations") {
+    } else if (this.type === "tournaments" || this.type === "clinics" || this.type === "coaches" || this.type === "vacations") {
       let f = HelpersProvider.me.modalCtrl.create(FilterPage, {
         type: "tournament",
         dateStart: this.dateStart,
