@@ -1,7 +1,7 @@
 page-view-event {
-    ion-buttons{
-        button{
-            .active-filter{
+    ion-buttons {
+        button {
+            .active-filter {
                 background-color: #7dff2f;
                 width: 10px;
                 height: 10px;
@@ -9,22 +9,51 @@ page-view-event {
                 display: inline-block;
                 margin-right: 4px;
             }
-            .button-inner{
+            .button-inner {
                 color: white;
-                
             }
         }
-    }
-    .scroll-content {
-        background-color: #cccccc;
     }
     #logo-navbar {
         width: 200px;
         margin-left: calc(50% - 100px);
     }
+    .scroll-content {
+        // background-color: #cccccc;
+        background: black !important;
+        display: flex;
+        @media (min-width: 970px) {
+            overflow-y: hidden !important;
+        }
+        flex-wrap: wrap;
+        .setcions {
+            width: 100%;
+            flex-basis: 100%;
+        }
+        @media (min-width: 970px) {
+            .setcions {
+                width: 50%;
+                flex-basis: 50%;
+            }
+            .setcions:first-child {
+                padding: 0 7.5px 0 0;
+            }
+            .setcions.items {
+                height: 100%;
+                overflow-y: auto;
+                padding: 0 0 0 7.5px;
+            }
+        }
+    }
+    #search-courts-input-view-event {
+        padding: 0 !important;
+        input {
+            border-radius: 0 !important;
+        }
+    }
     #banner {
         width: 100%;
-        height: 200px;
+        height: 400px;
         background-size: cover;
         background-repeat: no-repeat;
         .overlay {

@@ -17,11 +17,11 @@
 
 <ion-content>
 
-  <div [hidden]="!_viewMap" id="map_court" style="width: 100%; height: 300px;"></div>
+  <div [hidden]="!_viewMap" id="map_court" style="width: 100%; height: 400px;"></div>
 
-  <img class="img-active" [hidden]="_viewMap" *ngIf="isSavedCourt()" (click)="saveOrRemove()" src="assets/imgs/heart-active.png">
+  <!-- <img class="img-active" [hidden]="_viewMap" *ngIf="isSavedCourt()" (click)="saveOrRemove()" src="assets/imgs/heart-active.png">
   <img class="img-active" [hidden]="_viewMap" *ngIf="!isSavedCourt()" (click)="saveOrRemove()" src="assets/imgs/heart-unactive.png">
-  
+   -->
   <!-- BUTTONS NEXT Y BACK SLIDE -->
   <img id="back-slide" [hidden]="_viewMap" (click)="backSlide()" class="buttons-slide" src="assets/imgs/back-slide.png">
   <img id="next-slide" [hidden]="_viewMap" (click)="nextSlide()" class="buttons-slide" src="assets/imgs/next-slide.png">

@@ -13,23 +13,26 @@ declare var google: any;
 export class FilterPage {
 
   public courts = false;
-  public rvresourts = false;
   public tournaments = false;
+  public coaches = false;
+  public vacations = false;
   public dateStart = new Date();
   public dateEnd = new Date();
   public address = "";
   public maxDistance = 30;
-  public type = "court";
+  public types = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public viewCtrl: ViewController
   ) {
-    this.type = this.navParams.get("type");
+    this.types = this.navParams.get("types");
+    for (let type of this.types) {
+      this[type] = true;
+    }
     this.dateStart = this.navParams.get("dateStart");
     this.dateEnd = this.navParams.get("dateEnd");
     this.address = this.navParams.get("address");
     this.maxDistance = parseInt(this.navParams.get("maxDistance"));
-    console.log(this.maxDistance);
   }
 
   async ionViewDidLoad() {
@@ -42,6 +45,24 @@ export class FilterPage {
     console.log(this.navParams.get("myCurrentLocation"));
     if (this.navParams.get("myCurrentLocation") === true)
       this.radioButton(true);
+  }
+
+  public seletcType(type: string) {
+    return this.types.find(it => { return it === type; }) !== undefined;
+  }
+
+  public radioChange(type: string) {
+    if (this[type] === true)
+      this.types.push(type);
+    else {
+      let index = this.types.findIndex(it => { return it === type; });
+      if (index !== -1) {
+        if (this.types.length > 1)
+          this.types.splice(index, 1);
+        else
+          this.types = [];
+      }
+    }
   }
 
   public async chageDate(date) {
@@ -73,23 +94,25 @@ export class FilterPage {
 
   public finish() {
     let address = (document.querySelector("#input-location-address input") as any).value;
-    if (this.type === "court") {
-      let p = {
-        maxDistance: this.maxDistance,
-        myCurrentLocation: address === '',
-        address
-      };
-      this.viewCtrl.dismiss(p);
-    } else {
-      let p = {
-        maxDistance: this.maxDistance,
-        myCurrentLocation: address === '',
-        address,
-        dateStart: this.dateStart,
-        dateEnd: this.dateEnd
-      };
-      this.viewCtrl.dismiss(p);
-    }
+    // if (this.type === "court") {
+    //   let p = {
+    //     maxDistance: this.maxDistance,
+    //     myCurrentLocation: address === '',
+    //     address
+    //   };
+    //   this.viewCtrl.dismiss(p);
+    // } else {
+
+    // }
+    let p = {
+      types: this.types,
+      maxDistance: this.maxDistance,
+      myCurrentLocation: address === '',
+      address,
+      dateStart: this.dateStart,
+      dateEnd: this.dateEnd
+    };
+    this.viewCtrl.dismiss(p);
   }
 
 }

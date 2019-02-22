@@ -1,76 +1,90 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-buttons left>
+    <!-- <ion-buttons left>
       <button ion-button style="color: white;" (click)="viewCtrl.dismiss()">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
         &nbsp;&nbsp;
-        <!-- <ion-icon name="arrow-back"></ion-icon> -->
+        <ion-icon name="arrow-back"></ion-icon>
         Home
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
     <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
-    <ion-buttons end [hidden]="type==='players'">
+    <!-- <ion-buttons end [hidden]="type==='players'">
       <button ion-button (click)="filter()">
         Filter
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content>
+<ion-content padding>
 
-  <ion-searchbar [hidden]="type==='players'" id="search-courts-input-view-event" placeholder="Change your location"
-    [hidden]="!isChangingLocation()" type="text" showCancelButton="true"></ion-searchbar>
+  <div class="setcions">
+    <ion-searchbar [hidden]="type==='players'" id="search-courts-input-view-event" placeholder="Change your location"
+      [hidden]="!isChangingLocation()" type="text" showCancelButton="true"></ion-searchbar>
 
-  <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 300px">
-  </div>
-
-  <div id="banner" [hidden]="_viewMap" [style.backgroundImage]="getBanner()">
-    <div class="overlay">
-      <h1 style="color:white;">{{type}}</h1>
+    <!-- <div [hidden]="!_viewMap" id="map_place_event" style="width: 100%; height: 400px">
+    </div> -->
+    <div id="map_place_event" style="width: 100%; height: 400px">
     </div>
-  </div>
 
-  <!-- PARA BUSQUEDAD DE COURTS TORNEOS EVENT CLINICS -->
-  <div id="button-view" [hidden]="type==='players'">
-    <button ion-button color="secondary" style="color:black;" (click)="viewMap()">{{_viewMap===true?'Hide Map':'View
-      Map'}}</button>
-  </div>
+    <!-- <div id="banner" [hidden]="_viewMap" [style.backgroundImage]="getBanner()">
+      <div class="overlay">
+        <h1 style="color:white;">{{type}}</h1>
+      </div>
+    </div> -->
 
-  <div id="location" [hidden]="type==='players'">
-    <div class="details">
-      <h2>{{currentLocation==="" ? 'Current Location' : currentLocation}}</h2>
-      <p *ngIf="type==='tournaments'||type==='clinics'"><span (click)="changeDateStart()">{{dateStart | date:'EEE,
-          MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
-          | date:'EEE, MMM dd'}}</span></p>
-    </div>
-    <div class="action">
-      <button ion-button style="background-color: white; color: black;" (click)="changeSearch()">Edit Search</button>
-    </div>
-  </div>
+    <!-- PARA BUSQUEDAD DE COURTS TORNEOS EVENT CLINICS -->
+    <!-- <div id="button-view" [hidden]="type==='players'">
+      <button ion-button color="secondary" style="color:black;" (click)="viewMap()">{{_viewMap===true?'Hide Map':'View
+        Map'}}</button>
+    </div> -->
 
-  <div class="item" [hidden]="type==='players'" *ngFor="let item of items">
-    <div class="details" (click)="toItem(item.data)">
-      <h2>{{item.name}}</h2>
-      <div>
-        <img src="./assets/imgs/pin-red.png">
-        <p>{{item.location}}</p>
+    <div id="location" style="background: #cccccc !important">
+      <div class="details">
+        <h2>{{currentLocation==="" ? 'Current Location' : currentLocation}}</h2>
+        <p *ngIf="type==='tournaments'||type==='clinics'"><span (click)="changeDateStart()">{{dateStart | date:'EEE,
+            MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
+            | date:'EEE, MMM dd'}}</span></p>
+      </div>
+      <div class="action">
+        <button ion-button style="background-color: white; color: black;" (click)="changeSearch()">
+          Edit Location
+        </button>
+      </div>
+
+      <div class="action">
+        <button ion-button style="background-color: white; color: black;" (click)="filter()">
+          Filter
+        </button>
       </div>
     </div>
-    <div class="photo" [style.backgroundImage]="formaterUrl(item.photo)" [style.backgroundSize]="type==='courts'?'cover':'contain'">
-      <img *ngIf="isSaved(item.data)" (click)="remove(item.data)" src="assets/imgs/heart-active.png">
-      <img *ngIf="!isSaved(item.data)" (click)="save(item.data)" src="assets/imgs/heart-unactive.png">
-      <!-- <img class="photo" [src]="item.photo"> -->
+  </div>
+
+  <!-- PARA LOS ITEMS -->
+  <div class="setcions items">
+    <div class="item" *ngFor="let item of items">
+      <div class="details" (click)="toItem(item.data)">
+        <h2>{{item.name}}</h2>
+        <div>
+          <img src="./assets/imgs/pin-red.png">
+          <p>{{item.location}}</p>
+        </div>
+      </div>
+      <div class="photo" [style.backgroundImage]="formaterUrl(item.photo)"
+        [style.backgroundSize]="item.type==='courts'?'cover':'contain'">
+        <!-- <img *ngIf="isSaved(item.data)" (click)="remove(item.data)" src="assets/imgs/heart-active.png">
+            <img *ngIf="!isSaved(item.data)" (click)="save(item.data)" src="assets/imgs/heart-unactive.png"> -->
+        <!-- <img class="photo" [src]="item.photo"> -->
+      </div>
     </div>
   </div>
 
-
-
-  <ion-searchbar [hidden]="type!=='players'" (input)="onSearchInput()" [(ngModel)]="searchTerm" [showCancelButton]="true"
-    placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
+  <!-- <ion-searchbar [hidden]="type!=='players'" (input)="onSearchInput()" [(ngModel)]="searchTerm"
+    [showCancelButton]="true" placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
 
   <ion-list [hidden]="type!=='players'">
     <div class="flex-center" *ngIf="players.length < 1">
@@ -88,10 +102,11 @@
         <h2 text-wrap (click)="goToFriendProfile(p._id)">{{p.fullName}}</h2>
         <p (click)="goToFriendProfile(p._id)">Skill Level: {{p.rank}}</p>
         <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
-        <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
+        <button [disabled]="disable" *ngIf="isFriend(p)" ion-button item-end
+          [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
           (click)="checkFriendRequest(p, $event)"></button>
       </ion-item>
     </div>
-  </ion-list>
+  </ion-list> -->
 
 </ion-content>
