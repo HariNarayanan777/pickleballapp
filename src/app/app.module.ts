@@ -6,7 +6,6 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-// import { TabsPage } from '../pages/tabs/tabs';
 
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
@@ -85,7 +84,6 @@ import { FilterPage } from '../pages/filter/filter';
     AboutPage,
     ContactPage,
     HomePage,
-    // TabsPage
   ],
   imports: [
     BrowserModule,
@@ -128,7 +126,6 @@ import { FilterPage } from '../pages/filter/filter';
     AboutPage,
     ContactPage,
     HomePage,
-    // TabsPage,
     SearchPage,
     CreateAccountPage,
     FutureTournamentsPage,

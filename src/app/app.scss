@@ -31,20 +31,3 @@
     background-color: red;
     border-radius: 50%;
 }
-
-ion-tabs{
-    .tabbar{
-        background: #000000 !important;
-        border-top: 0.55px solid #484545 !important;
-         
-    }
-    .tab-button[aria-selected=true] .tab-button-icon{
-        color: #7dff2f !important;
-     }
-     .tab-button[aria-selected=false] .tab-button-icon, .tab-button[aria-selected=false] .tab-button-text{
-        color: white !important;
-     }
-     .tab-button[aria-selected=true]{
-         border-bottom: 5px solid;
-     }
-}

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../../pages/tabs/tabs';
 
 @Injectable()
 export class AuthProvider {
@@ -37,7 +36,6 @@ export class AuthProvider {
     if (withEmailAndPassword === true) {
       await this.storage.set('SESIONEMAIL', true);
     }
-    this.app.getRootNavs()[0].setRoot(TabsPage);
   }
 
   public async getIdUser(): Promise<string> {

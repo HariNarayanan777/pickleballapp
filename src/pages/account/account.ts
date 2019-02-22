@@ -16,7 +16,6 @@ import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CreateEventPage } from '../create-event/create-event';
 import { ShareEventFriendsPage } from '../share-event-friends/share-event-friends';
-import { TabsPage } from '../tabs/tabs';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
@@ -266,7 +265,6 @@ export class AccountPage {
   }
 
   public toHome() {
-    TabsPage.toTab(0);
   }
 
 }

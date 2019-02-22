@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { TabsPage } from '../tabs/tabs';
 import { Storage } from '@ionic/storage';
 import { RestProvider } from '../../providers/rest/rest';
 import { HttpClient } from '@angular/common/http';
