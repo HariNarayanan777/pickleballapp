@@ -3,8 +3,6 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { RestProvider } from '../../providers/rest/rest';
 import { Storage } from '@ionic/storage';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
-import { ListChatPage } from '../list-chat/list-chat';
-import { ChatPage } from '../chat/chat';
 
 
 
@@ -132,7 +130,4 @@ export class CategoriesPage {
     this.rest.patchData(`/notifications/${noti.id}`, payload).subscribe(res => console.log(res))
   }
 
-  public toChat(user) {
-    this.navCtrl.push(ChatPage, { user });
-  }
 }

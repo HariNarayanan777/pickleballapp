@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
-import { ChatPage } from '../chat/chat';
 
 
 @IonicPage()
@@ -47,6 +46,5 @@ export class PublicProfilePage {
   }
 
   public async toChatView() {
-    this.navCtrl.push(ChatPage, { 'user': this.user }, { animation: "ios-transition" });
   }
 }

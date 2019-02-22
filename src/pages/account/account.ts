@@ -12,7 +12,6 @@ import { ShareAppPage } from '../share-app/share-app';
 import { CourtsSavedPage } from '../courts-saved/courts-saved';
 import { HelpersProvider } from '../../providers/helpers/helpers';
 import { NearCourtsAndTournamentsPage } from '../near-courts-and-tournaments/near-courts-and-tournaments';
-import { ListChatPage } from '../list-chat/list-chat';
 import { ListFriendPage } from '../list-friend/list-friend';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CreateEventPage } from '../create-event/create-event';

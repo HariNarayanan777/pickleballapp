@@ -4,7 +4,6 @@ import { CategoriesPage } from '../categories/categories';
 import { SearchPage } from '../search/search';
 import { AccountPage } from '../account/account';
 import { MyApp } from '../../app/app.component';
-import { ListChatPage } from '../list-chat/list-chat';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { Storage } from '@ionic/storage';
 import { SearchPlacesPage } from '../search-places/search-places';
@@ -20,7 +19,6 @@ export class TabsPage {
   // tab1Root = SearchPlacesPage;
   tab1Root = HomePage;
   tab2Root = CategoriesPage;
-  tab3Root = ListChatPage;
   tab4Root = SearchPage;
   tab5Root = AccountPage;
 

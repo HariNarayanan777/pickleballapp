@@ -6,7 +6,7 @@ import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
+// import { TabsPage } from '../pages/tabs/tabs';
 
 import { LocationAccuracy } from '@ionic-native/location-accuracy';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
@@ -24,11 +24,7 @@ import { RestProvider } from '../providers/rest/rest';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UpdateAccountPageModule } from '../pages/update-account/update-account.module';
 import { Push } from '@ionic-native/push';
-import { ChatPageModule } from '../pages/chat/chat.module';
-import { ChatPage } from '../pages/chat/chat';
 import { EmojiProvider } from '../providers/emoji/emoji';
-import { ListChatPageModule } from '../pages/list-chat/list-chat.module';
-import { ListChatPage } from '../pages/list-chat/list-chat';
 import { LiveComunicationProvider } from '../providers/live-comunication/live-comunication';
 import { SearchPlacesPageModule } from '../pages/search-places/search-places.module';
 import { SearchPage } from '../pages/search/search';
@@ -89,7 +85,7 @@ import { FilterPage } from '../pages/filter/filter';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage
+    // TabsPage
   ],
   imports: [
     BrowserModule,
@@ -102,8 +98,6 @@ import { FilterPage } from '../pages/filter/filter';
     LoginPageModule,
     HttpClientModule,
     UpdateAccountPageModule,
-    ChatPageModule,
-    ListChatPageModule,
     SearchPlacesPageModule,
     CreateAccountPageModule,
     FutureTournamentsPageModule,
@@ -134,9 +128,7 @@ import { FilterPage } from '../pages/filter/filter';
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
-    ChatPage,
-    ListChatPage,
+    // TabsPage,
     SearchPage,
     CreateAccountPage,
     FutureTournamentsPage,

@@ -12,6 +12,7 @@ import { LiveComunicationProvider } from '../providers/live-comunication/live-co
 import { AuthProvider } from '../providers/auth/auth';
 import { HelpersProvider } from '../providers/helpers/helpers';
 import { FilterPage } from '../pages/filter/filter';
+import { HomePage } from '../pages/home/home';
 
 @Component({
   templateUrl: 'app.html'
@@ -19,28 +20,16 @@ import { FilterPage } from '../pages/filter/filter';
 export class MyApp {
 
   rootPage: any;
-  pushObject: PushObject;
 
   public static setNotifications = false;
   constructor(
-    platform: Platform, statusBar: StatusBar,
-    splashScreen: SplashScreen, public storage: Storage, public http: HttpClient,
-    public lc: LiveComunicationProvider, public auht: AuthProvider,
-    public helper: HelpersProvider, public zone: NgZone
+    platform: Platform, public storage: Storage,
+    public http: HttpClient, public lc: LiveComunicationProvider,
+    public auht: AuthProvider, public helper: HelpersProvider,
+    public zone: NgZone
   ) {
     platform.ready().then(() => {
-      // splashScreen.hide();
-      // statusBar.overlaysWebView(false);
-      // statusBar.backgroundColorByHexString('#7dff2f');
-      this.storage.get('LOGGED_IN').then((logged) => {
-        if (logged == true) {
-          // this.rootPage = FilterPage;
-          this.rootPage = TabsPage;
-        } else {
-          this.rootPage = LoginPage;
-        }
-      });
-      // this.helper.startBackgroundLocationSelf();
+      this.rootPage = HomePage;
     });
   }
 

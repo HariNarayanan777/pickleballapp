@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ToastController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 import { AuthProvider } from '../../providers/auth/auth';
-import { ChatPage } from '../chat/chat';
 import { RestProvider } from '../../providers/rest/rest';
 import { PublicProfilePage } from '../public-profile/public-profile';
 import { HelpersProvider } from '../../providers/helpers/helpers';
@@ -80,7 +79,6 @@ export class ListFriendPage {
   public async toChatView(user) {
     if (this.toChat === false) return;
     await this.navCtrl.pop({ animation: "ios-transition" });
-    this.navCtrl.push(ChatPage, { user }, { animation: "ios-transition" });
   }
 
   //#region encontrar nuevas personas
