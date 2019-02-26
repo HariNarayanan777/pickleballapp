@@ -25,7 +25,7 @@ export class HelpersProvider {
     public diagnostic: Diagnostic, public modalCtrl: ModalController,
     public atps: AmazingTimePickerService, public toastCtrl: ToastController,
     public alertCtrl: AlertController, public camera: Camera, public app: App,
-    public locationAccuracy:LocationAccuracy
+    public locationAccuracy: LocationAccuracy
   ) {
     HelpersProvider.me = this;
   }
@@ -90,36 +90,42 @@ export class HelpersProvider {
     let position: any;
     let options = {
       timeout: 20000 //sorry I use this much milliseconds
-    }
-    if (this.platform.is("cordova") === true) {
-      //Para comprobar si tiene los permisos
-      if (await this.diagnostic.isLocationAuthorized() === false) {
-        await this.diagnostic.requestLocationAuthorization();
+    };
+    try {
+      if (this.platform.is("cordova") === true) {
+        //Para comprobar si tiene los permisos
         if (await this.diagnostic.isLocationAuthorized() === false) {
           await this.diagnostic.requestLocationAuthorization();
-        }
-      }
-      //Para comprobar si tiene habilitado el gps
-      if (await this.diagnostic.isGpsLocationAvailable() === false ||
-        await this.diagnostic.isGpsLocationEnabled() === false
-      ) {
-        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-
-          if(canRequest) {
-            // the accuracy option will be ignored by iOS
-            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-              () => console.log('Request successful'),
-              error => console.log('Error requesting location permissions', error)
-            );
+          if (await this.diagnostic.isLocationAuthorized() === false) {
+            await this.diagnostic.requestLocationAuthorization();
           }
-        
-        });
-        return null;
+        }
+        //Para comprobar si tiene habilitado el gps
+        if (await this.diagnostic.isGpsLocationAvailable() === false ||
+          await this.diagnostic.isGpsLocationEnabled() === false
+        ) {
+          this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+
+            if (canRequest) {
+              // the accuracy option will be ignored by iOS
+              this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+                () => console.log('Request successful'),
+                error => console.log('Error requesting location permissions', error)
+              );
+            }
+
+          });
+          return null;
+        }
+        position = await this.geolocation.getCurrentPosition(options);
+        return position;
       }
-      position = await this.geolocation.getCurrentPosition(options);
-      return position;
+      return await this.geolocation.getCurrentPosition(options);
     }
-    return await this.geolocation.getCurrentPosition(options);
+    catch (e) {
+      console.error(e);
+    }
+    return null;
   }
 
   public nativeDatePicker(options?: CalendarModalOptions): Promise<Date> {

@@ -42,9 +42,9 @@
 
   <div id="location" [hidden]="type==='players'">
     <div class="details">
-      <h2>{{currentLocation==="" ? 'Current Location' : currentLocation}}</h2>
-      <p *ngIf="type==='tournaments'||type==='clinics'"><span (click)="changeDateStart()">{{dateStart | date:'EEE,
-          MMM dd'}}</span> - <span (click)="changeDateEnd()">{{dateEnd
+      <h2>{{currentLocation=== 'NOT' ? 'Its location could not be obtained' : currentLocation==="" ? 'Current Location' : currentLocation}}</h2>
+      <p *ngIf="type==='tournaments'||type==='clinics'"><span>{{dateStart | date:'EEE,
+          MMM dd'}}</span> - <span>{{dateEnd
           | date:'EEE, MMM dd'}}</span></p>
     </div>
     <div class="action">

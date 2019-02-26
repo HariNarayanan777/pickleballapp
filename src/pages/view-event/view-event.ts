@@ -39,12 +39,13 @@ export class ViewEventPage {
   searchTerm: string = '';
   searchControl: FormControl;
   public players: any = [];
-  userID: any;
+  userID: any = "";
   disable: boolean = false;
 
   //Para busquedad de courts
   public search = "";
   public map: any;
+  public enableMap = false;
   public lat = 36.778259;
   public lng = -119.417931;
   marker: any;
@@ -60,7 +61,7 @@ export class ViewEventPage {
   public maxDistance = 33000;
   public load: Loading;
 
-  public currentLocation = "";
+  public currentLocation = "NOT";
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public viewCtrl: ViewController, public http: HttpClient,
@@ -71,9 +72,13 @@ export class ViewEventPage {
   }
 
   async ionViewWillEnter() {
-    this.userID = await AuthProvider.me.getIdUser();
-    if (this.type === "courts")
+    if (this.userID === "") {
+      this.userID = await AuthProvider.me.getIdUser();
       await this.getCourtsSaved();
+    }
+
+    if (this.type === "courts" && this.enableMap === true)
+      await this.getCourts();
     if (this.type === "tournaments")
       this.getTournaments();
     if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
@@ -83,7 +88,6 @@ export class ViewEventPage {
   async ngAfterViewInit() {
     document.querySelector(".back-button").setAttribute("hidden", "");
     await LiveComunicationProvider.reloadGoogleplaces();
-    await this.initMap();
 
     let input = () => { return document.querySelector("#search-courts-input-view-event .searchbar-input") };
     let autocomplete = new google.maps.places.Autocomplete(input());
@@ -114,33 +118,6 @@ export class ViewEventPage {
       return `url(assets/imgs/court-sport-default.jpg)`
   }
 
-  public async changeDateStart() {
-    // let dateStart = await HelpersProvider.me.nativeDatePicker({
-    //   defaultDate: this.dateStart,
-    //   title: "Select the initial date"
-    // });
-    // if (dateStart !== null) {
-    //   this.dateStart = dateStart;
-    //   if (this.type === "tournaments")
-    //     this.getTournaments();
-    //   if (this.type === "clinics")
-    //     this.getEvents();
-    // }
-  }
-
-  public async changeDateEnd() {
-    // let dateEnd = await HelpersProvider.me.nativeDatePicker({
-    //   defaultDate: this.dateStart,
-    //   title: "Select the end date"
-    // });
-    // if (dateEnd !== null) {
-    //   this.dateEnd = dateEnd;
-    //   if (this.type === "tournaments")
-    //     this.getTournaments();
-    //   if (this.type === "clinics")
-    //     this.getEvents();
-    // }
-  }
 
   private async initMap() {
 
@@ -170,62 +147,53 @@ export class ViewEventPage {
       this.lat = event.latLng.lat();
       this.lng = event.latLng.lng();
 
-      this.marker.setPosition({
-        lat: this.lat,
-        lng: this.lng
+      //Obtenemos la direccion del punto
+      let geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, async (res, status) => {
+
+        if (Object.prototype.toString.call(res) === "[object Array]") {
+          if (res.length === 0) return;
+          res = res[0];
+        }
+
+        if (res.geometry) {
+          let address = res.formatted_address;
+          (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value = address;
+          await this.setLocationOfSearch(address);
+        }
+
       });
-      this.map.setCenter({ lat: this.lat, lng: this.lng });
-      if (this.type === "courts")
-        this.getCourts();
-      if (this.type === "tournaments")
-        this.getTournaments(this.lat, this.lng);
-      if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
-        this.getEvents();
+
     });
-    if (this.type === "courts")
-      await this.getCourts();
-    if (this.type === "tournaments")
-      await this.getTournaments(this.lat, this.lng);
-    if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
-      await this.getEvents();
+
+    await this.ionViewWillEnter();
   }
 
   private async setPosition(position, getCourts: boolean) {
     console.log(position);
     this.lat = position.coords.latitude;
     this.lng = position.coords.longitude;
+    if (this.enableMap === false) {
+      this.enableMap = true;
+      await this.initMap();
+      if (this.currentLocation === "NOT")
+        this.currentLocation = "";
+      return;
+    }
     this.marker.setPosition({
       lat: this.lat,
       lng: this.lng
     });
     this.map.setCenter({ lat: this.lat, lng: this.lng });
     if (getCourts === true) {
-      if (this.type === "courts")
-        await this.getCourts();
-      if (this.type === "tournaments")
-        await this.getTournaments(this.lat, this.lng);
-      if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
-        this.getEvents();
+      await this.ionViewWillEnter();
     }
-    // let geocoder = new google.maps.Geocoder();
-    // geocoder.geocode({ 'location': { lat: this.lat, lng: this.lng } }, async (res, status) => {
-
-    //   if (Object.prototype.toString.call(res) === "[object Array]") {
-    //     if (res.length === 0) return;
-    //     res = res[0];
-    //   }
-
-    //   if (res.geometry) {
-    //     let address = res.formatted_address;
-    //     (document.querySelector("#search-courts-input-view-event .searchbar-input") as any).value = address;
-    //   }
-
-    // });
+    this.zone.run(function () { console.log("set new position"); });
   }
 
   private setLocationOfSearch(address: string) {
     let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address }, (res, status) => {
+    geocoder.geocode({ address }, async (res, status) => {
 
       if (Object.prototype.toString.call(res) === "[object Array]") {
         if (res.length === 0) return;
@@ -233,31 +201,26 @@ export class ViewEventPage {
       }
 
       if (res.geometry) {
-        let estado = "", i = 0;
+        console.log(res);
+        let estado = "";
         for (let des of res.address_components) {
-          if (i === 0) {
-            estado += " "+ des.short_name;
+          if (des.types && des.types.length > 0) {
+            if (des.types[0] === "administrative_area_level_1" || des.types[0] === "country")
+              estado += " " + des.long_name;
+
           }
-          estado += " "+ des.long_name;
-          i += 1;
         }
         this.currentLocation = estado;
-        // console.log(this.currentLocation);
-        // console.log(res);
         this.lat = res.geometry.location.lat();
         this.lng = res.geometry.location.lng();
 
-        this.marker.setPosition({
-          lat: this.lat,
-          lng: this.lng
-        });
-        this.map.setCenter({ lat: this.lat, lng: this.lng });
-        if (this.type === "courts")
-          this.getCourts();
-        if (this.type === "tournaments")
-          this.getTournaments(this.lat, this.lng);
-        if (this.type === "clinics" || this.type === "coaches" || this.type === "vacations")
-          this.getEvents();
+        let pos = {
+          coords: {
+            latitude: res.geometry.location.lat(),
+            longitude: res.geometry.location.lng()
+          }
+        };
+        await this.setPosition(pos, true);
       }
 
     });
