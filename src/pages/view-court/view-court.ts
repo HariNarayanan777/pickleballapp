@@ -33,7 +33,7 @@ export class ViewCourtPage {
     if (!court.users)
       court.users = [];
     this.court = court;
-    console.log(this.court);
+    // console.log(this.court);
   }
 
   public nextSlide() {

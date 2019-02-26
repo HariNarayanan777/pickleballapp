@@ -6,7 +6,7 @@
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
         &nbsp;&nbsp;
         <!-- <ion-icon name="arrow-back"></ion-icon> -->
-        Home
+        Back
       </button>
     </ion-buttons>
     <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
@@ -81,7 +81,7 @@
     <div class="th">
       <h2>Hours of Operation</h2>
       <div class="status" [ngClass]="court.opening_hours.open_now === true ? 'open' : 'close'">
-        {{court.opening_hours.open_now === true ? 'OPEN' : 'CLOSE'}}
+        {{court.opening_hours.open_now === true ? 'OPEN' : 'CLOSED'}}
       </div>
     </div>
     <div class="periods" *ngFor="let p of court.opening_hours.periods">

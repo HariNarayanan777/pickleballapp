@@ -62,8 +62,8 @@
 
     <div class="body">
       <div class="item friend" *ngFor="let f of listFriend">
-        <img [src]="f.photo" (error)="errorUserImage($event)">
-        <div class="datas">
+        <img [src]="f.photo" (click)="goToFriendProfile(f.id)" (error)="errorUserImage($event)">
+        <div class="datas" (click)="goToFriendProfile(f.id)">
           <div>
             <h2>Player:</h2> <span>{{f.fullName}}</span>
           </div>

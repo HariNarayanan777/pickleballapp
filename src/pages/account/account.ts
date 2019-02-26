@@ -22,6 +22,7 @@ import { TabsPage } from '../tabs/tabs';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { PublicProfilePage } from '../public-profile/public-profile';
 
 declare var google: any;
 
@@ -286,6 +287,10 @@ export class AccountPage {
 
   public toHome() {
     TabsPage.toTab(0);
+  }
+
+  public goToFriendProfile(userID) {
+    this.navCtrl.push(PublicProfilePage, { 'userID': userID });
   }
 
 }

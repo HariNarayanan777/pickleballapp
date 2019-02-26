@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { ChatPage } from '../chat/chat';
+import { HelpersProvider } from '../../providers/helpers/helpers';
 
 
 @IonicPage()
@@ -16,6 +17,7 @@ export class PublicProfilePage {
   email: any;
   rank: any;
   user:any;
+  public location = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider
@@ -36,12 +38,8 @@ export class PublicProfilePage {
       this.fullName = data['fullName'];
       this.email = data['email'];
       this.rank = data['rank'];
-      if(data['loginFacebook'] !== null && data['loginFacebook'] !== undefined){
-        this.profileImg = `https://graph.facebook.com/${data['loginFacebook']['userID']}/picture?type=large&width=720&height=720`
-      }else if(data['image'] !== null && data['image'] !== undefined){
-        this.profileImg = data['image']['src'];
-      }else
-        this.profileImg = 'assets/imgs/default-user.png';
+      this.location = data["location"] || "";
+      this.profileImg = HelpersProvider.me.getPhotoUrl(data, 2);
     });
 
   }
