@@ -492,7 +492,8 @@ export class ViewEventPage {
       this.markers.push(marker);
     }
     this.setEventToMarkers();
-    this.load.dismiss();
+    if (this.load.instance !== null)
+      this.load.dismiss();
     this.zone.run(function () { console.log("fetch courts"); });
   }
 
