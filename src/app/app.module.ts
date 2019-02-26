@@ -82,6 +82,7 @@ import { ViewEventPage } from '../pages/view-event/view-event';
 import { ViewEventPageModule } from '../pages/view-event/view-event.module';
 import { FilterPageModule } from '../pages/filter/filter.module';
 import { FilterPage } from '../pages/filter/filter';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,10 @@ import { FilterPage } from '../pages/filter/filter';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: 'pickleconnect',
+      driverOrder: ['sqlite', 'websql', 'indexeddb']
+    }),
     CategoriesPageModule,
     MapPageModule,
     SearchPageModule,
@@ -178,7 +182,8 @@ import { FilterPage } from '../pages/filter/filter';
     CameraPreview,
     PhotoLibrary,
     File,
-    LocationAccuracy
+    LocationAccuracy,
+    LaunchNavigator
   ]
 })
 export class AppModule { }

@@ -4,7 +4,7 @@ import * as moment from "moment";
 import { AuthProvider } from '../../providers/auth/auth';
 import { HttpClient } from '@angular/common/http';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
-
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 declare var google;
 
 @IonicPage()
@@ -26,7 +26,8 @@ export class ViewCourtPage {
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     public http: HttpClient, public toastCtrl: ToastController,
-    public viewCtrl: ViewController, public zone: NgZone
+    public viewCtrl: ViewController, public zone: NgZone,
+    private launchnavigator: LaunchNavigator
   ) {
     let court = this.navParams.get("court");
     if (!court.users)
@@ -175,6 +176,24 @@ export class ViewCourtPage {
     //   duration: 3000
     // });
     // toast.present();
+  }
+
+  public launchNavigator() {
+    let isAvailable = this.launchnavigator.isAppAvailable(this.launchnavigator.APP.GOOGLE_MAPS);
+    let options: LaunchNavigatorOptions;
+    if (isAvailable) {
+      options = {
+        // start: 'London, ON',
+        app: this.launchnavigator.APP.GOOGLE_MAPS
+      }
+    } else {
+      console.warn("Google Maps not available - falling back to user selection");
+      options = {
+        // start: 'London, ON',
+        app: this.launchnavigator.APP.USER_SELECT
+      }
+    }
+    this.launchnavigator.navigate([this.court.lat, this.court.lng], options);
   }
 
 }
