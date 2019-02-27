@@ -175,7 +175,6 @@ export class AccountPage {
       await this.storage.remove("USER_TOKEN");
       await this.storage.remove("SESIONEMAIL");
       await this.storage.remove("USER_ID");
-      MyApp.setNotifications = false;
       this.app.getRootNav().setRoot(LoginPage);
     };
 

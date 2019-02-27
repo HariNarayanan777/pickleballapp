@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { CreateAccountPage } from '../create-account/create-account';
 import { AuthProvider } from '../../providers/auth/auth';
 import * as moment from 'moment';
+import { ViewEventPage } from '../view-event/view-event';
 
 
 declare var FB: any;
@@ -22,7 +23,7 @@ export class LoginPage {
   public password = "";
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams, 
+    public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage,
     private rest: RestProvider, private platform: Platform,
     public alertCltr: AlertController, private http: HttpClient
@@ -54,6 +55,8 @@ export class LoginPage {
     }
     let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
     await AuthProvider.me.saveLoginUser(login, true);
+    this.navCtrl.setRoot(ViewEventPage);
+    console.log("change");
   }
 
   handleLogin(res) {
@@ -80,9 +83,11 @@ export class LoginPage {
 
 
   saveInAPI(res) {
-    this.rest.putData(this.fbLoginEndpoint, res).subscribe(result => {
-      AuthProvider.me.saveLoginUser(result);
-    })
+    this.rest.putData(this.fbLoginEndpoint, res).subscribe(async result => {
+      await AuthProvider.me.saveLoginUser(result);
+      this.navCtrl.setRoot(ViewEventPage);
+      console.log("change");
+    });
   }
 
   public createAccount() {

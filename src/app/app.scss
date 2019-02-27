@@ -31,3 +31,31 @@
     background-color: red;
     border-radius: 50%;
 }
+
+ion-menu {
+    ion-header ion-toolbar {
+        .toolbar-background {
+            background-color: black !important;
+        }
+        ion-title {
+            div {
+                color: #7dff2f !important;
+            }
+        }
+    }
+    .scroll-content {
+        overflow-y: hidden !important;
+        background-color: black !important;
+        ion-list{
+            button {
+                background-color: black !important;
+                .item-inner{
+                    border-bottom-color: #7dff2f !important;
+                }
+                ion-label{
+                    color: #7dff2f !important;
+                }
+            }
+        }
+    }
+}

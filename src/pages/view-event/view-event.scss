@@ -1,18 +1,6 @@
 page-view-event {
     ion-buttons {
-        button {
-            .active-filter {
-                background-color: #7dff2f;
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                display: inline-block;
-                margin-right: 4px;
-            }
-            .button-inner {
-                color: white;
-            }
-        }
+        order: 2 !important;
     }
     #logo-navbar {
         width: 200px;

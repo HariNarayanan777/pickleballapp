@@ -27,7 +27,6 @@ export class AuthProvider {
   public async saveLoginUser(user, withEmailAndPassword?) {
     withEmailAndPassword = withEmailAndPassword || false;
     await this.storage.set('USER_ID', user['id']);
-    console.log(user.token);
     if (user.token !== undefined && user.token !== null) {
       await this.storage.set('USER_TOKEN', user['token']);
       this.USER_TOKEN = user.token

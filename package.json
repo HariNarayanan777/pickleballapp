@@ -37,6 +37,7 @@
         "@ionic/storage": "^2.2.0",
         "amazing-time-picker": "^1.8.0",
         "angular-cropperjs": "^0.1.5",
+        "bootstrap": "^4.3.1",
         "cordova-android": "7.1.4",
         "cordova-ios": "4.5.5",
         "cordova-plugin-camera": "^4.0.3",

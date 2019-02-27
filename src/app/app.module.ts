@@ -77,6 +77,7 @@ import { ViewEventPage } from '../pages/view-event/view-event';
 import { ViewEventPageModule } from '../pages/view-event/view-event.module';
 import { FilterPageModule } from '../pages/filter/filter.module';
 import { FilterPage } from '../pages/filter/filter';
+import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,10 @@ import { FilterPage } from '../pages/filter/filter';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: 'pickleconnect',
+      driverOrder: ['sqlite', 'websql', 'indexeddb']
+    }),
     CategoriesPageModule,
     MapPageModule,
     SearchPageModule,
@@ -135,6 +139,7 @@ import { FilterPage } from '../pages/filter/filter';
     CourtsSavedPage,
     NearCourtsAndTournamentsPage,
     ListFriendPage,
+    LoginPage,
     ViewCourtPage,
     CreateEventPage,
     SelectUsersPage,
