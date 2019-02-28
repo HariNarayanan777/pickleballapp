@@ -1,54 +1,77 @@
 <ion-header>
 
   <ion-navbar>
-    <!-- <ion-buttons start style="order: 1">
-      <button ion-button icon-only>
-        <ion-icon name="ios-person-outline"></ion-icon>
-      </button>
-    </ion-buttons> -->
-    <ion-buttons end style="min-width: 60px;">
-      <button class="text-btn" ion-button clear>
-        Filter
+    <ion-buttons start style="order: 1">
+      <button ion-button color="primary" menuToggle="leftMenu">
+        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>PickleConnect</ion-title>
-    <!-- <ion-buttons end style="min-width: 60px;">
-      <button class="text-btn" ion-button clear>
-        Filter
-      </button>
-    </ion-buttons> -->
+    <img id="logo-navbar" src="./assets/imgs/logo-pickle.png">
   </ion-navbar>
 
 </ion-header>
 
 <ion-content>
-  <form action="." (ngSubmit)="onSearchInput()">
-    <ion-searchbar (input)="onSearchInput()" placeholder="Search all players" [(ngModel)]="searchTerm"
-      [formControl]="searchControl" [showCancelButton]="true" (ionCancel)="cancel()"></ion-searchbar>
-  </form>
 
+  <div class="container">
+    <div class="row " [ngClass]="selectUser===true?'justify-content-between':'justify-content-center'">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+        <form action="." (ngSubmit)="onSearchInput()">
+          <ion-searchbar (input)="onSearchInput()" placeholder="Search all players" [(ngModel)]="searchTerm"
+            [formControl]="searchControl" [showCancelButton]="true" (ionCancel)="cancel()"></ion-searchbar>
+        </form>
 
-  <ion-list *ngIf="searching">
-    <div class="flex-center" *ngIf="players.length < 1">
-      <p>Sorry, no results matched your criteria</p>
+        <ion-list *ngIf="searching">
+          <div class="flex-center" *ngIf="players.length < 1">
+            <p>Sorry, no results matched your criteria</p>
+          </div>
+          <div *ngIf="players.length > 0">
+            <ion-item>
+              <p class="list-title">Results for {{searchTerm}} in Players</p>
+            </ion-item>
+
+            <ion-item *ngFor="let p of players" [hidden]="p._id===userID" (click)="goToFriendProfile(p._id)">
+              <ion-avatar item-start>
+                <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
+              </ion-avatar>
+              <h2 text-wrap>{{p.fullName}}</h2>
+              <p>Skill Level: {{p.rank}}</p>
+              <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
+              <button [disabled]="disable" class="button-save" *ngIf="isFriend(p)" ion-button item-end
+                [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
+                (click)="checkFriendRequest(p, $event)"></button>
+            </ion-item>
+          </div>
+        </ion-list>
+      </div>
+      <div class="col-12 col-sm-10 col-md-3 col-lg-5" id="people" *ngIf="selectUser">
+        <ion-grid>
+          <ion-row padding>
+            <ion-col col-12>
+              <div class="image-holder">
+                <img [src]="people.profileImg" alt="">
+              </div>
+              <p class="title-name">{{people.fullName}}</p>
+              <p class="location">
+                <ion-icon name="ios-pin"></ion-icon> {{people.location}}
+              </p>
+              <p class="location">
+                <ion-icon name="ios-at"></ion-icon>{{people.email}}
+              </p>
+              <p class="location">
+                <ion-icon name="ios-star"></ion-icon>{{people.rank}}
+              </p>
+              <!-- <p>
+                <button ion-button full icon-start (click)="toChatView()">
+                  <ion-icon name="ios-chatboxes-outline"></ion-icon> Send message
+                </button>
+              </p> -->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
     </div>
-    <div *ngIf="players.length > 0">
-      <ion-item>
-        <p class="list-title">Results for {{searchTerm}} in Players</p>
-      </ion-item>
+  </div>
 
-      <ion-item *ngFor="let p of players" [hidden]="p._id===userID" (click)="goToFriendProfile(p._id)">
-        <ion-avatar item-start>
-          <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
-        </ion-avatar>
-        <h2 text-wrap>{{p.fullName}}</h2>
-        <p>Skill Level: {{p.rank}}</p>
-        <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
-        <button [disabled]="disable" class="button-save" *ngIf="isFriend(p)" ion-button item-end
-          [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
-          (click)="checkFriendRequest(p, $event)"></button>
-      </ion-item>
-    </div>
-  </ion-list>
 
 </ion-content>

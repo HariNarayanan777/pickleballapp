@@ -20,32 +20,52 @@ export class MyApp {
   rootPage: any;
 
   public pages = [
-    { title: "Search", component: ViewEventPage },
-    { title: "Search Friends", component: SearchPage },
-    { title: "Profile", component: AccountPage }
+    { title: "Search", component: ViewEventPage, requiredLogin: false },
+    { title: "Search Friends", component: SearchPage, requiredLogin: true },
+    { title: "Profile", component: AccountPage, requiredLogin: true }
   ];
+
+  public isLogged = false;
+  public static changeLogin: Function;
+
   constructor(
     platform: Platform, public storage: Storage,
     public http: HttpClient, public lc: LiveComunicationProvider,
     public auht: AuthProvider, public helper: HelpersProvider,
     public zone: NgZone
   ) {
+
     platform.ready().then(() => {
+      this.rootPage = ViewEventPage;
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
-          // this.rootPage = FilterPage;
-          this.rootPage = ViewEventPage;
+          this.isLogged = true;
         } else {
-          this.rootPage = LoginPage;
+          this.isLogged = false;
         }
       });
     });
+
+    MyApp.changeLogin = function (isLogged: boolean) {
+      this.isLogged = isLogged;
+      this.zone.run(function () { console.log("change Login"); });
+    }.bind(this);
+
+  }
+
+  openLogin() {
+    this.nav.setRoot(LoginPage);
   }
 
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  validRol(page) {
+    if (page.requiredLogin === false) return true;
+    return page.requiredLogin === this.isLogged;
   }
 
 }

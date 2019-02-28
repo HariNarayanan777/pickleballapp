@@ -1,4 +1,7 @@
 page-login {
+    .toolbar-background {
+        background: #000000 !important;
+    }
     ion-content {
         background-color: #000000;
         background-image: linear-gradient(#000000, #222731);
@@ -12,7 +15,7 @@ page-login {
             .area-login {
                 width: 100%;
                 flex-basis: 100%;
-                .logo-login{
+                .logo-login {
                     margin-bottom: 50px;
                 }
                 ion-list {
@@ -21,14 +24,13 @@ page-login {
                     flex-wrap: wrap;
                     margin-bottom: 0 !important;
                 }
-
-                .input-styled{
+                .input-styled {
                     background: #333 !important;
                     border-radius: 30px;
                     min-height: 45px;
                     height: 45px;
                     margin-bottom: 15px;
-                    ion-icon{
+                    ion-icon {
                         font-size: 25px;
                         color: #fff;
                     }
@@ -49,39 +51,35 @@ page-login {
                         color: white !important;
                     }
                 }
-                
-               .clear-btn-row{
-                   margin-bottom: 50px;
-                   button{
-                       height: 20px;
-                       min-height: 20px;
-                       padding: 5px;
-                       color: #bea805;
-                       font-size: 15px;
-                       text-transform: initial;
-                   }
-                   button:last-child{
-                       float: right;
-                       color: #fff;
-                   }
-               }
-
-               .white-btn{
-                height: 40px;
-                color: #000;
-                background: #fff;
-                border-radius: 30px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                font-size: 15px;
-                font-weight: 400;
-                ion-icon{
-                    color: #576ea5;
+                .clear-btn-row {
+                    margin-bottom: 50px;
+                    button {
+                        height: 20px;
+                        min-height: 20px;
+                        padding: 5px;
+                        color: #bea805;
+                        font-size: 15px;
+                        text-transform: initial;
+                    }
+                    button:last-child {
+                        float: right;
+                        color: #fff;
+                    }
                 }
-               }
-               
+                .white-btn {
+                    height: 40px;
+                    color: #000;
+                    background: #fff;
+                    border-radius: 30px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    font-size: 15px;
+                    font-weight: 400;
+                    ion-icon {
+                        color: #576ea5;
+                    }
+                }
             }
-           
         }
     }
 }

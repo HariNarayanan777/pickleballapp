@@ -8,6 +8,7 @@ import { CreateAccountPage } from '../create-account/create-account';
 import { AuthProvider } from '../../providers/auth/auth';
 import * as moment from 'moment';
 import { ViewEventPage } from '../view-event/view-event';
+import { MyApp } from '../../app/app.component';
 
 
 declare var FB: any;
@@ -56,6 +57,7 @@ export class LoginPage {
     let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
     await AuthProvider.me.saveLoginUser(login, true);
     this.navCtrl.setRoot(ViewEventPage);
+    MyApp.changeLogin(true);
     console.log("change");
   }
 
@@ -86,6 +88,7 @@ export class LoginPage {
     this.rest.putData(this.fbLoginEndpoint, res).subscribe(async result => {
       await AuthProvider.me.saveLoginUser(result);
       this.navCtrl.setRoot(ViewEventPage);
+      MyApp.changeLogin(true);
       console.log("change");
     });
   }

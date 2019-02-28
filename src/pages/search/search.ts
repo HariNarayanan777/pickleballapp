@@ -21,6 +21,8 @@ export class SearchPage {
   public players: any = [];
   userID: any;
   disable: boolean = false;
+  public people: any = {};
+  public selectUser = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage,
@@ -38,11 +40,11 @@ export class SearchPage {
     this.shouldShowCancel = false;
   }
 
-  public errorImage(e){
+  public errorImage(e) {
     e.target.src = "./assets/imgs/default-user.png";
   }
 
-  public getUrlImage(player){
+  public getUrlImage(player) {
     return HelpersProvider.me.getPhotoUrl(player);
   }
 
@@ -162,8 +164,21 @@ export class SearchPage {
     })
   }
 
-  goToFriendProfile(userID){
-    this.navCtrl.push(PublicProfilePage, {'userID': userID});
+
+  //#region para mostrar un usario en misma pantalla si es necesario
+  goToFriendProfile(userID) {
+    if (window.innerWidth <= 720) {
+      this.navCtrl.push(PublicProfilePage, { 'userID': userID });
+      return;
+    }
+    this.rest.getData('/user/' + userID).subscribe(data => {
+      console.log(data);
+      this.selectUser = true;
+      this.people = data;
+      this.people.profileImg = HelpersProvider.me.getPhotoUrl(data);
+    });
+
   }
 
+  //#endregion
 }

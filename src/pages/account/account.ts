@@ -176,6 +176,7 @@ export class AccountPage {
       await this.storage.remove("SESIONEMAIL");
       await this.storage.remove("USER_ID");
       this.app.getRootNav().setRoot(LoginPage);
+      MyApp.changeLogin(false);
     };
 
     let withEmail = await this.storage.get('SESIONEMAIL');

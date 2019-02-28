@@ -28,189 +28,142 @@
 
 <ion-content>
 
-  <div id="profile-datas">
-    <div id="datas-prits">
-      <img [src]="profileImg">
-      <div id="datas">
-        <div>
-          <h2>PLAYER:</h2> <span>{{fullName}}</span>
-        </div>
-        <div>
-          <h2>location:</h2> <span>{{address}}</span>
-        </div>
-        <div>
-          <h2>level:</h2> <span>{{rank}}</span>
-        </div>
-        <div>
-          <h2>email:</h2> <span>{{email}}</span>
-        </div>
-      </div>
-    </div>
-    <h3 (click)="presentModal()">
-      <ion-icon name="create"></ion-icon> Manage Profile
-    </h3>
-  </div>
-
-  <div class="sections">
-    <div class="title" (click)="toViewFriends()">
-      <h2>Friends</h2>
-      <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </div>
-
-    <div class="body">
-      <div class="item friend" *ngFor="let f of listFriend">
-        <img [src]="f.photo" (error)="errorUserImage($event)">
-        <div class="datas">
-          <div>
-            <h2>Player:</h2> <span>{{f.fullName}}</span>
-          </div>
-          <div>
-            <h2>Location:</h2> <span>{{f.location}}</span>
-          </div>
-          <div>
-            <h2>Level:</h2> <span>{{f.rank}}</span>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div id="profile-datas">
+          <div id="datas-prits">
+            <img [src]="profileImg">
+            <div id="datas">
+              <div>
+                <h2>PLAYER:</h2> <span>{{fullName}}</span>
+              </div>
+              <div>
+                <h2>location:</h2> <span>{{address}}</span>
+              </div>
+              <div>
+                <h2>level:</h2> <span>{{rank}}</span>
+              </div>
+              <div>
+                <h2>email:</h2> <span>{{email}}</span>
+              </div>
+            </div>
           </div>
         </div>
+        <h3 (click)="presentModal()">
+          <ion-icon name="create"></ion-icon> Manage Profile
+        </h3>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12  col-md-6 col-lg-5">
+          <div class="sections">
+            <div class="title" (click)="toViewFriends()">
+              <h2>Friends</h2>
+              <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+            <div class="body">
+              <div class="item friend" *ngFor="let f of listFriend">
+                <img [src]="f.photo" (error)="errorUserImage($event)">
+                <div class="datas">
+                  <div>
+                    <h2>Player:</h2> <span>{{f.fullName}}</span>
+                  </div>
+                  <div>
+                    <h2>Location:</h2> <span>{{f.location}}</span>
+                  </div>
+                  <div>
+                    <h2>Level:</h2> <span>{{f.rank}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-5">
+          <div class="sections">
+            <div class="title" (click)="toSavedCourts()">
+              <h2>Saved Courts</h2>
+              <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+            <div class="body">
+              <div class="item court" *ngFor="let c of listCourts">
+                <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)">
+                <div class="datas">
+                  <h2 (click)="toCourt(c)">{{c.name}}</h2>
+                  <h2>{{c.location}}</h2>
+                </div>
+                <div class="go" (click)="toCourt(c)">
+                  GO
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 col-md-10 col-lg-8">
+          <div class="sections">
+            <div class="title" (click)="toSavedTournments(true)">
+              <h2>My Events</h2>
+              <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </div>
+
+            <div class="body">
+              <div class="item event court" *ngFor="let c of listEvents">
+                <img [src]="c.images ? transformUrl(c.images[0]) : ''" (click)="toEvent(c)"
+                  (error)="errorUserImage($event)">
+                <div class="datas">
+                  <h2 (click)="toEvent(c)">{{c.name}}</h2>
+                  <h2>{{c.locationText}}</h2>
+                </div>
+                <div class="go" (click)="toEvent(c)">
+                  GO
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-8">
+          <ion-list id="list-options">
+            <ion-item (click)="createEvent()">
+              Create Event
+              <!-- <i class="fa fa-angle-right" item-end aria-hidden="true"></i> -->
+            </ion-item>
+
+            <ion-item (click)="toSavedTournments()">
+              My Tournaments
+              <!-- <i class="fa fa-angle-right" item-end aria-hidden="true"></i> -->
+            </ion-item>
+            <ion-item>
+              App Settings
+            </ion-item>
+            <ion-item>
+              Privacy
+            </ion-item>
+            <ion-item>
+              Contact Us
+            </ion-item>
+            <ion-item (click)="logout()">
+              Sign Out
+            </ion-item>
+          </ion-list>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <div class="sections">
-    <div class="title" (click)="toSavedCourts()">
-      <h2>Saved Courts</h2>
-      <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </div>
 
-    <div class="body">
-      <div class="item court" *ngFor="let c of listCourts">
-        <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)">
-        <div class="datas">
-          <h2 (click)="toCourt(c)">{{c.name}}</h2>
-          <h2>{{c.location}}</h2>
-        </div>
-        <div class="go" (click)="toCourt(c)">
-          GO
-        </div>
-      </div>
-    </div>
 
-  </div>
 
-  <div class="sections">
-    <div class="title" (click)="toSavedTournments(true)">
-      <h2>My Events</h2>
-      <i class="fa fa-angle-right" aria-hidden="true"></i>
-    </div>
 
-    <div class="body">
-      <div class="item event court" *ngFor="let c of listEvents">
-        <img [src]="c.images ? transformUrl(c.images[0]) : ''" (click)="toEvent(c)" (error)="errorUserImage($event)">
-        <div class="datas">
-          <h2 (click)="toEvent(c)">{{c.name}}</h2>
-          <h2>{{c.locationText}}</h2>
-        </div>
-        <div class="go" (click)="toEvent(c)">
-          GO
-        </div>
-      </div>
-    </div>
 
-  </div>
 
-  <ion-item class="full" (click)="createEvent()">
-    Create Event
-    <i class="fa fa-angle-right" item-end aria-hidden="true"></i>
-  </ion-item>
 
-  <ion-item class="full" (click)="toSavedTournments()">
-    My Tournaments
-    <i class="fa fa-angle-right" item-end aria-hidden="true"></i>
-  </ion-item>
 
-  <ion-list id="list-options">
-    <ion-item>
-      App Settings
-    </ion-item>
-    <ion-item>
-      Privacy
-    </ion-item>
-    <ion-item>
-      Contact Us
-    </ion-item>
-    <ion-item (click)="logout()">
-      Sign Out
-    </ion-item>
-  </ion-list>
-
-  <!-- <ion-grid>
-    <ion-row>
-      <ion-col col-12 id="buttons-actions">
-        <ion-item>
-          <button full ion-button (click)="toViewFriends()">
-            View Friends
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <button full ion-button (click)="createEvent()">
-            Create Event
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <button full ion-button (click)="shareApp()">
-            Share PickleConnect
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <button full ion-button (click)="toFutureTournments()">
-            Future Tournaments
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <button full ion-button (click)="toSavedTournments()">
-            Saved Tournaments
-          </button>
-        </ion-item>
-
-        <ion-item>
-          <button full ion-button (click)="toSavedCourts()">
-            Saved Courts
-          </button>
-        </ion-item>
-
-        <ion-item *ngIf="validNear()">
-          <button full ion-button (click)="toNearCourtsTournaments()">
-            {{getNearEntityMessage()}}
-          </button>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-
-  <!-- <ion-list>
-    <ion-item>
-      <ion-label>
-        <ion-icon name="ios-card"></ion-icon>Name
-      </ion-label>
-      <ion-input type="text" disabled [(ngModel)]="fullName"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <ion-icon name="ios-mail-outline"></ion-icon> Email
-      </ion-label>
-      <ion-input type="text" disabled [(ngModel)]="email"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        <ion-icon name="ios-pin-outline"></ion-icon> Zipcode
-      </ion-label>
-      <ion-input type="text" disabled [(ngModel)]="zipcode"></ion-input>
-    </ion-item>
-  </ion-list> -->
 
   <div id="map_tls_account" hidden></div>
 
