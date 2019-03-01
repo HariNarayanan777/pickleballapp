@@ -9,6 +9,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import * as moment from 'moment';
 import { ViewEventPage } from '../view-event/view-event';
 import { MyApp } from '../../app/app.component';
+import { MenuHorizontalProvider } from '../../providers/menu-horizontal/menu-horizontal';
 
 
 declare var FB: any;
@@ -27,7 +28,8 @@ export class LoginPage {
     public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage,
     private rest: RestProvider, private platform: Platform,
-    public alertCltr: AlertController, private http: HttpClient
+    public alertCltr: AlertController, private http: HttpClient,
+    public menuH: MenuHorizontalProvider
   ) {
   }
 

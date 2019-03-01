@@ -59,3 +59,23 @@ ion-menu {
         }
     }
 }
+
+// FOR MENU HORIZONTAL
+.navbar{
+    width: 100% !important;
+    background-color: black !important;
+    .collapse.navbar-collapse{
+        // padding-left: 16px;
+        .nav-item{
+            margin-left: 10px;
+        }
+        .nav-item a{
+            color: #7dff2f !important;
+            font-weight: bold;
+            font-size: 1.8rem !important;
+        }
+        .nav-item.active{
+            border-bottom: 1px solid #7dff2f !important;
+        }
+    }
+}

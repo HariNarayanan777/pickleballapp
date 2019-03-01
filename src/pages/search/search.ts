@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { Push } from '@ionic-native/push';
 import { PublicProfilePage } from '../public-profile/public-profile';
 import { HelpersProvider } from '../../providers/helpers/helpers';
+import { MenuHorizontalProvider } from '../../providers/menu-horizontal/menu-horizontal';
 
 
 @IonicPage()
@@ -26,7 +27,9 @@ export class SearchPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private rest: RestProvider, private storage: Storage,
-    public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController) {
+    public toastCtrl: ToastController, public actionSheetCtrl: ActionSheetController,
+    public menuH: MenuHorizontalProvider
+  ) {
     this.searchControl = new FormControl();
   }
 

@@ -78,6 +78,7 @@ import { ViewEventPageModule } from '../pages/view-event/view-event.module';
 import { FilterPageModule } from '../pages/filter/filter.module';
 import { FilterPage } from '../pages/filter/filter';
 import { LoginPage } from '../pages/login/login';
+import { MenuHorizontalProvider } from '../providers/menu-horizontal/menu-horizontal';
 
 @NgModule({
   declarations: [
@@ -172,7 +173,8 @@ import { LoginPage } from '../pages/login/login';
     CameraPreview,
     PhotoLibrary,
     File,
-    LocationAccuracy
+    LocationAccuracy,
+    MenuHorizontalProvider
   ]
 })
 export class AppModule { }

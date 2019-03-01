@@ -19,9 +19,10 @@ import { ShareEventFriendsPage } from '../share-event-friends/share-event-friend
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
+import { MenuHorizontalProvider } from '../../providers/menu-horizontal/menu-horizontal';
 
 declare var google: any;
-declare var FB:any;
+declare var FB: any;
 
 @IonicPage()
 @Component({
@@ -47,11 +48,11 @@ export class AccountPage {
   public map: any = {};
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams, 
+    public navCtrl: NavController, public navParams: NavParams,
     private storage: Storage,
     private app: App, private rest: RestProvider,
     public modalCtrl: ModalController, public http: HttpClient,
-    private platform: Platform
+    private platform: Platform, public menuH: MenuHorizontalProvider
   ) {
     this.init();
   }

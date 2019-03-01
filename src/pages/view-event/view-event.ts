@@ -11,6 +11,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { PublicProfilePage } from '../public-profile/public-profile';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { FilterPage } from '../filter/filter';
+import { MenuHorizontalProvider } from '../../providers/menu-horizontal/menu-horizontal';
 
 declare var google: any;
 
@@ -65,7 +66,8 @@ export class ViewEventPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public viewCtrl: ViewController, public http: HttpClient,
     private zone: NgZone, private rest: RestProvider, public toastCtrl: ToastController,
-    private actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController
+    private actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController,
+    public menuH: MenuHorizontalProvider
   ) {
     // this.type = this.navParams.get("courts");
   }

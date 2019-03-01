@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
+import { Platform, Nav, App } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
@@ -10,13 +10,13 @@ import { ViewEventPage } from '../pages/view-event/view-event';
 import { LoginPage } from '../pages/login/login';
 import { AccountPage } from '../pages/account/account';
 import { SearchPage } from '../pages/search/search';
+import { MenuHorizontalProvider } from '../providers/menu-horizontal/menu-horizontal';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
 
-  @ViewChild(Nav) nav: Nav;
   rootPage: any;
 
   public pages = [
@@ -27,12 +27,13 @@ export class MyApp {
 
   public isLogged = false;
   public static changeLogin: Function;
+  public static me: MyApp;
 
   constructor(
     platform: Platform, public storage: Storage,
     public http: HttpClient, public lc: LiveComunicationProvider,
     public auht: AuthProvider, public helper: HelpersProvider,
-    public zone: NgZone
+    public zone: NgZone, public app: App
   ) {
 
     platform.ready().then(() => {
@@ -40,32 +41,38 @@ export class MyApp {
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
           this.isLogged = true;
+          MenuHorizontalProvider.isLogged = true;
         } else {
           this.isLogged = false;
+          MenuHorizontalProvider.isLogged = false;
         }
       });
     });
 
     MyApp.changeLogin = function (isLogged: boolean) {
       this.isLogged = isLogged;
+      MenuHorizontalProvider.isLogged = isLogged;
       this.zone.run(function () { console.log("change Login"); });
     }.bind(this);
-
+    MyApp.me = this;
   }
 
-  openLogin() {
-    this.nav.setRoot(LoginPage);
-  }
-
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
-  }
-
-  validRol(page) {
-    if (page.requiredLogin === false) return true;
-    return page.requiredLogin === this.isLogged;
+  public static goPage(id) {
+    switch (id) {
+      case 's':
+        MyApp.me.app.getActiveNavs()[0].setRoot(ViewEventPage);
+        break;
+      case 'sf':
+        MyApp.me.app.getActiveNavs()[0].setRoot(SearchPage);
+        break;
+      case 'p':
+        MyApp.me.app.getActiveNavs()[0].setRoot(AccountPage);
+        break;
+      case 'l':
+        MyApp.me.app.getActiveNavs()[0].setRoot(LoginPage);
+        break;
+    }
+    MyApp.me.zone.run(function () { console.log("change Login"); });
   }
 
 }
