@@ -118,6 +118,6 @@
         <variable name="GOOGLE_API_KEY_FOR_ANDROID" value="AIzaSyCOousbcePaV9XQ_tDvVP96yGzYanRF6Pk" />
         <variable name="OKHTTP_VERSION" value="3.12.0" />
     </plugin>
-    <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.0" />
+    <engine name="ios" spec="4.5.5" />
 </widget>

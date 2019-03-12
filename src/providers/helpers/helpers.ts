@@ -104,17 +104,19 @@ export class HelpersProvider {
         if (await this.diagnostic.isGpsLocationAvailable() === false ||
           await this.diagnostic.isGpsLocationEnabled() === false
         ) {
-          this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
-            if (canRequest) {
-              // the accuracy option will be ignored by iOS
-              this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-                () => console.log('Request successful'),
-                error => console.log('Error requesting location permissions', error)
-              );
-            }
+          if(this.platform.is("android") === true){
+            this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
-          });
+              if (canRequest) {
+               this.getAccuracy();
+              }
+  
+            });
+          }else if(this.platform.is("ios") === true){
+            this.getAccuracy();
+          }
+       
           return null;
         }
         position = await this.geolocation.getCurrentPosition(options);
@@ -128,6 +130,14 @@ export class HelpersProvider {
     return null;
   }
 
+
+  getAccuracy(){
+     // the accuracy option will be ignored by iOS
+     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+      () => console.log('Request successful'),
+      error => console.log('Error requesting location permissions', error)
+    );
+  }
   public nativeDatePicker(options?: CalendarModalOptions): Promise<Date> {
     options = options || {};
 
