@@ -101,11 +101,12 @@ export class HelpersProvider {
           }
         }
         //Para comprobar si tiene habilitado el gps
+        if(this.platform.is("android") === true){
+
         if (await this.diagnostic.isGpsLocationAvailable() === false ||
           await this.diagnostic.isGpsLocationEnabled() === false
         ) {
 
-          if(this.platform.is("android") === true){
             this.locationAccuracy.canRequest().then((canRequest: boolean) => {
 
               if (canRequest) {
@@ -113,11 +114,12 @@ export class HelpersProvider {
               }
   
             });
-          }else if(this.platform.is("ios") === true){
-            this.getAccuracy();
-          }
+          
        
           return null;
+        }
+      }else if(this.platform.is("ios") === true){
+          this.getAccuracy();
         }
         position = await this.geolocation.getCurrentPosition(options);
         return position;
