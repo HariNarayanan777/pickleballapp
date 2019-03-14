@@ -36,7 +36,7 @@ export class MyApp {
     platform.ready().then(() => {
       splashScreen.hide();
       statusBar.overlaysWebView(false);
-      statusBar.backgroundColorByHexString('black');
+      statusBar.backgroundColorByName('black');
       this.storage.get('LOGGED_IN').then((logged) => {
         if (logged == true) {
           // this.rootPage = FilterPage;

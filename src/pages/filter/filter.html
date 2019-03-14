@@ -21,7 +21,7 @@
     <ion-checkbox slot="end" [(ngModel)]="tournaments"></ion-checkbox>
   </ion-item>
 
-  <h3>Max Distance {{maxDistance}}ml</h3>
+  <h3>Max Distance {{maxDistance}} miles</h3>
   <ion-item>
     <ion-range min="0" max="100" [(ngModel)]="maxDistance" color="secondary">
       <!-- <ion-label slot="start">-200</ion-label>
@@ -44,7 +44,7 @@
   </div>
 
   <div id="search-from">
-    <h2>Search From</h2>
+    <h3 style="font-size: 1.7rem; padding-left: 0;">Search From</h3>
     <!-- <ion-item>
       <ion-label>My current location</ion-label>
       <ion-checkbox slot="end" [(ngModel)]="tournaments"></ion-checkbox>

@@ -8,7 +8,8 @@ page-filter {
         text-transform: uppercase !important;
     }
     .scroll-content {
-        background-image: linear-gradient(#cccccc, #999999, #666666, #333366, #333333) !important;
+        // background-image: linear-gradient(#cccccc, #999999, #666666, #333366, #333333) !important;
+        background-color:  #82a1b1;
     }
     ion-item {
         background-color: transparent !important;
@@ -85,7 +86,7 @@ page-filter {
             font-size: 1.7rem;
         }
         h3 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
         ion-item {
             padding: 0;
@@ -96,7 +97,7 @@ page-filter {
                 border-radius: 50% !important;
             }
             ion-label {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
         }
         #input-location-address input {

@@ -17,11 +17,11 @@
 
 <ion-content>
 
-  <div class="back-banner">
-    <button ion-button style="color: #0099ff !important; font-size: 2.3rem;
+  <div ion-fixed class="back-banner">
+    <button ion-button style="color: white !important; font-size: 1.5rem;
       font-weight: normal; background-color: #999999;" (click)="viewCtrl.dismiss()">
       <i class="fa fa-chevron-left" aria-hidden="true"></i>
-      &nbsp;&nbsp;
+      &nbsp;&nbsp; Chats
       <!-- <ion-icon name="arrow-back"></ion-icon> -->
     </button>
     <ion-row>
@@ -71,7 +71,8 @@
         </button>
       </ion-col>
       <ion-col col-8>
-        <ion-textarea #chat_input placeholder="Text Input" [(ngModel)]="editorMsg" (keyup.enter)="sendMsg()" (ionFocus)="onFocus()">
+        <ion-textarea #chat_input placeholder="Text Input" [(ngModel)]="editorMsg" (keyup.enter)="sendMsg()"
+          (ionFocus)="onFocus()">
         </ion-textarea>
       </ion-col>
       <ion-col col-2>

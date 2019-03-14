@@ -11,6 +11,7 @@ import { RestProvider } from '../../providers/rest/rest';
 import { PublicProfilePage } from '../public-profile/public-profile';
 import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { FilterPage } from '../filter/filter';
+import * as moment from 'moment';
 
 declare var google: any;
 
@@ -27,7 +28,7 @@ export class ViewEventPage {
   public items = [];
 
   public dateStart = new Date();
-  public dateEnd = new Date();
+  public dateEnd = moment().add("days", 60).toDate();
 
   //Para busquedad de torneos
   public torneoName = "";
@@ -69,6 +70,7 @@ export class ViewEventPage {
     private actionSheetCtrl: ActionSheetController, private loadingCtrl: LoadingController
   ) {
     this.type = this.navParams.get("type");
+    console.log(this.dateEnd);
   }
 
   async ionViewWillEnter() {
@@ -336,8 +338,9 @@ export class ViewEventPage {
 
   //#region para obtener los courts
   public changeSearch() {
-    this._isChangingLocation = !this._isChangingLocation;
-    if (this._isChangingLocation === true) this._viewMap = true;
+    // this._isChangingLocation = !this._isChangingLocation;
+    // if (this._isChangingLocation === true) this._viewMap = true;
+    this.filter();
   }
 
   public isChangingLocation() {
@@ -726,10 +729,7 @@ export class ViewEventPage {
   }
 
   public getUrlImage(player) {
-    if (player.loginFacebook) {
-      return player.loginFacebook.image;
-    }
-    return "";
+    return HelpersProvider.me.getPhotoUrl(player);
   }
 
   cancel() {

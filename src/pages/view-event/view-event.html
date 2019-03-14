@@ -73,8 +73,8 @@
     placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
 
   <ion-list [hidden]="type!=='players'">
-    <div class="flex-center" *ngIf="players.length < 1">
-      <p>Sorry, no results matched your criteria</p>
+    <div class="flex-center" *ngIf="players.length < 1&&searchTerm!==''">
+      <p style="text-align: center;">Sorry, no results matched your criteria</p>
     </div>
     <div *ngIf="players.length > 0">
       <ion-item>
