@@ -53,13 +53,14 @@ export class CategoriesPage {
   getNotifications(infiniteScroll?) {
     let query = {
       or: [
-        { user: this.userID, type: "chat" },
+        // { user: this.userID, type: "chat" },
         { user: this.userID, type: "acceptFriend" },
         { user: this.userID, type: "requestFriend" }
       ]
     };
     this.rest.getData(`/notifications?where=${JSON.stringify(query)}&sort=createdAt DESC&limit=10&skip=${this.skip}`).subscribe(res => {
-      let rsts: any = res; console.log(rsts);
+      let rsts: any = res;
+      rsts = rsts.map(it=>{ it.createdAt = new Date(it.createdAt); return it; });
       if (rsts.length > 0) {
         this.notifications = this.notifications.concat(rsts);
         this.skip += 10;
@@ -134,5 +135,13 @@ export class CategoriesPage {
 
   public toChat(user) {
     this.navCtrl.push(ChatPage, { user });
+  }
+
+  public deleteNotifications(noti){
+    this.rest.removeData(`/notifications/${noti.id}`).subscribe(res =>{
+      this.notifications = this.notifications.filter(it=>{
+        return it.id !== noti.id;
+      });
+    });
   }
 }

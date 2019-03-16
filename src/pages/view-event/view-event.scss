@@ -18,6 +18,9 @@ page-view-event {
     .scroll-content {
         background-color: #cccccc;
     }
+    ion-content.players-inner .scroll-content{
+        background-color: black !important;
+    }
     #logo-navbar {
         width: 200px;
         margin-left: calc(50% - 100px);
@@ -120,6 +123,18 @@ page-view-event {
                 height: 3rem;
                 object-fit: contain;
             }
+        }
+    }
+    .item-player{
+        background-color: #292929;
+        ion-avatar img{
+            border-radius: 0 !important;
+        }
+        h2, p{
+            color: #cccccc !important;
+        }
+        .item-inner{
+            border-bottom-width: 0 !important;
         }
     }
 }

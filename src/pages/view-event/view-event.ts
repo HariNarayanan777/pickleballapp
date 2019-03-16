@@ -706,6 +706,7 @@ export class ViewEventPage {
     if (this.searchTerm === "") {
       this.searching = false;
       this.shouldShowCancel = false;
+      this.players = [];
     } else {
       this.searching = true;
       this.shouldShowCancel = true;

@@ -20,7 +20,7 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content [ngClass]="type==='players'?'players-inner':''">
 
   <ion-searchbar [hidden]="type==='players'" id="search-courts-input-view-event" placeholder="Change your location"
     [hidden]="!isChangingLocation()" type="text" showCancelButton="true"></ion-searchbar>
@@ -73,15 +73,15 @@
     placeholder="Search Players" (ionCancel)="cancel()"></ion-searchbar>
 
   <ion-list [hidden]="type!=='players'">
-    <div class="flex-center" *ngIf="players.length < 1&&searchTerm!==''">
-      <p style="text-align: center;">Sorry, no results matched your criteria</p>
+    <div class="flex-center item-player" *ngIf="players.length < 1&&searchTerm!==''">
+      <p style="text-align: center; padding: 15px;">Sorry, no results matched your criteria</p>
     </div>
     <div *ngIf="players.length > 0">
-      <ion-item>
+      <ion-item class="item-player">
         <p class="list-title">Results for {{searchTerm}} in Players</p>
       </ion-item>
 
-      <ion-item *ngFor="let p of players" [hidden]="p._id===userID">
+      <ion-item *ngFor="let p of players" class="item-player" [hidden]="p._id===userID">
         <ion-avatar item-start (click)="goToFriendProfile(p._id)">
           <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
         </ion-avatar>

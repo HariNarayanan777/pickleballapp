@@ -52,8 +52,18 @@ export class LoginPage {
         .present();
       return;
     }
-    let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
-    await AuthProvider.me.saveLoginUser(login, true);
+    try {
+      let login = await this.http.put("/login", { email: this.email, password: this.password }).toPromise();
+      await AuthProvider.me.saveLoginUser(login, true);
+    }
+    catch (e) {
+      console.error(e);
+      this.alertCltr.create({
+        title: "Error",
+        message: "Email and Password do not match",
+        buttons: ["Ok"]
+      }).present();
+    }
   }
 
   handleLogin(res) {

@@ -24,7 +24,7 @@
       &nbsp;&nbsp; Chats
       <!-- <ion-icon name="arrow-back"></ion-icon> -->
     </button>
-    <ion-row>
+    <ion-row style="width: 100%;">
       <ion-col col-12 style="display: flex; justify-content: center;">
         <img class="nav-avatar" [src]="photo" (error)="errorImage($event)">
       </ion-col>
@@ -43,6 +43,7 @@
       <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>
       <div class="msg-detail">
         <div class="msg-info">
+          <p>{{msg.dateTime | date:'MM/dd/yyyy'}} {{msg.dateTime | relativeTime}}</p>
           <!-- <p>&nbsp;&nbsp;&nbsp;{{msg.dateTime | relativeTime}}</p> -->
           <p>&nbsp;&nbsp;&nbsp;</p>
         </div>
