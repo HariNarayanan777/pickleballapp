@@ -33,6 +33,7 @@ declare var google: any;
 })
 export class AccountPage {
 
+  user: any = {};
   profileImg: any;
   userID: any;
   fullName: any;
@@ -62,9 +63,11 @@ export class AccountPage {
   async ionViewWillEnter() {
     try {
       try {
+
         await this.getFriends();
         let user = await AuthProvider.me.getIdUser(),
           query: any = { user };
+        this.user = await this.http.get(`/user/${user}`).toPromise();
         this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
         query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
         this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
@@ -74,13 +77,13 @@ export class AccountPage {
       await LiveComunicationProvider.reloadGoogleplaces();
       try {
         let miPosition = await HelpersProvider.me.getMyPosition();
-        if (miPosition) {
+        if (this.user.zipCode) {
           let lng = miPosition.coords.longitude;
           let lat = miPosition.coords.latitude;
-          this.getAddress(lat, lng);
           this.resultsCourts = await this.http.get(`/court-position?lng=${lng}&lat=${lat}`).toPromise() as any;
           this.resultsTournaments = await this.http.get(`/tournaments-ubication?lng=${lng}&lat=${lat}`).toPromise() as any;
         }
+        this.getAddress(this.user.zipCode);
       } catch (error) {
         console.error(error);
       }
@@ -106,21 +109,31 @@ export class AccountPage {
     return InterceptorProvider.tranformUrl(img)
   }
 
-  private getAddress(lat, lng) {
+  private getAddress(zipCode) {
     let geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'location': { lat, lng } }, async (res, status) => {
+    geocoder.geocode({ 'address': zipCode}, async (res, status) => {
 
       if (Object.prototype.toString.call(res) === "[object Array]") {
         if (res.length === 0) return;
         res = res[0];
       }
-
-      if (res.geometry) {
+      let address = '';
+      if(res.address_components){
+        for(let cmp of res.address_components){
+          for(let t of cmp.types){
+            if(t==='locality' || t==='administrative_area_level_1'){
+              address += " "+ cmp.long_name;
+            }
+          }
+        }
+      }
+      if (address !== '') { console.log(address);
         this.address = res.formatted_address;
         await this.http.put(`/user-location`, {
-          location: this.address,
+          location: address,
           idUser: this.userID
         }).toPromise();
+        this.address = address;
       }
 
     });
@@ -226,8 +239,10 @@ export class AccountPage {
   public presentModal() {
     const modal = this.modalCtrl.create(UpdateAccountPage);
     modal.onDidDismiss(data => {
-      if (data['updated'] == true) {
-        this.init();
+      if (data) {
+        if (data['updated'] == true) {
+          this.init();
+        }
       }
     });
     modal.present();

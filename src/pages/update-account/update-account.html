@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only (click)="viewCtrl.dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>
       Update Account
     </ion-title>
@@ -35,20 +40,20 @@
 
   <ion-list>
     <ion-item>
-        <ion-label>Skill Level</ion-label>
-        <ion-select [(ngModel)]="level">
-          <ion-option value="1">1</ion-option>
-          <ion-option value="1.5">1.5</ion-option>
-          <ion-option value="2">2</ion-option>
-          <ion-option value="2.5">2.5</ion-option>
-          <ion-option value="3">3</ion-option>
-          <ion-option value="3.5">3.5</ion-option>
-          <ion-option value="4">4</ion-option>
-          <ion-option value="4.5">4.5</ion-option>
-          <ion-option value="5">5</ion-option>
-          <ion-option value="5.5">5.5</ion-option>
-          <ion-option value="6">6</ion-option>
-        </ion-select>
+      <ion-label>Skill Level</ion-label>
+      <ion-select [(ngModel)]="level">
+        <ion-option value="1">1</ion-option>
+        <ion-option value="1.5">1.5</ion-option>
+        <ion-option value="2">2</ion-option>
+        <ion-option value="2.5">2.5</ion-option>
+        <ion-option value="3">3</ion-option>
+        <ion-option value="3.5">3.5</ion-option>
+        <ion-option value="4">4</ion-option>
+        <ion-option value="4.5">4.5</ion-option>
+        <ion-option value="5">5</ion-option>
+        <ion-option value="5.5">5.5</ion-option>
+        <ion-option value="6">6</ion-option>
+      </ion-select>
     </ion-item>
   </ion-list>
 
