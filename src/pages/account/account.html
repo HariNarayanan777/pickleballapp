@@ -67,12 +67,15 @@
           <div>
             <h2>Player:</h2> <span>{{f.fullName}}</span>
           </div>
-          <div>
+          <div *ngIf="f.showPosition">
             <h2>Location:</h2> <span>{{f.location}}</span>
           </div>
           <div>
             <h2>Level:</h2> <span>{{f.rank}}</span>
           </div>
+        </div>
+        <div class="go" (click)="deleteFriend(f)">
+          REMOVE
         </div>
       </div>
     </div>
@@ -86,15 +89,15 @@
     </div>
 
     <div class="body">
-      <div class="item court" *ngFor="let c of listCourts">
+      <div class="item court" *ngFor="let c of listCourts" (click)="toCourt(c)">
         <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)">
         <div class="datas">
-          <h2 (click)="toCourt(c)">{{c.name}}</h2>
+          <h2>{{c.name}}</h2>
           <h2>{{c.location}}</h2>
         </div>
-        <div class="go" (click)="toCourt(c)">
+        <!-- <div class="go" (click)="toCourt(c)">
           GO
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -127,7 +130,7 @@
   </ion-item>
 
   <ion-item class="full" (click)="toSavedTournments()">
-    My Tournaments
+    Saved Tournaments
     <i class="fa fa-angle-right" item-end aria-hidden="true"></i>
   </ion-item>
 

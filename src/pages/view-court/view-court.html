@@ -17,17 +17,18 @@
 
 <ion-content>
 
-  <div [hidden]="!_viewMap" id="map_court" style="width: 100%; height: 300px;"></div>
+  <div id="map_court" style="width: 100%; height: 300px;"></div>
 
-  <img class="img-active" [hidden]="_viewMap" *ngIf="isSavedCourt()" (click)="saveOrRemove()"
+  <img class="img-active" hidden *ngIf="isSavedCourt()" (click)="saveOrRemove()"
     src="assets/imgs/heart-active.png">
-  <img class="img-active" [hidden]="_viewMap" *ngIf="!isSavedCourt()" (click)="saveOrRemove()"
+  <img class="img-active" hidden *ngIf="!isSavedCourt()" (click)="saveOrRemove()"
     src="assets/imgs/heart-unactive.png">
 
   <!-- BUTTONS NEXT Y BACK SLIDE -->
-  <img id="back-slide" [hidden]="_viewMap" (click)="backSlide()" class="buttons-slide" src="assets/imgs/back-slide.png">
-  <img id="next-slide" [hidden]="_viewMap" (click)="nextSlide()" class="buttons-slide" src="assets/imgs/next-slide.png">
-  <div id="banner" [hidden]="_viewMap">
+  <img id="back-slide" hidden (click)="backSlide()" class="buttons-slide" src="assets/imgs/back-slide.png">
+  <img id="next-slide" hidden (click)="nextSlide()" class="buttons-slide" src="assets/imgs/next-slide.png">
+  <!-- <div id="banner" [hidden]="_viewMap"> -->
+  <div id="banner" hidden>
     <ion-slides slidesPerView="1" autoplay="true" #mySlide loop="3000" pager="false" [hidden]="!court.photos">
       <ion-slide *ngFor="let img of court.photos">
         <img [src]="img">
@@ -35,7 +36,7 @@
     </ion-slides>
   </div>
 
-  <div id="button-view">
+  <div id="button-view" hidden>
     <button ion-button color="secondary" style="color:black;" (click)="viewMap()">{{_viewMap===true?'Hide Map':'View
       Map'}}</button>
   </div>

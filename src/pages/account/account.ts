@@ -308,4 +308,14 @@ export class AccountPage {
     this.navCtrl.push(PublicProfilePage, { 'userID': userID });
   }
 
+  public async deleteFriend(user) {
+    try {
+      await this.http.delete(`/requestfriend/${user.requestID}`).toPromise();
+      await this.getFriends();
+    }
+    catch (e) {
+      console.error(e);
+    }
+  }
+
 }

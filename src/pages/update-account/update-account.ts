@@ -19,6 +19,7 @@ export class UpdateAccountPage {
   profile: any;
   searchable: any;
   level: number = 1;
+  showPosition = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController,
     private storage: Storage,
@@ -40,6 +41,7 @@ export class UpdateAccountPage {
       this.zipcode = data['zipCode'];
       this.searchable = data['searchable'];
       this.level = data["rank"];
+      this.showPosition = data["showPosition"];
     });
 
   }
@@ -50,7 +52,10 @@ export class UpdateAccountPage {
     this.profile['zipCode'] = this.zipcode;
     this.profile['searchable'] = this.searchable;
     this.profile['rank'] = this.level;
-    this.rest.putData('/user/' + this.userID, this.profile).subscribe(result => {
+    this.profile['showPosition'] = this.showPosition;
+    let profile = JSON.parse( JSON.stringify(this.profile) );
+    delete profile["eventsPlayer"];
+    this.rest.putData('/user/' + this.userID, profile).subscribe(result => {
       console.log("Update", result);
       let data = { 'updated': true }
       this.viewCtrl.dismiss(data);

@@ -117,6 +117,16 @@ page-account {
                     width: 72px;
                 }
             }
+            .item.friend .go {
+                padding: 0 8px;
+                color: #cccccc;
+                font-size: 0.8rem;
+                border: 1px solid #cccccc;
+                width: 50px;
+                text-align: center;
+                height: 20px;
+                line-height: 20px;
+            }
             .item.court {
                 align-items: center;
             }
