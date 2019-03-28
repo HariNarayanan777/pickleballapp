@@ -354,100 +354,96 @@ export class ViewEventPage {
     this.markers = [];
   }
 
+  // private async getCourts() {
+  //   this.load = this.loadingCtrl.create();
+  //   this.load.present({ disableApp: true });
+  //   this.courst = [];
+  //   this.cleanMarkers();
+  //   let defaultBounds = new google.maps.LatLng(this.lat, this.lng);
+  //   let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number']
+  //   let options: any = {
+  //     location: defaultBounds,
+  //     radius: this.maxDistance,
+  //     fields
+  //   };
+  //   options.name = 'pickleball courts';
+
+
+  //   let service = new google.maps.places.PlacesService(this.map);
+
+  //   let results = await new Promise((resolve, reject) => {
+  //     service.nearbySearch(options, (results, status, pagination) => {
+  //       // console.log(results);
+  //       pagination.nextPage();
+  //       if (status == google.maps.places.PlacesServiceStatus.OK) {
+  //         for (let result of results) {
+  //           this.courst.push({
+  //             lat: result.geometry.location.lat(),
+  //             lng: result.geometry.location.lng(),
+  //             name: result.name,
+  //             location: result.vicinity,
+  //             photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
+  //             rating: result.rating,
+  //             place_id: result.place_id
+  //           })
+
+  //         }
+  //       }
+  //       resolve(results);
+  //     });
+  //   }) as any[];
+
+  //   var options2: any = {
+  //     location: defaultBounds,
+  //     radius: this.maxDistance,
+  //     fields
+  //   };
+  //   options2.type = ['rv_park'];
+  //   let results2 = await new Promise((resolve, reject) => {
+  //     service.nearbySearch(options2, (results, status, pagination) => {
+  //       // console.log(results);
+  //       pagination.nextPage();
+  //       if (status == google.maps.places.PlacesServiceStatus.OK) {
+  //         for (let result of results) {
+  //           this.courst.push({
+  //             lat: result.geometry.location.lat(),
+  //             lng: result.geometry.location.lng(),
+  //             name: result.name,
+  //             location: result.vicinity,
+  //             photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
+  //             rating: result.rating,
+  //             place_id: result.place_id
+  //           })
+
+  //         }
+  //       }
+  //       resolve(results);
+  //     });
+  //   }) as any[];
+  //   this.courst = this.courst.map(it => {
+  //     it.users = this.getUsersCourt(it);
+  //     return it;
+  //   });
+  //   this.setMarkersOfPlaces(results, results2);
+  // }
+
   private async getCourts() {
-    this.load = this.loadingCtrl.create();
-    this.load.present({ disableApp: true });
-    this.courst = [];
     this.cleanMarkers();
-    let defaultBounds = new google.maps.LatLng(this.lat, this.lng);
-    let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number']
-    let options: any = {
-      location: defaultBounds,
-      radius: this.maxDistance,
-      fields
-    };
-    options.name = 'pickleball courts';
-
-
-    let service = new google.maps.places.PlacesService(this.map);
-
-    let results = await new Promise((resolve, reject) => {
-      service.nearbySearch(options, (results, status, pagination) => {
-        // console.log(results);
-        pagination.nextPage();
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (let result of results) {
-            this.courst.push({
-              lat: result.geometry.location.lat(),
-              lng: result.geometry.location.lng(),
-              name: result.name,
-              location: result.vicinity,
-              photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
-              rating: result.rating,
-              place_id: result.place_id
-            })
-
-          }
-        }
-        resolve(results);
-      });
-    }) as any[];
-
-    var options2: any = {
-      location: defaultBounds,
-      radius: this.maxDistance,
-      fields
-    };
-    options2.type = ['rv_park'];
-    let results2 = await new Promise((resolve, reject) => {
-      service.nearbySearch(options2, (results, status, pagination) => {
-        // console.log(results);
-        pagination.nextPage();
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (let result of results) {
-            this.courst.push({
-              lat: result.geometry.location.lat(),
-              lng: result.geometry.location.lng(),
-              name: result.name,
-              location: result.vicinity,
-              photos: result.photos ? this.getUrlSmallImage(result.photos) : undefined,
-              rating: result.rating,
-              place_id: result.place_id
-            })
-
-          }
-        }
-        resolve(results);
-      });
-    }) as any[];
-    this.courst = this.courst.map(it => {
-      it.users = this.getUsersCourt(it);
+    let courts: any = await this.http.get(`/court-state?lat=${this.lat}&lng=${this.lng}&user=${this.userID}`).toPromise();
+    this.courst = courts;
+    this.items = this.courst.map(it => {
+      it.data = it;
       return it;
     });
-    this.setMarkersOfPlaces(results, results2);
+    this.setMarkersOfPlaces();
   }
 
-  public getUrlSmallImage(photos) {
-    return photos.map(it => {
-      return it.getUrl({ 'maxWidth': 200, 'maxHeight': 200 });
-    });
-  }
 
-  private setMarkersOfPlaces(results_courts, results_rv) {
-    if (this.type === "courts") {
-      this.items = this.courst.map(it => {
-        return {
-          name: it.name,
-          location: it.location,
-          photo: it.photos !== undefined ? it.photos[0] : 'assets/imgs/court-sport-default.jpg',
-          data: it
-        };
-      });
-    }
-
-    for (let result of results_courts) {
-      let lat = result.geometry.location.lat();
-      let lng = result.geometry.location.lng();
+  private setMarkersOfPlaces() {
+    console.log("here", this.courst);
+    for (let result of this.courst) {
+      let lat = result.coordinates[1];
+      let lng = result.coordinates[0];
       let image = {
         url: './assets/imgs/pickleball-icon.png',
         // This marker is 20 pixels wide by 32 pixels high.
@@ -470,33 +466,12 @@ export class ViewEventPage {
       this.markers.push(marker);
     }
 
-    for (let result of results_rv) {
-      let lat = result.geometry.location.lat();
-      let lng = result.geometry.location.lng();
-      let image = {
-        url: './assets/imgs/camper.png',
-        // This marker is 20 pixels wide by 32 pixels high.
-        size: new google.maps.Size(35, 21),
-        // The origin for this image is (0, 0).
-        origin: new google.maps.Point(0, 0),
-        // The anchor for this image is the base of the flagpole at (0, 32).
-        anchor: new google.maps.Point(17.5, 21)
-      };
-
-      let marker = new google.maps.Marker({
-        animation: 'DROP',
-        position: {
-          lat,
-          lng
-        },
-        map: this.map,
-        icon: image
-      });
-      this.markers.push(marker);
-    }
     this.setEventToMarkers();
-    if (this.load.instance !== null)
-      this.load.dismiss();
+    try {
+      if (this.load.instance !== null)
+        this.load.dismiss();
+    }
+    catch (e) { console.error(3); }
     this.zone.run(function () { console.log("fetch courts"); });
   }
 
@@ -510,80 +485,62 @@ export class ViewEventPage {
   }
 
   public toCourtSlide(court) {
-    if (court.lng !== null && court.lng !== undefined &&
-      court.lat !== null && court.lat !== undefined) {
-      this.toCourt(court.lat, court.lng);
-    }
+    this.toCourt(court.coordinates[1], court.coordinates[0]);
   }
 
   private toCourt(lat: number, lng: number) {
     let court = this.courst.find(it => {
-      return it.lat === lat && it.lng === lng;
+      return it.coordinates[1] === lat && it.coordinates[0] === lng;
     });
-    let save = this.isSavedCourt(court);
-    if (save.saved === true) {
-      court.id = this.courstSaved[save.index].id;
-    } else
-      delete court.id;
-    if (court !== null && court !== undefined) {
-      let fields = ['photos', 'formatted_address', 'name', 'rating', 'opening_hours', 'geometry', 'price_level', 'website', 'international_phone_number', 'formatted_phone_number']
-      let service = new google.maps.places.PlacesService(this.map);
-      var request = {
-        placeId: court.place_id,
-        fields
-      };
-      service.getDetails(request, place => {
-        console.log(place);
-        court.photos = place.photos ? place.photos.map(it => it.getUrl({ 'maxWidth': 600, 'maxHeight': 200 })) : court.photos;
-        court.website = place.website || undefined;
-        court.formatted_phone_number = place.formatted_phone_number || undefined;
-        court.opening_hours = place.opening_hours || undefined;
-        this.navCtrl.push(ViewCourtPage, { court });
-      });
+    if (court !== undefined) {
+      let save = this.isSavedCourt(court);
+      if (save.saved === true) {
+        court.id = this.courstSaved[save.index].id;
+      } else
+        delete court.id
 
+      this.navCtrl.push(ViewCourtPage, { court });
     }
-
   }
 
   private async getCourtsSaved() {
     let user = await AuthProvider.me.getIdUser();
     let query = { user };
-    this.courstSaved = await this.http.get(`/court-find?where=${JSON.stringify(query)}`).toPromise() as any[];
-    // this.courstSaveds = await this.http.get(`/court?limit=400`).toPromise() as any[];
+    let courstSaved = await this.http.get(`/courtsaved?where=${JSON.stringify(query)}&limit=4000`).toPromise() as any[];
+    this.courstSaved = courstSaved.map(it => {
+      it.court.idSaved = it.id;
+      return it.court;
+    });
   }
 
   public getUsersCourt(court) {
     let index = this.courstSaved.findIndex(it => {
-      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+      return it.coordinates[0] === court.coordinates[0] && it.coordinates[1] === court.coordinates[1];
     });
     if (index !== -1) return court.users;
     return [];
   }
 
   public async saveCourt(court) {
-    if (court.lng !== null && court.lng !== undefined &&
-      court.lat !== null && court.lat !== undefined) {
-      try {
-        let user = await AuthProvider.me.getIdUser();
-        let ite = JSON.parse(JSON.stringify(court));
-        ite.coordinates = [ite.lng, ite.lat];
-        delete ite.lng;
-        delete ite.lat;
-        ite.user = user;
-        await this.http.post("/court", ite).toPromise();
-        // this.presentToast("Saved Court");
-        await this.getCourtsSaved();
-      }
-      catch (e) {
-        console.error(e);
-      }
+    try {
+      let user = await AuthProvider.me.getIdUser();
+      let it = {
+        user,
+        court: court.id
+      };
+      await this.http.post("/courtsaved", it).toPromise();
+      // this.presentToast("Saved Court");
+      await this.getCourtsSaved();
+    }
+    catch (e) {
+      console.error(e);
     }
   }
 
   public async removeCourt(court) {
     let pos = await this.isSavedCourt(court);
     if (pos.saved === true) {
-      await this.http.delete(`/court/${this.courstSaved[pos.index].id}`).toPromise();
+      await this.http.delete(`/courtsaved/${this.courstSaved[pos.index].idSaved}`).toPromise();
       // this.presentToast("Courst Removed");
       await this.getCourtsSaved();
     }
@@ -591,7 +548,7 @@ export class ViewEventPage {
 
   public isSavedCourt(court) {
     let index = this.courstSaved.findIndex(it => {
-      return it.coordinates[0] === court.lng && it.coordinates[1] === court.lat;
+      return it.coordinates[0] === court.coordinates[0] && it.coordinates[1] === court.coordinates[1];
     });
     if (index === -1) {
       return { saved: false, index };

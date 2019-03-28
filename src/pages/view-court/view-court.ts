@@ -33,7 +33,8 @@ export class ViewCourtPage {
     if (!court.users)
       court.users = [];
     this.court = court;
-    // console.log(this.court);
+    this.court.updated = new Date(this.court.updated);
+    console.log(this.court);
   }
 
   public nextSlide() {
@@ -193,7 +194,7 @@ export class ViewCourtPage {
         app: this.launchnavigator.APP.USER_SELECT
       }
     }
-    this.launchnavigator.navigate([this.court.lat, this.court.lng], options);
+    this.launchnavigator.navigate([this.court.coordinates[1], this.court.coordinates[1]], options);
   }
 
 }

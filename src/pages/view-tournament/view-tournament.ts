@@ -78,7 +78,7 @@ export class ViewTournamentPage {
   }
 
   public dateToFormat(date) {
-    return moment(date).format("ddd DD/MM/YYYY");
+    return moment(date).format("ddd MM/DD/YYYY");
   }
 
   public async addOrRemove(tour, save) {

@@ -46,7 +46,7 @@
       <h2>{{court.name}}</h2>
       <div>
         <img src="./assets/imgs/pin-red.png">
-        <p>{{court.location}}</p>
+        <p>{{court.city}}, {{court.address}}</p>
       </div>
     </div>
     <div class="action">
@@ -58,11 +58,11 @@
   </div>
   <div class="others">
     <ion-row>
-      <ion-col *ngIf="court.website">
-        <a target="_black" [href]="court.website">Visit WebSite</a>
+      <ion-col *ngIf="court.nameContact">
+        {{court.nameContact}}
       </ion-col>
-      <ion-col *ngIf="court.formatted_phone_number">
-        <a href="tel:{{court.formatted_phone_number}}">{{court.formatted_phone_number}}</a>
+      <ion-col *ngIf="court.telephone&&court.telephone!=='Send Email'">
+        <a href="tel:{{court.telephone}}">{{court.telephone}}</a>
       </ion-col>
     </ion-row>
   </div>
@@ -78,18 +78,44 @@
     </div>
   </div>
 
-  <div id="hours" *ngIf="court.opening_hours">
+  <!-- <div id="hours" *ngIf="court.Schedule">
     <div class="th">
-      <h2>Hours of Operation</h2>
-      <div class="status" [ngClass]="court.opening_hours.open_now === true ? 'open' : 'close'">
-        {{court.opening_hours.open_now === true ? 'OPEN' : 'CLOSED'}}
+      <h2>Schedule</h2>
+      <div class="status">
+        {{court.Schedule}}
       </div>
     </div>
-    <div class="periods" *ngFor="let p of court.opening_hours.periods">
-      <h2>{{getDay(p.open)}}</h2>
-      <span>{{getPeriod(p)}}</span>
-    </div>
-  </div>
+  </div> -->
+
+  <ion-item *ngIf="court.Schedule">
+    <h2>Schedule/Hours</h2>
+    <p>{{court.Schedule}}</p>
+  </ion-item>
+
+  <ion-item *ngIf="court.Fee">
+    <h2>Fees</h2>
+    <p>{{court.Fee}}</p>
+  </ion-item>
+
+  <ion-item *ngIf="court.In">
+    <h2>Indoor courts</h2>
+    <p>{{court.In}}</p>
+  </ion-item>
+
+  <ion-item *ngIf="court.Out">
+    <h2>Outdoor Courts</h2>
+    <p>{{court.Out}}</p>
+  </ion-item>
+
+  <ion-item *ngIf="court.Comment">
+    <h2>Note</h2>
+    <p>{{court.Comment}}</p>
+  </ion-item>
+
+  <ion-item *ngIf="court.updated">
+    <h2>Last Updated</h2>
+    <p>{{court.updated | date:'MM/dd/yyyy'}}</p>
+  </ion-item>
 
 
   <!-- <ion-fab bottom right>

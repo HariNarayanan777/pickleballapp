@@ -57,10 +57,10 @@
       <h2>{{item.name}}</h2>
       <div>
         <img src="./assets/imgs/pin-red.png">
-        <p>{{item.location}}</p>
+        <p>{{item.city}}, {{item.address}}</p>
       </div>
     </div>
-    <div class="photo" [style.backgroundImage]="formaterUrl(item.photo)" [style.backgroundSize]="type==='courts'?'cover':'contain'">
+    <div class="photo" [style.backgroundSize]="type==='courts'?'cover':'contain'">
       <img *ngIf="isSaved(item.data)" (click)="remove(item.data)" src="assets/imgs/heart-active.png">
       <img *ngIf="!isSaved(item.data)" (click)="save(item.data)" src="assets/imgs/heart-unactive.png">
       <!-- <img class="photo" [src]="item.photo"> -->
