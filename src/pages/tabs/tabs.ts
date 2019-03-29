@@ -41,16 +41,28 @@ export class TabsPage {
 
   private async initSocketEvents() {
     await this.subscribeWebSocketsRoom();
-    LiveComunicationProvider.eventsNotifications.onNoti = async function (notification) {
+    LiveComunicationProvider.eventsNotifications.onNoti = async function (notification) { console.log(notification);
       let select = this.tabRef.getSelected();
-      if (select === null || select.tabIcon !== "ios-notifications-outline") {
-        let _div = document.getElementById("notification-rst");
-        if (_div === null) {
-          let div = document.createElement("div");
-          div.setAttribute("id", "notification-rst");
-          document.querySelector('[ng-reflect-name="ios-notifications-outline"]').parentElement.appendChild(div);
+      if(notification !== null && notification.type !== undefined){
+        if (select === null || select.tabIcon !== "ios-chatbubbles-outline") {
+          let _div = document.getElementById("notification-rsts");
+          if (_div === null) {
+            let div = document.createElement("div");
+            div.setAttribute("id", "notification-rsts");
+            document.querySelector('[ng-reflect-name="ios-chatbubbles-outline"]').parentElement.appendChild(div);
+          }
+        }
+      }else{
+        if (select === null || select.tabIcon !== "ios-notifications-outline") {
+          let _div = document.getElementById("notification-rst");
+          if (_div === null) {
+            let div = document.createElement("div");
+            div.setAttribute("id", "notification-rst");
+            document.querySelector('[ng-reflect-name="ios-notifications-outline"]').parentElement.appendChild(div);
+          }
         }
       }
+
     }.bind(this);
   }
 

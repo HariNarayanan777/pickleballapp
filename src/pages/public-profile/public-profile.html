@@ -29,6 +29,16 @@
             <ion-icon name="ios-chatboxes-outline"></ion-icon> Send message
           </button>
         </p>
+        <p *ngIf="!isFriend&&sendRequestAllow()===true">
+          <button ion-button full icon-start (click)="addFriend()">
+            Add Friend
+          </button>
+        </p>
+        <!-- <p *ngIf="isFriend">
+          <button ion-button full icon-start (click)="addFriend()">
+            Add Friend
+          </button>
+        </p> -->
       </ion-col>
 
     </ion-row>

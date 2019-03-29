@@ -23,6 +23,7 @@ import { InterceptorProvider } from '../../providers/interceptor/interceptor';
 import { ViewTournamentPage } from '../view-tournament/view-tournament';
 import { LiveComunicationProvider } from '../../providers/live-comunication/live-comunication';
 import { PublicProfilePage } from '../public-profile/public-profile';
+import { ViewCourtPage } from '../view-court/view-court';
 
 declare var google: any;
 
@@ -68,7 +69,7 @@ export class AccountPage {
         let user = await AuthProvider.me.getIdUser(),
           query: any = { user };
         this.user = await this.http.get(`/user/${user}`).toPromise();
-        this.listCourts = await this.http.get(`/court?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
+        this.listCourts = await this.http.get(`/courtsaved?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
         query = { date: { ">": new Date().getTime() }, user: await AuthProvider.me.getIdUser() };
         this.listEvents = await this.http.get(`/event?where=${JSON.stringify(query)}&limit=3&sort=createdAt DESC`).toPromise() as any[];
       } catch (error) {
@@ -180,6 +181,9 @@ export class AccountPage {
     });
   }
 
+  public formatNumber(n){
+    return (parseFloat(n) as any).toFixed("1");
+  }
 
   public errorUserImage(e) {
     e.target.src = "assets/imgs/default-user-2.png";
@@ -297,7 +301,8 @@ export class AccountPage {
   }
 
   public toCourt(court) {
-    CourtsSavedPage.toCourtDetails(this, court);
+    this.navCtrl.push(ViewCourtPage, court);
+    // CourtsSavedPage.toCourtDetails(this, court);
   }
 
   public toHome() {

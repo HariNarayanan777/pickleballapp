@@ -42,7 +42,7 @@
           <h2>location:</h2> <span>{{address}}</span>
         </div>
         <div>
-          <h2>level:</h2> <span>{{rank}}</span>
+          <h2>level:</h2> <span>{{formatNumber(rank)}}</span>
         </div>
         <div>
           <h2>email:</h2> <span>{{email}}</span>
@@ -71,7 +71,7 @@
             <h2>Location:</h2> <span>{{f.location}}</span>
           </div>
           <div>
-            <h2>Level:</h2> <span>{{f.rank}}</span>
+            <h2>Level:</h2> <span>{{formatNumber(f.rank)}}</span>
           </div>
         </div>
         <div class="go" (click)="deleteFriend(f)">
@@ -90,10 +90,10 @@
 
     <div class="body">
       <div class="item court" *ngFor="let c of listCourts" (click)="toCourt(c)">
-        <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)">
+        <!-- <img [src]="c.photos ? c.photos[0] : ''" (error)="errorUserImage($event)"> -->
         <div class="datas">
-          <h2>{{c.name}}</h2>
-          <h2>{{c.location}}</h2>
+          <h2>{{c.court.name}}</h2>
+          <h2>{{c.court.location}}</h2>
         </div>
         <!-- <div class="go" (click)="toCourt(c)">
           GO

@@ -191,4 +191,16 @@ page-view-court {
             }
         }
     }
+
+    .item-md p {
+        margin: 0 0 2px;
+        overflow: inherit;
+        font-size: 1.4rem;
+        line-height: normal;
+        text-overflow: inherit;
+        color: #666;
+        position: relative;
+        word-break: break-all;
+        white-space: normal;
+    }
 }

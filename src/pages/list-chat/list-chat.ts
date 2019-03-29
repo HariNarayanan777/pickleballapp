@@ -23,6 +23,10 @@ export class ListChatPage {
   }
 
   async ionViewWillEnter() {
+    let _div = document.getElementById("notification-rsts"); console.log(_div);
+    if (_div !== null) {
+      _div.parentElement.removeChild(_div);
+    }
     let userID: any = await AuthProvider.me.getIdUser();
     let users = await this.http.get(`/list-chat/${userID}`).toPromise() as any[];
     this.users = users.map(user => {

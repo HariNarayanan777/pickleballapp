@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RestProvider } from '../../providers/rest/rest';
 import { ChatPage } from '../chat/chat';
 import { HelpersProvider } from '../../providers/helpers/helpers';
+import { HttpClient } from '@angular/common/http';
+import { AuthProvider } from '../../providers/auth/auth';
 
 
 @IonicPage()
@@ -16,19 +18,59 @@ export class PublicProfilePage {
   fullName: any;
   email: any;
   rank: any;
-  user:any;
+  user: any;
   public location = "";
-
+  public isFriend = true;
+  public requests = [];
+  public requestValid: any = {};
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private rest: RestProvider
-    ) {
-      this.userID = navParams.get('userID');
-      console.log(this.userID);
-      this.getProfile();
+    private rest: RestProvider, public http: HttpClient
+  ) {
+    this.userID = navParams.get('userID');
+    console.log(this.userID);
+    this.getProfile();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PublicProfilePage');
+  async ionViewDidLoad() {
+    let userID: any = await AuthProvider.me.getIdUser();
+    let query: any = { "or": [{ from: userID, response: true, to: this.userID }, { to: userID, from: this.userID, response: true }] };
+    let users = await this.http.get(`/requestfriend?where=${JSON.stringify(query)}`).toPromise() as any[];
+    if (users.length > 0) {
+      this.isFriend = true;
+      this.requestValid = users[0];
+    } else
+      this.isFriend = false;
+
+    query = { "or": [{ from: userID, to: this.userID }, { to: userID, from: this.userID, }] };
+    this.requests = await this.http.get(`/requestfriend?where=${JSON.stringify(query)}`).toPromise() as any[];
+  }
+
+  public sendRequestAllow() {
+    if (this.requests.length === 0) return true;
+    let indexResponseTrue = this.requests.findIndex(it => {
+      if (it.response === true || it.response === null) return true;
+      return false;
+    });
+    console.log("all", indexResponseTrue);
+    return indexResponseTrue === -1;
+  }
+
+  public async addFriend() {
+    let userID: any = await AuthProvider.me.getIdUser();
+    let payload = {
+      to: this.userID,
+      from: userID
+    }
+    this.rest.postData('/requestfriend', payload).subscribe(res => {
+      console.log("Request", res);
+      this.ionViewDidLoad();
+    })
+  }
+
+  cancelRequest() {
+    this.rest.removeData('/requestfriend/' + this.requestValid['id']).subscribe(res => {
+      this.ionViewDidLoad();
+    })
   }
 
   getProfile() {

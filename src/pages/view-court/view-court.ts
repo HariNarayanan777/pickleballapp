@@ -22,6 +22,7 @@ export class ViewCourtPage {
   public orderXSkill: { skill: number, users: any[] }[] = [];
   private idUser = "";
   public _viewMap = false;
+  public courtId = "";
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -30,6 +31,7 @@ export class ViewCourtPage {
     private launchnavigator: LaunchNavigator
   ) {
     let court = this.navParams.get("court");
+    this.courtId = court.id || court._id;
     if (!court.users)
       court.users = [];
     this.court = court;
@@ -43,6 +45,10 @@ export class ViewCourtPage {
 
   public backSlide() {
     this.slides.slidePrev();
+  }
+
+  public formatNumber(n){
+    return (parseFloat(n) as any).toFixed("1");
   }
 
   async ionViewDidLoad() {
@@ -82,16 +88,15 @@ export class ViewCourtPage {
   }
 
   public async getCourtUsers() {
-    if (this.court.id !== undefined && this.court.id !== null) {
-      let court = await this.http.get(`/court-find?where=${JSON.stringify({ id: this.court.id })}`).toPromise() as any;
-      if (court[0]) this.court.users = court[0].users;
-      else this.court.users = [];
-    }
-    else this.court.users = [];
+    let users = [];
+    let courts = await this.http.get(`/courtsaved?where=${JSON.stringify({ court: this.courtId })}&limit=5000`).toPromise() as any;
+    users = courts.map(it => {
+      return it.user;
+    });
 
-    for (let user of this.court.users) {
+    for (let user of users) {
       let index = this.orderXSkill.findIndex(it => {
-        return it.skill = user.rank;
+        return it.skill === user.rank;
       });
       if (index !== -1)
         this.orderXSkill[index].users.push(user);

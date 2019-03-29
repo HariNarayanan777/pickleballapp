@@ -45,7 +45,7 @@
     <div class="details">
       <h2>{{court.name}}</h2>
       <div>
-        <img src="./assets/imgs/pin-red.png">
+        <img src="./assets/imgs/pin-black.png">
         <p>{{court.city}}, {{court.address}}</p>
       </div>
     </div>
@@ -74,7 +74,7 @@
     </div>
     <div class="tr" *ngFor="let skill of orderXSkill">
       <span>{{skill.users.length}} players checkend-in</span>
-      <span>{{skill.skill}}</span>
+      <span>{{formatNumber(skill.skill)}}</span>
     </div>
   </div>
 

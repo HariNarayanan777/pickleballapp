@@ -63,6 +63,10 @@ export class ListFriendPage {
     });
   }
 
+  public formatNumber(n){
+    return (parseFloat(n) as any).toFixed("1");
+  }
+  
   private validProperty(prop) {
     return prop !== undefined && prop !== null;
   }
