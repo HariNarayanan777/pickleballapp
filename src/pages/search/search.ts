@@ -166,4 +166,8 @@ export class SearchPage {
     this.navCtrl.push(PublicProfilePage, {'userID': userID});
   }
 
+  public formatNumber(n){
+    return (parseFloat(n) as any).toFixed("1");
+  }
+
 }

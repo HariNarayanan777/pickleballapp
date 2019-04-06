@@ -37,7 +37,7 @@
           <img [src]="getUrlImage(p)" (error)="errorImage($event)" style="width: 70px; height: 70px;">
         </ion-avatar>
         <h2 text-wrap>{{p.fullName}}</h2>
-        <p>Skill Level: {{p.rank}}</p>
+        <p>Skill Level: {{formatNumber(p.rank)}}</p>
         <p *ngIf="p.courts.length!==0">{{p.courts[0].name}}</p>
         <button [disabled]="disable" class="button-save" *ngIf="isFriend(p)" ion-button item-end [innerHtml]="sendRequestAllow(p) === true ? 'Add Friend': 'Cancel Request' "
           (click)="checkFriendRequest(p, $event)"></button>
