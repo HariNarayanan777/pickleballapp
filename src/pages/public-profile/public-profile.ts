@@ -89,4 +89,8 @@ export class PublicProfilePage {
   public async toChatView() {
     this.navCtrl.push(ChatPage, { 'user': this.user }, { animation: "ios-transition" });
   }
+
+  public formatNumber(n){
+    return (parseFloat(n) as any).toFixed("1");
+  }
 }

@@ -18,11 +18,11 @@
         <p class="location">
           <ion-icon name="ios-pin"></ion-icon> {{location}}
         </p>
-        <p class="location">
+        <!-- <p class="location">
           <ion-icon name="ios-at"></ion-icon>{{email}}
-        </p>
+        </p> -->
         <p class="location">
-          <ion-icon name="ios-star"></ion-icon>{{rank}}
+          <ion-icon name="ios-star"></ion-icon>{{formatNumber(rank)}}
         </p>
         <p>
           <button ion-button full icon-start (click)="toChatView()">
